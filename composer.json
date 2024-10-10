@@ -1,0 +1,11 @@
+{
+    "require": {
+        "nesbot/carbon": "^2.44",
+        "lodash-php/lodash-php": "^0.0.7"
+    },
+    "config": {
+        "platform": {
+            "php": "7.4.8"
+        }
+    }
+}
