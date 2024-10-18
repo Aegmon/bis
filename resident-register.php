@@ -115,9 +115,9 @@ $purokList = (function () use ($db) {
                       </div>
 
                       <div class="form-group">
-                        <label>National ID No.</label>
-                        <input type="text" class="form-control" name="national_id" placeholder="Enter National ID No."
-                          required>
+                        <label>Any Goverment Issued ID</label>
+                    <input type="file" class="form-control" name="issuedID" accept="image/*">
+                    
                       </div>
 
                       <div class="form-group">
@@ -251,10 +251,10 @@ $purokList = (function () use ($db) {
                       <div class="row g-0">
                         <div class="col-sm-4">
                        <div class="form-group">
-  <label>Email Address</label>
-  <input type="email" class="form-control" placeholder="Enter Email" name="email" id="email">
-  <small id="emailHelp" class="form-text"></small>
-</div>
+                    <label>Email Address</label>
+                    <input type="email" class="form-control" placeholder="Enter Email" name="email" id="email">
+                    <small id="emailHelp" class="form-text"></small>
+                  </div>
 
                         </div>
 

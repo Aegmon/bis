@@ -231,13 +231,7 @@ $admin_dashboard_cards = [
 		"value" => number_format($blotter),
 		"href" => "blotter.php",
 	],
-	[
-		"icon-text" => "₱",
-		"title" => "Collection - by day",
-		"subtitle" => "Collection Payment",
-		"value" => number_format($revenue["am"], 2),
-		"href" => "revenue.php",
-	],
+
 	[
 		"icon" => "fas flaticon-user",
 		"title" => "4ps Members",
@@ -475,7 +469,7 @@ $admin_dashboard_cards = [
                   <div class="card-header">
                     <div class="card-head-row">
                       <div class="card-title fw-bold">
-                        LGU Mission Statement
+                       Mission & Vision
                       </div>
                     </div>
                   </div>

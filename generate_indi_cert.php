@@ -113,14 +113,18 @@ $sec = $db
                           </h1>
                         </div>
                         <h2 class="mt-5 fw-bold">TO WHOM IT MAY CONCERN:</h2>
-                        <h2 class="mt-3" style="text-indent: 40px;">This is to certify that <span class="fw-bold"
-                            style="font-size:25px"><?= ucwords($resident['firstname'] . ' ' . $resident['middlename'] . ' ' . $resident['lastname']) ?></span>,
-                          , of legal age, <span class="fw-bold"
-                            style="font-size:25px"><?= ucwords($resident['gender']) ?></span>, <span class="fw-bold"
-                            style="font-size:25px"><?= ucwords($resident['civilstatus']) ?></span>,
-                          and Filipino is a resident of <span class="fw-bold"
-                            style="font-size:25px"><?= ucwords($brgy) ?></span> and that he/she is one of indigents in
-                          our barangay.</h2>
+                          <h2 class="mt-3" style="text-indent: 40px;">This is to certify that the person whose name and other information appear below has passed the record verification being one of the indigent families with low-income in our community, to wit.
+                        </h2>
+                           <br>
+                        <h1 class="mt-3">Name: <span class="fw-bold"
+                            style="font-size:25px"><?= ucwords($resident['firstname'] . ' ' . $resident['middlename'] . ' ' . $resident['lastname']) ?></span></h1>
+                        <h1 class="mt-3 ">Barangay: <span class="fw-bold"
+                            style="font-size:25px"><?= ucwords($brgy) ?></span></h1>
+
+
+
+
+          
                         <h2 class="mt-3" style="text-indent: 40px;">This certification/clearance is hereby issued to the
                           above-named person for whatever legal purpose it may serve him/her best.</h2>
                         <h2 class="mt-5">Given this <span class="fw-bold"
@@ -133,6 +137,7 @@ $sec = $db
                         <div class="p-3 text-right mr-5" style="margin-top:300px">
                           <h1 class="fw-bold mb-0 text-uppercase"><?= ucwords($captain['name']) ?></h1>
                           <p class="mr-5">PUNONG BARANGAY</p>
+                          <small>**NOT VALID without the official Dry Seal</small>
                         </div>
                       </div>
                     </div>

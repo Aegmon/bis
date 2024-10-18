@@ -2,23 +2,21 @@
 include "bootstrap/index.php";
 
 if (isUser()) {
-	header("Location: dashboard.php");
+    header("Location: dashboard.php");
 }
 
 $purokList = (function () use ($db) {
-	// prettier-ignore
-	return $db
-    ->from("purok")
-    ->select([
-      "id" => "purok.id",
-      "name" => "purok.name",
-      "details" => "purok.details",
-    ])
-    ->exec();
+    return $db
+        ->from("purok")
+        ->select([
+            "id" => "purok.id",
+            "name" => "purok.name",
+            "details" => "purok.details",
+        ])
+        ->exec();
 })();
 
 $residentList = (function () use ($db) {
-    // prettier-ignore
     $query = $db
         ->from("residents")
         ->join("purok", "purok.id", "residents.purok_id")
@@ -51,32 +49,28 @@ $residentList = (function () use ($db) {
             "purok_id" => "purok.id",
             "purok_name" => "purok.name",
             "purok_details" => "purok.details",
+            "isVerify" => "users.isVerify"
         ]);
 
-    // Filter by purok if selected
     if (isset($_GET["purok"]) && $_GET["purok"] != "") {
         $query->where("residents.purok_id", $_GET["purok"]);
     }
 
-    // Additional filters
-    if (isset($_GET["gender"])) {
+    if (isset($_GET["gender"]) && $_GET["gender"] != "") {
         $query->where("residents.gender", $_GET["gender"]);
     }
 
-    if (isset($_GET["voter"])) {
+    if (isset($_GET["civilstatus"]) && $_GET["civilstatus"] != "") {
+        $query->where("residents.civilstatus", $_GET["civilstatus"]);
+    }
+
+    if (isset($_GET["voter"]) && $_GET["voter"] != "") {
         $query->where("residents.voterstatus", $_GET["voter"]);
-    }
-
-    if (isset($_GET["is_pwd"])) {
-        $query->where("residents.is_pwd", $_GET["is_pwd"]);
-    }
-
-    if (isset($_GET["is_senior"])) {
-        $query->where("residents.is_senior", $_GET["is_senior"]);
     }
 
     return $query->exec();
 })();
+
 
 ?>
 <!DOCTYPE html>
@@ -138,27 +132,64 @@ $residentList = (function () use ($db) {
                   </div>
                 </div>
                 <div class="card-body">
-                  <div class="row">
-<div class="row">
-    <div class="col-md-4">
-        <form method="GET" action="resident.php">
-            <div class="form-group">
-                <label for="purok">Filter by Purok</label>
-                <select class="form-control" name="purok" id="purok">
-                    <option value="">All Purok</option> 
-                    <?php foreach ($purokList as $purok): ?>
-                        <option value="<?= $purok['id'] ?>" <?= (isset($_GET['purok']) && $_GET['purok'] == $purok['id']) ? 'selected' : '' ?>>
-                            <?= $purok['name'] ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Filter</button>
-        </form>
-    </div>
-</div>
+                    <div class="row">
+                        <form method="GET" action="resident.php" class="form-inline w-100">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="purok">Purok</label>
+                                    <select class="form-control" name="purok" id="purok">
+                                        <option value="">All Purok</option>
+                                        <?php foreach ($purokList as $purok): ?>
+                                            <option value="<?= $purok['id'] ?>" <?= (isset($_GET['purok']) && $_GET['purok'] == $purok['id']) ? 'selected' : '' ?>>
+                                                <?= $purok['name'] ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
 
-</div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="gender">Gender</label>
+                                    <select class="form-control" name="gender" id="gender">
+                                        <option value="">All</option>
+                                        <option value="Male" <?= (isset($_GET['gender']) && $_GET['gender'] == 'Male') ? 'selected' : '' ?>>Male</option>
+                                        <option value="Female" <?= (isset($_GET['gender']) && $_GET['gender'] == 'Female') ? 'selected' : '' ?>>Female</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="civilstatus">Civil Status</label>
+                                    <select class="form-control" name="civilstatus" id="civilstatus">
+                                        <option value="">All</option>
+                                        <option value="Single" <?= (isset($_GET['civilstatus']) && $_GET['civilstatus'] == 'Single') ? 'selected' : '' ?>>Single</option>
+                                        <option value="Married" <?= (isset($_GET['civilstatus']) && $_GET['civilstatus'] == 'Married') ? 'selected' : '' ?>>Married</option>
+                                        <option value="Widowed" <?= (isset($_GET['civilstatus']) && $_GET['civilstatus'] == 'Widowed') ? 'selected' : '' ?>>Widowed</option>
+                                        <option value="Divorced" <?= (isset($_GET['civilstatus']) && $_GET['civilstatus'] == 'Divorced') ? 'selected' : '' ?>>Divorced</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="voter">Voter Status</label>
+                                    <select class="form-control" name="voter" id="voter">
+                                        <option value="">All</option>
+                                        <option value="Voter" <?= (isset($_GET['voter']) && $_GET['voter'] == 'Voter') ? 'selected' : '' ?>>Voter</option>
+                                        <option value="Non-voter" <?= (isset($_GET['voter']) && $_GET['voter'] == 'Non-voter') ? 'selected' : '' ?>>Non-voter</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 mt-3">
+                                <button type="submit" class="btn btn-primary">Filter</button>
+                            </div>
+                        </form>
+                    </div>
+
+
 
                   <div class="table-responsive">
                     <table id="residenttable" class="display table table-striped">
@@ -172,6 +203,7 @@ $residentList = (function () use ($db) {
                           <th scope="col">Civil Status</th>
                           <th scope="col">Gender</th>
                           <th scope="col">Purok</th>
+                          <th scope="col">Verification Status</th> <!-- Added new column -->
                           <?php if (isAuthenticated()): ?>
                             <?php if (isAdmin()): ?>
                               <th scope="col">Voter Status</th>
@@ -205,6 +237,13 @@ $residentList = (function () use ($db) {
                               <td><?= $row["civilstatus"] ?></td>
                               <td><?= $row["gender"] ?></td>
                               <td><?= $row["purok_name"] ?></td>
+                              <td>
+                                <?php if ($row["isVerify"] == 1): ?>
+                                  <span class="badge badge-success">Verified</span>
+                                <?php else: ?>
+                                  <span class="badge badge-danger">Not Verified</span>
+                                <?php endif; ?>
+                              </td> <!-- Verification status badge -->
                               <?php if (isAuthenticated()): ?>
                                 <?php if (isAdmin()): ?>
                                   <td><?= $row["voterstatus"] ?></td>
@@ -229,49 +268,29 @@ $residentList = (function () use ($db) {
                                         type="button"
                                         data-toggle="tooltip"
                                         href="generate_resident.php?id=<?= $row["id"] ?>"
-                                        class="btn btn-link btn-info"
-                                        data-original-title="Generate"
+                                        class="btn btn-link btn-secondary"
+                                        title="Generate Report"
                                       >
-                                        <i class="fa fa-file"></i>
+                                        <i class="fa fa-file-pdf"></i>
                                       </a>
-                                      <a
+                                      <button
                                         type="button"
                                         data-toggle="tooltip"
-                                        href="model/residents.php?id=<?= $row[
-                                        	"id"
-                                        ] ?>&remove-resident=1"
-                                        onclick="confirm('Are you sure you want to delete this resident?');" class="btn btn-link btn-danger"
+                                        title=""
+                                        class="btn btn-link btn-danger"
                                         data-original-title="Remove"
+                                        onclick="confirmDelete(<?= $row['id'] ?>)"
                                       >
                                         <i class="fa fa-times"></i>
-                                      </a>
+                                      </button>
                                     <?php endif; ?>
                                   </div>
                                 </td>
                               <?php endif; ?>
-
                             </tr>
                           <?php endforeach; ?>
                         <?php endif; ?>
                       </tbody>
-                      <tfoot>
-                        <tr>
-                          <th scope="col">Fullname</th>
-                          <th scope="col">National ID</th>
-                          <th scope="col">Alias</th>
-                          <th scope="col">Birthdate</th>
-                          <th scope="col">Age</th>
-                          <th scope="col">Civil Status</th>
-                          <th scope="col">Gender</th>
-                          <th scope="col">Purok</th>
-                          <?php if (isAuthenticated()): ?>
-                            <?php if (isAdmin()): ?>
-                              <th scope="col">Voter Status</th>
-                            <?php endif; ?>
-                            <th scope="col">Action</th>
-                          <?php endif; ?>
-                        </tr>
-                      </tfoot>
                     </table>
                   </div>
                 </div>
@@ -280,6 +299,7 @@ $residentList = (function () use ($db) {
           </div>
         </div>
       </div>
+    
 
       <!-- Modal -->
       <div class="modal fade" id="edit" >

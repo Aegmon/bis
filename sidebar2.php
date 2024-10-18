@@ -31,14 +31,19 @@ function appendActiveClass(array $pages)
           <?php else: ?>
           <img src="assets/img/person.png" alt="..." class="avatar-img rounded-circle">
           <?php endif; ?>
+
         </div>
         <div class="info">
-          <a data-toggle="collapse" href="<?= role(["user", "administrator"]) ? "#collapseExample" : "javascript:void(0)" ?>" aria-expanded="true">
+          <a data-toggle="collapse" href="<?= role(["user", "administrator"])
+          	? "#collapseExample"
+          	: "javascript:void(0)" ?>" aria-expanded="true">
             <span>
               <?= isAuthenticated() ? ucfirst($_SESSION["username"]) : "Guest User" ?>
+
               <span class="user-level">
                 <?= isAuthenticated() ? ucfirst($_SESSION["role"]) : "Guest" ?>
               </span>
+
               <?= isAdmin() ? '<span class="caret"></span>' : null ?>
             </span>
           </a>
@@ -58,7 +63,10 @@ function appendActiveClass(array $pages)
         </div>
       </div>
       <ul class="nav nav-primary">
-        <li class="nav-item <?= appendActiveClass(["dashboard", "resident_info", "purok_info"]) ?>">
+        <li class="
+            nav-item
+            <?= appendActiveClass(["dashboard", "resident_info", "purok_info"]) ?>
+          ">
           <a href="dashboard.php">
             <i class="fas fa-home"></i>
             <p>Dashboard</p>
@@ -73,76 +81,104 @@ function appendActiveClass(array $pages)
         </li>
 
         <?php if (role(["administrator", "staff"])): ?>
-        <li class="nav-item <?= appendActiveClass(["officials"]) ?>">
+        <li class="
+              nav-item
+              <?= appendActiveClass(["officials"]) ?>
+            ">
           <a href="officials.php">
             <i class="fas fa-user-tie"></i>
             <p>Brgy Officials and Staff</p>
           </a>
         </li>
         <?php endif; ?>
-  <?php  if (isAdmin()): ?>
-        <li class="nav-item <?= appendActiveClass(["certificate-requests", "resident_certification", "generate_brgy_cert", "generate_fpscert", "generate_indi_cert", "generate_business_permit"]) ?>">
-          <a href="#certificates" data-toggle="collapse" class="<?= appendActiveClass(["certificate-requests", "resident_certification", "generate_brgy_cert", "generate_fpscert", "generate_indi_cert", "generate_business_permit"]) ? "collapsed" : "" ?>" aria-expanded="<?= appendActiveClass(["certificate-requests", "resident_certification", "generate_brgy_cert", "generate_fpscert", "generate_indi_cert", "generate_business_permit"]) ? "true" : "false" ?>">
-            <i class="fas fa-certificate"></i>
-            <p>Certificates</p>
-            <span class="caret"></span>
-          </a>
 
-          <div class="collapse <?= appendActiveClass(["certificate-requests", "resident_certification", "generate_brgy_cert", "generate_fpscert", "generate_indi_cert", "generate_business_permit"]) ? "show" : "" ?>" id="certificates">
-            <ul class="nav nav-collapse">
-              <li class="<?= $currentPage == "certificate-requests" ? "active" : null ?>">
-                <a href="certificate-requests.php">
-                  <span class="sub-item">Certificate Requests</span>
-                </a>
-              </li>
-            
-              <li class="<?= $currentPage == "resident_certification" ? "active" : null ?>">
-                <a href="resident_certification.php">
-                  <span class="sub-item">Barangay Certificates</span>
-                </a>
-              </li>
-           
-         
-              <li class="<?= $currentPage == "4ps-residents" ? "active" : null ?>">
-                <a href="4ps-residents.php">
-                  <span class="sub-item">4ps Certification</span>
-                </a>
-              </li>
-              <li class="<?= $currentPage == "resident_indigency" ? "active" : null ?>">
-                <a href="resident_indigency.php">
-                  <span class="sub-item">Certificate of Indigency</span>
-                </a>
-              </li>
-              <li class="<?= $currentPage == "business_permit" ? "active" : null ?>">
-                <a href="business_permit.php">
-                  <span class="sub-item">Brgy Business Clearance</span>
-                </a>
-              </li>
-            
-            </ul>
-          </div>
+        <li class="
+              nav-item
+              <?= appendActiveClass(["certificate-requests"]) ?>
+            ">
+          <a href="certificate-requests.php">
+            <i class="fas fa-user-tie"></i>
+            <p>Certificate Requests</p>
+          </a>
         </li>
-   <?php endif; ?>
+
         <?php if (role(["administrator", "staff"])): ?>
-        <li class="nav-item <?= appendActiveClass(["resident", "generate_resident"]) ?>">
+        <li class="
+              nav-item
+              <?= appendActiveClass(["resident", "generate_resident"]) ?>
+            ">
           <a href="resident.php">
             <i class="icon-people"></i>
             <p>Resident Information</p>
           </a>
         </li>
+        <?php endif; ?>
 
-      
-
-                   <li class="nav-item <?= appendActiveClass(["purok", "generate_resident"]) ?>">
-          <a href="purok.php">
-            <i class="icon-pin"></i>
-            <p>Purok</p>
+        <?php if (role(["administrator", "staff"])): ?>
+        <li class="
+              nav-item
+              <?= appendActiveClass(["resident_certification", "generate_brgy_cert"]) ?>
+            ">
+          <a href="resident_certification.php">
+            <i class="icon-badge"></i>
+            <p>Barangay Certificates</p>
           </a>
         </li>
         <?php endif; ?>
 
-           <?php if (role(["administrator", "user","staff"])): ?>
-        <li class="nav-item <?= appendActiveClass(["blotter", "generate_blotter_report"]) ?>">
+        <?php if (isAdmin()): ?>
+        <li class="
+            nav-item
+            <?= appendActiveClass(["resident_cuttingpermit", "generate_cuttingpermit"]) ?>
+          ">
+          <a href="resident_cuttingpermit.php">
+            <i class="icon-docs"></i>
+            <p>Cutting permit</p>
+          </a>
+        </li>
+        <?php endif; ?>
+
+        <?php if (isAdmin()): ?>
+        <li class="
+            nav-item
+            <?= appendActiveClass(["4ps-residents", "generate_fpscert"]) ?>
+          ">
+          <a href="4ps-residents.php">
+            <i class="icon-doc"></i>
+            <p>4ps Certification</p>
+          </a>
+        </li>
+        <?php endif; ?>
+
+        <?php if (isAdmin()): ?>
+        <li class="
+            nav-item
+            <?= appendActiveClass(["resident_indigency", "generate_indi_cert"]) ?>
+          ">
+          <a href="resident_indigency.php">
+            <i class="icon-docs"></i>
+            <p>Certificate of Indigency</p>
+          </a>
+        </li>
+        <?php endif; ?>
+
+        <?php if (isAdmin()): ?>
+        <li class="
+            nav-item
+            <?= appendActiveClass(["business_permit", "generate_business_permit"]) ?>
+          ">
+          <a href="business_permit.php">
+            <i class="icon-doc"></i>
+            <p>Brgy Business Clearance</p>
+          </a>
+        </li>
+        <?php endif; ?>
+
+        <?php if (isAdmin()): ?>
+        <li class="
+            nav-item
+            <?= appendActiveClass(["blotter", "generate_blotter_report"]) ?>
+          ">
           <a href="blotter.php">
             <i class="icon-layers"></i>
             <p>Blotter Records</p>
@@ -150,7 +186,10 @@ function appendActiveClass(array $pages)
         </li>
         <?php endif; ?>
 
-        <li class="nav-item <?= appendActiveClass(["announcements", "announcements-view"]) ?>">
+        <li class="
+            nav-item
+            <?= appendActiveClass(["announcements", "announcements-view"]) ?>
+          ">
           <a href="announcements.php">
             <i class="icon-pin"></i>
             <p>Announcements</p>
@@ -170,24 +209,18 @@ function appendActiveClass(array $pages)
             <p>Support</p>
           </a>
         </li>
-    <?php endif; ?>
- 
-        <?php if (role(["user"])): ?>
-        <li class="nav-item">
-          <a href="settings.php">
-            <i class="fas fa-cog"></i>
-            <p>Settings</p>
-          </a>
-        </li>
-    
         <?php endif; ?>
+
         <?php if (isAdmin()): ?>
-        <!-- <li class="nav-item <?= appendActiveClass(["revenue"]) ?>">
+        <li class="
+              nav-item
+              <?= appendActiveClass(["revenue"]) ?>
+            ">
           <a href="revenue.php">
             <i>₱</i>
             <p>Collection Payment</p>
           </a>
-        </li> -->
+        </li>
 
         <li class="nav-section">
           <span class="sidebar-mini-icon">
@@ -210,7 +243,11 @@ function appendActiveClass(array $pages)
                   <span class="sub-item">Barangay Info</span>
                 </a>
               </li>
-          
+              <li class="<?= $currentPage == "purok" ? "active" : null ?>">
+                <a href="purok.php">
+                  <span class="sub-item">Purok</span>
+                </a>
+              </li>
               <li class="<?= $currentPage == "precinct" ? "active" : null ?>">
                 <a href="precinct.php">
                   <span class="sub-item">Contact Number</span>
@@ -218,14 +255,28 @@ function appendActiveClass(array $pages)
               </li>
               <li class="<?= $currentPage == "position" ? "active" : null ?>">
                 <a href="position.php">
-                  <span class="sub-item">Position</span>
+                  <span class="sub-item">Positions</span>
                 </a>
               </li>
-                   <li class="<?= $currentPage == "chairmanship" ? "active" : null ?>">
+              <li class="<?= $currentPage == "chairmanship" ? "active" : null ?>">
                 <a href="chairmanship.php">
                   <span class="sub-item">Chairmanship</span>
                 </a>
               </li>
+
+              <?php if ($_SESSION["role"] == "staff"): ?>
+              <li>
+                <a href="#support" data-toggle="modal">
+                  <span class="sub-item">Support</span>
+                </a>
+              </li>
+              <li>
+                <a href="#requestdoc" data-toggle="modal">
+                  <span class="sub-item">Requested Documents</span>
+                </a>
+              </li>
+
+              <?php else: ?>
               <li class="<?= $currentPage == "users" ? "active" : null ?>">
                 <a href="users.php">
                   <span class="sub-item">Users</span>
@@ -236,20 +287,30 @@ function appendActiveClass(array $pages)
                   <span class="sub-item">Support</span>
                 </a>
               </li>
-              <!-- <li class="<?= $currentPage == "backup" ? "active" : null ?>">
-                <a href="backup.php">
+
+
+              <li>
+                <a href="backup/backup.php">
                   <span class="sub-item">Backup</span>
                 </a>
-              </li> -->
+              </li>
+              <li>
+                <a href="#restore" data-toggle="modal">
+                  <span class="sub-item">Restore</span>
+                </a>
+              </li>
+
+              <?php endif; ?>
             </ul>
           </div>
         </li>
         <?php endif; ?>
-
       </ul>
     </div>
   </div>
 </div>
+
+<!-- Modal -->
 <div class="modal fade" id="edit_profile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">

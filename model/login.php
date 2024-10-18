@@ -28,8 +28,8 @@ if (!$fetchedData) {
     return $conn->close();
 }
 
-// Check if the user is verified
-if ($fetchedData["isVerify"] != 1) {
+// Apply isVerify check only if the user_type is 'user'
+if ($fetchedData["user_type"] == "user" && $fetchedData["isVerify"] != 1) {
     $_SESSION["message"] = "Your account is not verified. Please wait for the admin to verify your registration.";
     $_SESSION["status"] = "danger";
     header("location: ../login.php");
