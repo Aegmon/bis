@@ -48,7 +48,6 @@ if (isset($_POST["register-resident"])) {
 			"First Name" => $fname,
 			"Middle Name" => $mname,
 			"Last Name" => $lname,
-			"Alias" => $alias,
 			"Birth Place" => $birthplace,
 			"Birth Date" => $birthdate,
 			"Age" => $age,
