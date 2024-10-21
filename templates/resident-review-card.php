@@ -414,7 +414,7 @@ $resident = (function () use ($db) {
     </form>
       <?php if (isAdmin()): ?>
         <form method="POST" action="model/residents.php">
-    <input type="hidden" name="resident_id" value="<?= $resident["id"] ?>">
+    <input type="hidden" name="resident_id" value="<?= $resident["account_id"] ?>">
     <button type="submit" name="verify-resident"  class="btn btn-success btn-block text-white fw-bold">Verify</button>
       </form>
     <?php endif; ?>

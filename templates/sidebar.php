@@ -123,6 +123,17 @@ function appendActiveClass(array $pages)
           </div>
         </li>
    <?php endif; ?>
+       <?php if (role(["user", ""])): ?>
+       <li class="
+              nav-item
+              <?= appendActiveClass(["certificate-requests"]) ?>
+            ">
+          <a href="certificate-requests.php">
+            <i class="fas fa-user-tie"></i>
+            <p>Certificate Requests</p>
+          </a>
+        </li>
+          <?php endif; ?>
         <?php if (role(["administrator", "staff"])): ?>
         <li class="nav-item <?= appendActiveClass(["resident", "generate_resident"]) ?>">
           <a href="resident.php">

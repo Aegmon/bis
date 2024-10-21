@@ -482,3 +482,21 @@ if (isset($_GET["unset-4ps"])) {
 	header("location: ../4ps-residents.php");
 	return $conn->close();
 }
+
+if (isset($_POST["verify-resident"])) {
+    $resident_id = $_POST["resident_id"];
+
+    $db
+        ->update("users")
+        ->where("users.id", $resident_id)
+        ->set([
+            "isVerify" => 1,
+        ])
+        ->exec();
+
+    $_SESSION["message"] = "Resident verified successfully";
+    $_SESSION["status"] = "success";
+
+   	header("location: ../resident-view.php");
+    return $conn->close();
+}
