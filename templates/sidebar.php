@@ -182,7 +182,7 @@ function appendActiveClass(array $pages)
           </a>
         </li>
 
-        <?php if (role(["staff", "user"])): ?>
+        <!-- <?php if (role(["staff", "user"])): ?>
         <li class="nav-section">
           <span class="sidebar-mini-icon">
             <i class="fa fa-ellipsis-h"></i>
@@ -195,7 +195,7 @@ function appendActiveClass(array $pages)
             <p>Support</p>
           </a>
         </li>
-    <?php endif; ?>
+    <?php endif; ?> -->
  
         <?php if (role(["user"])): ?>
         <li class="nav-item">
@@ -206,7 +206,7 @@ function appendActiveClass(array $pages)
         </li>
     
         <?php endif; ?>
-        <?php if (isAdmin()): ?>
+      
         <!-- <li class="nav-item <?= appendActiveClass(["revenue"]) ?>">
           <a href="revenue.php">
             <i>₱</i>
@@ -221,55 +221,64 @@ function appendActiveClass(array $pages)
           <h4 class="text-section">System</h4>
         </li>
 
-        <li class="nav-item <?= $isSettingsPage ? "active" : null ?>">
-          <a href="#settings" data-toggle="collapse" class="collapsed" aria-expanded="false">
-            <i class="icon-wrench"></i>
-            <p>Settings</p>
-            <span class="caret"></span>
-          </a>
+     <li class="nav-item <?= $isSettingsPage ? "active" : null ?>">
+    <a href="#settings" data-toggle="collapse" class="collapsed" aria-expanded="false">
+        <i class="icon-wrench"></i>
+        <p>
+            <?php if (isAdmin()): ?>
+                Settings
+            <?php elseif (role(["user"])): ?>
+                Barangay Information
+            <?php elseif (role(["staff"])): ?>
+                 Barangay Information
+            <?php endif; ?>
+        </p>
+        <span class="caret"></span>
+    </a>
 
-          <div class="collapse <?= $isSettingsPage ? "show" : null ?>" id="settings">
-            <ul class="nav nav-collapse">
-              <li>
-                <a href="#barangay" data-toggle="modal">
-                  <span class="sub-item">Barangay Info</span>
-                </a>
-              </li>
-          
-              <li class="<?= $currentPage == "precinct" ? "active" : null ?>">
-                <a href="precinct.php">
-                  <span class="sub-item">Contact Number</span>
-                </a>
-              </li>
-              <li class="<?= $currentPage == "position" ? "active" : null ?>">
-                <a href="position.php">
-                  <span class="sub-item">Position</span>
-                </a>
-              </li>
-                   <li class="<?= $currentPage == "chairmanship" ? "active" : null ?>">
-                <a href="chairmanship.php">
-                  <span class="sub-item">Chairmanship</span>
-                </a>
-              </li>
-              <li class="<?= $currentPage == "users" ? "active" : null ?>">
-                <a href="users.php">
-                  <span class="sub-item">Users</span>
-                </a>
-              </li>
-              <!-- <li class="<?= $currentPage == "support" ? "active" : null ?>">
-                <a href="support.php">
-                  <span class="sub-item">Support</span>
-                </a>
-              </li> -->
-              <!-- <li class="<?= $currentPage == "backup" ? "active" : null ?>">
-                <a href="backup.php">
-                  <span class="sub-item">Backup</span>
-                </a>
-              </li> -->
-            </ul>
-          </div>
-        </li>
-        <?php endif; ?>
+    <div class="collapse <?= $isSettingsPage ? "show" : null ?>" id="settings">
+        <ul class="nav nav-collapse">
+            <?php if (role(["user", "administrator"])): ?>
+                <li>
+                    <a href="#barangay" data-toggle="modal">
+                        <span class="sub-item">Barangay Info</span>
+                    </a>
+                </li>
+            <?php endif; ?>
+
+            <?php if (isAdmin() || role(["user", "staff"])): ?>
+                <li class="<?= $currentPage == "precinct" ? "active" : null ?>">
+                    <a href="precinct.php">
+                        <span class="sub-item">Contact Number</span>
+                    </a>
+                </li>
+            <?php endif; ?>
+
+            <?php if (role(["administrator","staff"])): ?>
+                <li class="<?= $currentPage == "chairmanship" ? "active" : null ?>">
+                    <a href="chairmanship.php">
+                        <span class="sub-item">Chairmanship</span>
+                    </a>
+                </li>
+            <?php endif; ?>
+
+            <?php if (isAdmin()): ?>
+                <li class="<?= $currentPage == "users" ? "active" : null ?>">
+                    <a href="users.php">
+                        <span class="sub-item">Users</span>
+                    </a>
+                </li>
+                <li class="<?= $currentPage == "position" ? "active" : null ?>">
+                    <a href="position.php">
+                        <span class="sub-item">Position</span>
+                    </a>
+                </li>
+            <?php endif; ?>
+        </ul>
+    </div>
+</li>
+
+  
 
       </ul>
     </div>

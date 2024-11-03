@@ -63,7 +63,9 @@ while ($row = $result->fetch_assoc()) {
                           <tr>
                             <th scope="col">No.</th>
                             <th scope="col">Title</th>
+                              <?php if (isAdmin()): ?>
                             <th scope="col">Action</th>
+                              <?php endif ?>
                           </tr>
                         </thead>
                         <tbody>
@@ -73,6 +75,7 @@ while ($row = $result->fetch_assoc()) {
                           <tr>
                             <td><?= $no ?></td>
                             <td><?= $row['title'] ?></td>
+                               <?php if (isAdmin()): ?>
                             <td>
                               <div class="form-button-action">
                                 <a type="button" href="#edit" data-toggle="modal" class="btn btn-link btn-primary"
@@ -88,6 +91,7 @@ while ($row = $result->fetch_assoc()) {
                                 </a>
                               </div>
                             </td>
+                            <?php endif ?>
                           </tr>
                           <?php $no++;
 													endforeach ?>
@@ -101,7 +105,9 @@ while ($row = $result->fetch_assoc()) {
                           <tr>
                             <th scope="col">No.</th>
                             <th scope="col">Title</th>
+                              <?php if (isAdmin()): ?>
                             <th scope="col">Action</th>
+                              <?php endif ?>
                           </tr>
                         </tfoot>
                       </table>

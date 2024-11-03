@@ -12,9 +12,11 @@ Paniqui Tarlac
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Update Barangay Info</h5>
+        <h5 class="modal-title" id="exampleModalLabel">
+          <?= isAdmin() ? "Update Barangay Info" : "Barangay Information" ?>
+        </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
+          <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
@@ -24,13 +26,15 @@ Paniqui Tarlac
             <div class="col-md-6">
               <div class="form-group">
                 <label>Province Name</label>
-                <input type="text" class="form-control" placeholder="Enter Province Name" name="province" required value="<?= $province ?>">
+                <input type="text" class="form-control" placeholder="Enter Province Name" name="province" required value="<?= $province ?>" 
+                <?= isAdmin() ? "" : "readonly" ?>>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label>Town Name</label>
-                <input type="text" class="form-control" placeholder="Enter Town Name" name="town" required value="<?= $town ?>">
+                <input type="text" class="form-control" placeholder="Enter Town Name" name="town" required value="<?= $town ?>" 
+                <?= isAdmin() ? "" : "readonly" ?>>
               </div>
             </div>
           </div>
@@ -38,48 +42,58 @@ Paniqui Tarlac
             <div class="col-md-6">
               <div class="form-group">
                 <label>Barangay Name</label>
-                <input type="text" class="form-control" placeholder="Enter Barangay Name" name="brgy" required value="<?= $brgy ?>">
+                <input type="text" class="form-control" placeholder="Enter Barangay Name" name="brgy" required value="<?= $brgy ?>" 
+                <?= isAdmin() ? "" : "readonly" ?>>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label>Contact Number</label>
-                <input type="text" class="form-control" placeholder="Enter Contact Number" name="number" required value="<?= $number ?>">
+                <input type="text" class="form-control" placeholder="Enter Contact Number" name="number" required value="<?= $number ?>" 
+                <?= isAdmin() ? "" : "readonly" ?>>
               </div>
             </div>
           </div>
           <div class="form-group">
             <label>Dashboard Text</label>
-            <textarea class="form-control" name="db_msg" required><?= $db_txt ?></textarea>
+            <textarea class="form-control" name="db_msg" required <?= isAdmin() ? "" : "readonly" ?>><?= $db_txt ?></textarea>
           </div>
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
                 <label>Municipality/City Logo</label><br>
                 <img src="assets/uploads/<?= $city_logo ?>" class="img-fluid" width="120">
-                <input type="file" class='form-control' name="city_logo" accept="image/*">
+                <?php if (isAdmin()): ?>
+                  <input type="file" class='form-control' name="city_logo" accept="image/*">
+                <?php endif; ?>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label>Barangay Logo</label><br>
                 <img src="assets/uploads/<?= $brgy_logo ?>" class="img-fluid" width="120">
-                <input type="file" class='form-control' name="brgy_logo" accept="image/*">
+                <?php if (isAdmin()): ?>
+                  <input type="file" class='form-control' name="brgy_logo" accept="image/*">
+                <?php endif; ?>
               </div>
             </div>
           </div>
           <div class="form-group">
             <label>Dashboard Image</label><br>
-            <img src="<?= !empty($db_img)
-            	? "assets/uploads/" . $db_img
-            	: "assets/img/bg-abstract.png" ?>" class="img-fluid">
-            <input type="file" class='form-control' name="db_img" accept="image/*">
+            <img src="<?= !empty($db_img) ? "assets/uploads/" . $db_img : "assets/img/bg-abstract.png" ?>" class="img-fluid">
+            <?php if (isAdmin()): ?>
+              <input type="file" class='form-control' name="db_img" accept="image/*">
+            <?php endif; ?>
           </div>
-          <small class="form-text text-muted">Note: pls upload only image and not more than 20MB.</small>
+                  <?php if (isAdmin()): ?>
+          <small class="form-text text-muted">Note: Please upload only images and not more than 20MB.</small>
+           <?php endif; ?>
       </div>
       <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      <button type="submit" class="btn btn-primary">Update</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <?php if (isAdmin()): ?>
+          <button type="submit" class="btn btn-primary">Update</button>
+        <?php endif; ?>
       </div>
       </form>
     </div>
