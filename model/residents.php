@@ -42,11 +42,8 @@ if (isset($_POST["register-resident"])) {
 		$profileimg = getBody("profileimg", $_POST);
 
 		$requiredFields = [
-			"National ID" => $nationalIDFile,
-			"Citizenship" => $citizenship,
 			"Address" => $address,
 			"First Name" => $fname,
-			"Middle Name" => $mname,
 			"Last Name" => $lname,
 			"Birth Place" => $birthplace,
 			"Birth Date" => $birthdate,
