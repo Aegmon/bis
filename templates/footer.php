@@ -49,7 +49,19 @@
     });
 </script>
 
- <script>
+<script>
+// Function to set the maximum date to 15 years ago
+document.addEventListener('DOMContentLoaded', function() {
+  const birthdateInput = document.getElementById('birthdate');
+  const today = new Date();
+  
+  // Calculate the date 15 years ago from today
+  const minDate = new Date(today.getFullYear() - 15, today.getMonth(), today.getDate());
+  
+  // Set the max attribute for the date input to 15 years ago
+  birthdateInput.max = minDate.toISOString().split("T")[0];
+});
+
 document.getElementById('birthdate').addEventListener('change', function() {
   const birthdate = new Date(this.value);
   const today = new Date();
@@ -66,9 +78,7 @@ document.getElementById('birthdate').addEventListener('change', function() {
   // Set age or clear it if invalid
   document.getElementById('age').value = age >= 0 ? age : '';
 });
-
- 
-  </script>
+</script>
     <script>
   document.getElementById('password').addEventListener('input', function() {
     const password = this.value;

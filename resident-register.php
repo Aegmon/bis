@@ -120,11 +120,10 @@ $purokList = (function () use ($db) {
                     
                       </div>
 
-                      <div class="form-group">
-                        <label>Citizenship</label>
-                        <input type="text" class="form-control" name="citizenship" placeholder="Enter citizenship" value="Filipino"
+                 
+                        <input type="hidden" class="form-control" name="citizenship" placeholder="Enter citizenship" value="Filipino"
                           required readonly>
-                      </div>
+                    
 
                       <div class="form-group">
                         <label>Address</label>
@@ -144,7 +143,7 @@ $purokList = (function () use ($db) {
                         <div class="col-sm-4">
                           <div class="form-group">
                             <label>Middle name</label>
-                            <input class="form-control" placeholder="Enter Middle name" name="mname" required>
+                            <input class="form-control" placeholder="Middel Name (optional)" name="mname" >
                           </div>
                         </div>
 

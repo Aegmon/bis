@@ -98,11 +98,11 @@ $resident = (function () use ($db) {
              <small style="color:red">**Jpeg , jpg only</small>
           </div>
 
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label>National ID No.</label>
             <input type="text" class="form-control" name="national_id"
               value="<?= $resident["national_id"] ?>" placeholder="Enter National ID No." required>
-          </div>
+          </div> -->
 
           <div class="form-group">
             <label>Citizenship</label>
@@ -132,7 +132,7 @@ $resident = (function () use ($db) {
               <div class="form-group">
                 <label>Middle name</label>
                 <input class="form-control" placeholder="Enter Middle name" name="mname"
-                  value="<?= $resident["middlename"] ?>" required>
+                  value="<?= $resident["middlename"] ?>" >
               </div>
             </div>
 

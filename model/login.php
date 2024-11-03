@@ -42,6 +42,14 @@ $_SESSION["username"] = $fetchedData["username"];
 $_SESSION["role"] = $fetchedData["user_type"];
 $_SESSION["avatar"] = $fetchedData["avatar"];
 
+// Log login activity for administrators
+if ($fetchedData["user_type"] == "administrator") {
+    $logMessage = "Admin logged in: " . $_SESSION["username"];
+    $logQuery = $conn->prepare("INSERT INTO admin_logs (logs) VALUES (?)");
+    $logQuery->bind_param("s", $logMessage);
+    $logQuery->execute();
+}
+
 // Success message
 $_SESSION["message"] = "You have successfully logged in to the Automated Barangay Services Management System!";
 $_SESSION["status"] = "success";
@@ -49,3 +57,4 @@ $_SESSION["status"] = "success";
 // Redirect to the dashboard
 header("location: ../dashboard.php");
 return $conn->close();
+?>

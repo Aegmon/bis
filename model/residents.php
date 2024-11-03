@@ -284,7 +284,6 @@ if (isset($_POST["update-resident"])) {
 		"Citizenship" => $citizenship,
 		"Address" => $address,
 		"First Name" => $fname,
-		"Middle Name" => $mname,
 		"Last Name" => $lname,
 		"Birth Place" => $birthplace,
 		"Birth Date" => $birthdate,

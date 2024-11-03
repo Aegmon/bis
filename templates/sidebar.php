@@ -118,7 +118,21 @@ function appendActiveClass(array $pages)
                   <span class="sub-item">Brgy Business Clearance</span>
                 </a>
               </li>
-            
+                <li class="<?= $currentPage == "certificate_ofguardianship" ? "active" : null ?>">
+                <a href="#">
+                  <span class="sub-item">Certificate of Guardianship</span>
+                </a>
+              </li>
+                <li class="<?= $currentPage == "certificate_ofguardianship" ? "active" : null ?>">
+                <a href="#">
+                  <span class="sub-item">Certificate of Business Closure</span>
+                </a>
+              </li>
+                  <li class="<?= $currentPage == "certificate_ofguardianship" ? "active" : null ?>">
+                <a href="#">
+                  <span class="sub-item">Oath of Undertaking</span>
+                </a>
+              </li>
             </ul>
           </div>
         </li>
@@ -242,11 +256,11 @@ function appendActiveClass(array $pages)
                   <span class="sub-item">Users</span>
                 </a>
               </li>
-              <li class="<?= $currentPage == "support" ? "active" : null ?>">
+              <!-- <li class="<?= $currentPage == "support" ? "active" : null ?>">
                 <a href="support.php">
                   <span class="sub-item">Support</span>
                 </a>
-              </li>
+              </li> -->
               <!-- <li class="<?= $currentPage == "backup" ? "active" : null ?>">
                 <a href="backup.php">
                   <span class="sub-item">Backup</span>

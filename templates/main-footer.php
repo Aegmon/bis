@@ -88,45 +88,46 @@ Paniqui Tarlac
 
 <!-- Modal -->
 <div class="modal fade" id="support" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Contact Support</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body" style="background-image:url('assets/img/db.jpg'); background-size:cover;">
-        <form method="POST" action="model/save_support.php">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Enter Name" name="name" required >
-              </div>
+     <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Contact Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <input type="email" class="form-control" placeholder="Enter Email Address" name="email" required >
-              </div>
+            <div class="modal-body">
+                <p>If you need assistance, please reach out to one of the following contacts:</p>
+                
+                <h6>𝗠𝗗𝗥𝗥𝗠𝗖 𝗣𝗔𝗡𝗜𝗤𝗨𝗜</h6>
+                <ul>
+                  
+                    <li>0948-8675-614</li>
+                    <li>(045) 606-3952</li>
+                </ul>
+                
+                <h6>𝗣𝗡𝗣 𝗣𝗔𝗡𝗜𝗤𝗨𝗜</h6>
+                <ul>
+                    <li>0908-9882-818</li>
+                    <li>(045) 931-1110</li>
+                 
+                </ul>
+                
+                <h6>𝗕𝗙𝗣 𝗣𝗔𝗡𝗜𝗤𝗨𝗜</h6>
+                <p>0923-1357-153</p>
+                <p>(045) 491-0362</p>
+                
+                <h6>𝗥𝗛𝗨-𝗜 𝗣𝗔𝗡𝗜𝗤𝗨𝗜</h6>
+                <ul>
+                    <li>800-9882-818</li>
+         
+                </ul>
             </div>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Enter Contact Number(optional)" name="number">
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Enter Subject" name="subject" required>
-          </div>
-          <div class="form-group">
-            <textarea type="text" class="form-control" placeholder="Enter Message" name="message" required ></textarea>
-          </div>
-      </div>
-      <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      <button type="submit" class="btn btn-primary">Send</button>
-      </div>
-      </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 <!-- Modal -->
 <div class="modal fade" id="requestdoc" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">

@@ -73,7 +73,7 @@ $users = $db
 								</div>
 								<div class="card-body">
 									<div class="table-responsive">
-										<table class="table table-striped ">
+							    <table id="usertable" class="display table table-striped">
 											<thead>
 												<tr>
 													<th scope="col">No.</th>
@@ -207,6 +207,13 @@ $users = $db
 
 	</div>
 	<?php include "templates/footer.php"; ?>
+	  <script>
+    $(document).ready(function() {
+      $('#usertable').DataTable({
+        order: []
+      });
+    });
+  </script>
 </body>
 
 </html>

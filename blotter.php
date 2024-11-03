@@ -74,8 +74,8 @@ $settled = $result3->num_rows;
 													<th scope="col">Respondent</th>
 													<th scope="col">Victim(s)</th>
 													<th scope="col">Blotter/Incident</th>
-													<th scope="col">Status</th>
-													<?php if (isset($_SESSION["username"])): ?>
+															<th scope="col">Status</th>
+													<?php if (isAdmin()): ?>
 														<th scope="col">Action</th>
 													<?php endif; ?>
 												</tr>
@@ -88,6 +88,7 @@ $settled = $result3->num_rows;
 															<td><?= ucwords($row["respondent"]) ?></td>
 															<td><?= ucwords($row["victim"]) ?></td>
 															<td><?= ucwords($row["type"]) ?></td>
+															
 															<td>
 																<?php if ($row["status"] == "Scheduled"): ?>
 																	<span class="badge badge-warning">Scheduled</span>
@@ -97,6 +98,7 @@ $settled = $result3->num_rows;
 																	<span class="badge badge-success">Settled</span>
 																<?php endif; ?>
 															</td>
+															
 															<?php if (isset($_SESSION["username"])): ?>
 																		<?php if (isAdmin()): ?>
 																<td>
@@ -157,10 +159,12 @@ $settled = $result3->num_rows;
 													<th scope="col">Respondent</th>
 													<th scope="col">Victim(s)</th>
 													<th scope="col">Blotter/Incident</th>
+										
 													<th scope="col">Status</th>
-													<?php if (isset($_SESSION["username"])): ?>
+													<?php if (isAdmin()): ?>
 														<th scope="col">Action</th>
 													<?php endif; ?>
+														
 												</tr>
 											</tfoot>
 										</table>
@@ -241,96 +245,114 @@ $settled = $result3->num_rows;
 			</div>
 
 			<!-- Modal -->
-			<div class="modal fade" id="add">
-				<div class="modal-dialog modal-lg" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="exampleModalLabel">Manage Blotter</h5>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<form method="POST" action="model/save_blotter.php">
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Complainant</label>
-											<input type="text" class="form-control" placeholder="Enter Complainant Name" name="complainant" required>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Respondent</label>
-											<input type="text" class="form-control" placeholder="Enter Respondent Name" name="respondent" required>
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Victim(s)</label>
-											<input type="text" class="form-control" placeholder="Enter Victim(s) Name" name="victim" required>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Type</label>
-											<select class="form-control" name="type">
-												<option disabled selected>Select Blotter Type</option>
-												<option value="Amicable">Amicable</option>
-												<option value="Incident">Incident</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Location</label>
-											<input type="text" class="form-control" placeholder="Enter Location" name="location" required>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Date</label>
-											<input type="date" class="form-control" name="date" value="<?= date("Y-m-d") ?>" required>
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Time</label>
-											<input type="time" class="form-control" name="time" required>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Status</label>
-											<select class="form-control" name="status">
-												<option disabled selected>Select Blotter Status</option>
-												<option value="Active">Active</option>
-												<option value="Settled">Settled</option>
-												<option value="Scheduled">Scheduled</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div class="form-group">
-									<label>Details</label>
-									<textarea class="form-control" placeholder="Enter Blotter or Incident here..." name="details" required></textarea>
-								</div>
+<div class="modal fade" id="add">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Manage Blotter</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="model/save_blotter.php">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Complainant</label>
+                                <input type="text" class="form-control" placeholder="Enter Complainant Name" name="complainant" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Respondent</label>
+                                <input type="text" class="form-control" placeholder="Enter Respondent Name" name="respondent" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Victim/Affected Resident</label>
+                                <input type="text" class="form-control" placeholder="Enter Victim(s) Name" name="victim" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Type</label>
+                                <select class="form-control" name="type">
+                                    <option disabled selected>Select Blotter Type</option>
+                                     <option value="Misunderstanding">Misunderstanding</option>
+                                    <option value="Incident">Incident</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Location</label>
+                                <input type="text" class="form-control" placeholder="Enter Location" name="location" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" class="form-control" name="date" 
+                                <?php if (isAdmin()): ?>
+                                    placeholder="Enter Date"
+                                <?php else: ?>
+                                    value="<?= date("Y-m-d") ?>" readonly
+                                <?php endif; ?> required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Time</label>
+                                <input type="time" class="form-control" name="time" 
+                                <?php if (isAdmin()): ?>
+                                    placeholder="Enter Time"
+                                <?php else: ?>
+                                    value="<?= date("H:i") ?>" readonly
+                                <?php endif; ?> required>
+                            </div>
+                        </div>
+												 <?php if (isAdmin()): ?>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Status</label>
+            <select class="form-control" name="status">
+                <option disabled selected>Select Blotter Status</option>
+                <option value="Active">Active</option>
+                <option value="Settled">Settled</option>
+                <option value="Scheduled">Scheduled</option>
+            </select>
+        </div>
+    </div>
+<?php else: ?>
+    
+            <input type="hidden" class="form-control" name="status" value="Active">
+        
+<?php endif; ?>
 
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-							<button type="submit" class="btn btn-primary">Save</button>
-						</div>
-						</form>
-					</div>
-				</div>
-			</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Details</label>
+                        <textarea class="form-control" placeholder="Enter Blotter or Incident here..." name="details" required></textarea>
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 			<!-- Modal -->
 			<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

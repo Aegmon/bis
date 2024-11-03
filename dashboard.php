@@ -485,11 +485,7 @@ $admin_dashboard_cards = [
                         Court of Appeals' ?>
                     </p>
 
-                    <div class="text-center">
-                      <img class="img-fluid" src="<?= !empty($db_img)
-                      	? "assets/uploads/" . $db_img
-                      	: "assets/img/bg-abstract.png" ?>" />
-                    </div>
+                    
                   </div>
                 </div>
               </div>

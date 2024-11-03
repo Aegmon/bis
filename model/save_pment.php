@@ -68,7 +68,7 @@ if (isset($_POST['create-payment'])) {
       ->where('id', $request_id)
       ->set([
         "payment_id" => $paymentResult["id"],
-        "status" => "Resolved"
+        "status" => "Released"
       ])
       ->exec();
   } else {
@@ -78,7 +78,7 @@ if (isset($_POST['create-payment'])) {
         "resident_id" => $resident_id,
         "payment_id" => $paymentResult['id'],
         "certificate_id" => $certificate_id,
-        "status" => "resolved",
+        "status" => "Released",
         "memo" => $details,
       ])
       ->exec();
