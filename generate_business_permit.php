@@ -180,7 +180,7 @@ if (isset($_GET['request_id'])) {
                 <form method="POST" action="model/save_pment.php">
                   <div class="form-group">
                     <label>Amount</label>
-                    <input type="number" class="form-control" name="amount" placeholder="Enter amount to pay" required>
+                    <input type="number" class="form-control" name="amount" placeholder="Enter amount to pay" value='25' required>
                   </div>
 
                   <div class="form-group">
@@ -227,11 +227,11 @@ if (isset($_GET['request_id'])) {
     const urlSearchParams = new URLSearchParams(window.location.search);
     const params = Object.fromEntries(urlSearchParams.entries());
 
-    // if (!params['closeModal']) {
-    //   setTimeout(() => {
-    //     $('#pment').modal('show');
-    //   }, 1000);
-    // }
+    if (!params['closeModal']) {
+      setTimeout(() => {
+        $('#pment').modal('show');
+      }, 1000);
+    }
 
     function printDiv(divName) {
       var printContents = document.getElementById(divName).innerHTML;
