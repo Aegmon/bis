@@ -41,7 +41,19 @@ $nat = $conn->query($check)->fetch_assoc();
 if ($nat['id'] == $id || count($nat) <= 0) {
 	if (!empty($id)) {
 
-		if (!empty($profile) && !empty($profile2)) {
+		if (empty($bdate) && empty($age)) {
+
+			$query = "UPDATE residents SET national_id='$national_id',citizenship='$citi',`picture`='$profile', `firstname`='$fname', `middlename`='$mname', `lastname`='$lname', `alias`='$alias', `birthplace`='$bplace',`civilstatus`='$cstatus', `gender`='$gender', `purok`='$purok', `voterstatus`='$vstatus', `identified_as`='$indetity', `phone`='$number', `email`='$email',`occupation`='$occu', `address`='$address',
+						`resident_type`='$deceased', `remarks`='$remarks'
+						WHERE id=$id;";
+
+			if ($conn->query($query) === true) {
+
+				$_SESSION['message'] = 'Resident Information has been updated!';
+				$_SESSION['status'] = 'success';
+				header("Location: ../resident.php");
+			}
+		} else if (!empty($profile) && !empty($profile2)) {
 
 			$query = "UPDATE residents SET national_id='$national_id',citizenship='$citi',`picture`='$profile', `firstname`='$fname', `middlename`='$mname', `lastname`='$lname', `alias`='$alias', `birthplace`='$bplace', `birthdate`='$bdate',
 						age=$age, `civilstatus`='$cstatus', `gender`='$gender', `purok`='$purok', `voterstatus`='$vstatus', `identified_as`='$indetity', `phone`='$number', `email`='$email',`occupation`='$occu', `address`='$address',

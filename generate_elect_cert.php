@@ -97,12 +97,8 @@ $sec = $conn->query($s)->fetch_assoc();
                           <h1 class="mt-4 fw-bold mb-5">BARANGAY CLEARANCE</h1>
                         </div>
                         <h2 class="mt-5">TO WHOM IT MAY CONCERN:</h2>
-                        <h2 class="mt-3" style="text-indent: 40px;">This is to certify that <span class="fw-bold"
-                            style="font-size:25px"><?= ucwords($resident['firstname'] . ' ' . $resident['middlename'] . ' ' . $resident['lastname']) ?></span>,
-                          is a permanent resident of
-                          <span class="fw-bold" style="font-size:25px"><?= ucwords($brgy) ?></span> and that he/she is
-                          known to me to be of good moral character.
-                        </h2>
+                      <h2 class="mt-3" style="text-indent: 40px;">This is to certify that <span class="fw-bold" style="font-size:25px"><?= ucwords($resident['firstname'] . ' ' . $resident['middlename'] . ' ' . $resident['lastname']) ?></span>, is a permanent resident of <span class="fw-bold" style="font-size:25px"><?= ucwords($brgy) ?></span> and that he or she is known to me to be of good moral character.</h2>
+
                         <h2 class="mt-3" style="text-indent: 40px;">This certification/clearance is hereby issued to the
                           above-named person for whatever legal purpose it may serve him/her best.</h2>
                         <h2 class="mt-5">Given this <span class="fw-bold"
@@ -154,7 +150,7 @@ $sec = $conn->query($s)->fetch_assoc();
               <div class="modal-body">
                 <form method="POST" action="model/save_pment.php">
                   <div class="form-group">
-                    <label>Amount</label>
+                    <label>Amount of Payment</label>
                   <input type="number" class="form-control" name="amount" placeholder="Enter amount to pay" value='25' required>
                   </div>
                   <div class="form-group">
@@ -162,9 +158,9 @@ $sec = $conn->query($s)->fetch_assoc();
                     <input type="date" class="form-control" name="date" value="<?= date('Y-m-d') ?>">
                   </div>
                   <div class="form-group">
-                    <label>Payment Details(Optional)</label>
-                    <textarea class="form-control" placeholder="Enter Payment Details"
-                      name="details">Barangay Clearance Payment</textarea>
+                    <label>Feedback</label>
+                    <textarea class="form-control" placeholder="Enter Feedback"
+                      name="details">Enter Feedback</textarea>
                   </div>
               </div>
               <div class="modal-footer">

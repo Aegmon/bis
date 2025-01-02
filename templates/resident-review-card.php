@@ -146,7 +146,7 @@ $resident = (function () use ($db) {
           </div>
 
           <div class="row g-0">
-            <div class="col-sm-4">
+            <div class="col">
               <div class="form-group">
                 <label>Alias</label>
                 <input class="form-control" placeholder="Enter Alias" name="alias"
@@ -154,7 +154,7 @@ $resident = (function () use ($db) {
               </div>
             </div>
 
-            <div class="col-sm-4">
+            <div class="col">
               <div class="form-group">
                 <label>Place of Birth</label>
                 <input class="form-control" placeholder="Enter Birthplace" name="birthplace" required
@@ -162,25 +162,36 @@ $resident = (function () use ($db) {
               </div>
             </div>
 
-            <div class="col-sm-4">
+            <div class="col">
               <div class="form-group">
                 <label>Birthdate</label>
-                <input type="date" class="form-control" placeholder="Enter Birthdate" name="birthdate"
+                <input type="<?= isAdmin() ? 'date' : 'hidden' ?>" class="form-control" placeholder="Enter Birthdate" name="birthdate"
                   required value="<?= $resident["birthdate"] ?>">
+
+                  <input type="<?= isAdmin() ? 'hidden' : 'date' ?>" class="form-control" placeholder="Enter Birthdate" name=""
+                  required value="<?= $resident["birthdate"] ?>"
+                  <?php if (!isAdmin()): ?>
+                          disabled
+                    <?php endif; ?>>
               </div>
             </div>
           </div>
 
           <div class="row g-0">
-            <div class="col-sm-4">
-              <div class="form-group">
+            <div class="col">
+              <div class="form-group ">
                 <label>Age</label>
-                <input type="number" class="form-control" placeholder="Enter Age" min="1" name="age"
+                <input type="<?= isAdmin() ? 'number' : 'hidden' ?>" class="form-control" placeholder="Enter Age" min="1" name="age"
                   required value="<?= $resident["age"] ?>">
+                
+                    <input type="<?= isAdmin() ? 'hidden' : 'number' ?>" class="form-control" placeholder="Enter Age" min="1" name=""
+                  required value="<?= $resident["age"] ?>"<?php if (!isAdmin()): ?>
+                          disabled
+                    <?php endif; ?>>
               </div>
             </div>
 
-            <div class="col-sm-4">
+            <div class="col">
               <div class="form-group">
                 <label>Civil Status</label>
 
@@ -207,7 +218,7 @@ $resident = (function () use ($db) {
               </div>
             </div>
 
-            <div class="col-sm-4">
+            <div class="col">
               <div class="form-group">
                 <label>Gender</label>
                 <select class="form-control" name="gender" required value="<?= $resident[

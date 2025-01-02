@@ -264,7 +264,7 @@ $residentList = (function () use ($db) {
                                       <?php endif; ?>
                                     </a>
                                     <?php if (isAdmin()): ?>
-                                      <a
+                                      <!-- <a
                                         type="button"
                                         data-toggle="tooltip"
                                         href="generate_resident.php?id=<?= $row["id"] ?>"
@@ -272,7 +272,7 @@ $residentList = (function () use ($db) {
                                         title="Generate Report"
                                       >
                                         <i class="fa fa-file-pdf"></i>
-                                      </a>
+                                      </a> -->
                                       <button
                                         type="button"
                                         data-toggle="tooltip"

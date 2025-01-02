@@ -16,10 +16,11 @@ if (isset($_POST['create-payment'])) {
 
   $details = getBody('details', $_POST);
   $date = getBody('date', $_POST);
-  $mode = getBody('mode', $_POST);
+  $mode = "Cash";
   $resident_id = getBody('resident_id', $_POST);
   $certificate_id = getBody('certificate_id', $_POST);
   $request_id = getBody('request_id', $_POST);
+  $stats = "released";
 
   $requiredFields = [
     "Amount" => $amount,
@@ -68,7 +69,8 @@ if (isset($_POST['create-payment'])) {
       ->where('id', $request_id)
       ->set([
         "payment_id" => $paymentResult["id"],
-        "status" => "Released"
+        "status" => $stats,
+            "feedback" => $details,
       ])
       ->exec();
   } else {
@@ -78,8 +80,9 @@ if (isset($_POST['create-payment'])) {
         "resident_id" => $resident_id,
         "payment_id" => $paymentResult['id'],
         "certificate_id" => $certificate_id,
-        "status" => "Released",
+        "status" => $stats,
         "memo" => $details,
+           "feedback" => $details,
       ])
       ->exec();
   }
@@ -92,7 +95,7 @@ if (isset($_POST['create-payment'])) {
     return $conn->close();
   }
 
-  $_SESSION["message"] = "Successfully stored payment";
+  $_SESSION["message"] = "Amount Sent";
   $_SESSION["status"] = "success";
 
   header("Location: " . $_SERVER["HTTP_REFERER"] . "&closeModal=1");

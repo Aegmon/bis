@@ -1,11 +1,23 @@
 <?php include 'bootstrap/index.php' ?>
 <?php
-$query = "SELECT * FROM tblpermit";
+$query = "SELECT 
+    cr.id AS id, 
+    r.id AS resident_id, 
+    CONCAT(r.firstname, ' ', r.middlename, ' ', r.lastname) AS name,
+    cr.*
+FROM 
+    certificate_requests AS cr
+JOIN 
+    residents AS r
+ON 
+    cr.resident_id = r.id
+WHERE 
+    cr.certificate_id = 10;";
 $result = $conn->query($query);
 
-$permit = array();
+$job = array();
 while ($row = $result->fetch_assoc()) {
-	$permit[] = $row;
+	$job[] = $row;
 }
 
 ?>
@@ -14,7 +26,7 @@ while ($row = $result->fetch_assoc()) {
 
   <head>
     <?php include 'templates/header.php' ?>
-    <title>Resident Certificate Issuance - Barangay Services Management System</title>
+    <title>First Time Jobseeker - Barangay Services Management System</title>
   </head>
 
   <body>
@@ -48,13 +60,9 @@ while ($row = $result->fetch_assoc()) {
                 <div class="card">
                   <div class="card-header">
                     <div class="card-head-row">
-                      <div class="card-title">Business Certificate Issuance</div>
+                      <div class="card-title">First Time Jobseeker Issuance</div>
                       <?php if (isset($_SESSION['username'])) : ?>
                       <div class="card-tools">
-                        <a href="#add" data-toggle="modal" class="btn btn-info btn-border btn-round btn-sm">
-                          <i class="fa fa-plus"></i>
-                          Business Permit
-                        </a>
                       </div>
                       <?php endif ?>
                     </div>
@@ -64,66 +72,61 @@ while ($row = $result->fetch_assoc()) {
                       <table id="residenttable" class="display table table-striped">
                         <thead>
                           <tr>
-                            <th scope="col">Name of Business</th>
-                            <th scope="col">Business Owner</th>
-                            <th scope="col">Nature</th>
-                            <th scope="col">Date Applied</th>
+                            <th scope="col">Request ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Year Of Residency</th>
                             <?php if (isset($_SESSION['username'])) : ?>
                             <th scope="col">Action</th>
                             <?php endif ?>
                           </tr>
                         </thead>
                         <tbody>
-                          <?php if (!empty($permit)) : ?>
-                          <?php foreach ($permit as $row) : ?>
-                          <tr>
-                            <td><?= ucwords($row['name']) ?></td>
-                            <td>
-                              <?= !empty($row['owner2']) ? ucwords($row['owner1'] . ' & ' . $row['owner2']) : $row['owner1'] ?>
-                            </td>
-                            <td><?= $row['nature'] ?></td>
-                            <td><?= $row['applied'] ?></td>
-                            <?php if (isset($_SESSION['username'])) : ?>
-                            <td>
-                              <div class="form-button-action">
-                                <a type="button" data-toggle="tooltip"
-                                  href="generate_business_permit.php?id=<?= $row['id'] ?>"
-                                  class="btn btn-link btn-primary" data-original-title="Generate Permit">
-                                  <i class="fas fa-file-alt"></i>
-                                </a>
+														<?php if (!empty($job)) : ?>
+															<?php foreach ($job as $row) : ?>
+																<tr>
+																	<td><?= ucwords($row['id']) ?></td>
+																	<td><?= ucwords($row['name']) ?></td>
+																	<td>
+																		<?php
+																		// Decode JSON in 'data' column if applicable
+																		$data = json_decode($row['data'], true);
+																		if (isset($data['year_residence'])) {
+																				echo ucwords($data['year_residence']);
+																		} else {
+																				echo "N/A";
+																		}
+																		?>
+																	</td>
+																	<td><?= $row['created_at'] ?></td>
+																	<?php if (isset($_SESSION['username'])) : ?>
+																		<td>
+																			<div class="form-button-action">
+																				<a type="button" data-toggle="tooltip"
+																					href="generate_jobseeker_cert.php?cr_id=<?= $row['id'] ?>"
+																					class="btn btn-link btn-primary" data-original-title="Generate Permit">
+																					<i class="fas fa-file-alt"></i>
+																				</a>
 
-                                <a type="button" data-toggle="tooltip"
-                                  href="generate_business_closure.php?id=<?= $row['id'] ?>"
-                                  class="btn btn-link btn-warning" data-original-title="Business Closure Certificate">
-                                  <i class="fas fa-file-alt"></i>
-                                </a>
-                                <?php if (isset($_SESSION['username']) && $_SESSION['role'] == 'administrator') : ?>
-                                <a type="button" data-toggle="tooltip"
-                                  href="model/remove_permit.php?id=<?= $row['id'] ?>"
-                                  onclick="return confirm('Are you sure you want to delete this business permit?');"
-                                  class="btn btn-link btn-danger" data-original-title="Remove">
-                                  <i class="fa fa-times"></i>
-                                </a>
-                                <?php endif ?>
-                              </div>
-                            </td>
-                            <?php endif ?>
-
-                          </tr>
-                          <?php endforeach ?>
-                          <?php endif ?>
-                        </tbody>
-                        <tfoot>
-                          <tr>
-                            <th scope="col">Name of Business</th>
-                            <th scope="col">Business Owner</th>
-                            <th scope="col">Nature</th>
-                            <th scope="col">Date Applied</th>
-                            <?php if (isset($_SESSION['username'])) : ?>
-                            <th scope="col">Action</th>
-                            <?php endif ?>
-                          </tr>
-                        </tfoot>
+                                        <a type="button" data-toggle="tooltip"
+																					href="generate_oath_cert.php?cr_id=<?= $row['id'] ?>"
+																					class="btn btn-link btn-warning" data-original-title="OATH OF UNDERTAKING">
+																					<i class="fas fa-file-alt"></i>
+																				</a>
+																				<?php if (isset($_SESSION['username']) && $_SESSION['role'] == 'administrator') : ?>
+																					<a type="button" data-toggle="tooltip"
+																						href="model/remove_jobseeker.php?id=<?= $row['id'] ?>"
+																						onclick="return confirm('Are you sure you want to delete this record?');"
+																						class="btn btn-link btn-danger" data-original-title="Remove">
+																						<i class="fa fa-times"></i>
+																					</a>
+																				<?php endif ?>
+																			</div>
+																		</td>
+																	<?php endif ?>
+																</tr>
+															<?php endforeach ?>
+														<?php endif ?>
+													</tbody>
                       </table>
                     </div>
                   </div>

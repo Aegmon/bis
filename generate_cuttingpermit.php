@@ -126,7 +126,7 @@ if (isset($_GET['request_id'])) {
                           <h1 class="mt-4 fw-bold"><u>CERTIFICATION</u></h1>
                         </div>
                         <div class="text-center">
-                          <h1 class="mt-4 fw-bold mb-5" style="font-size:38px;color:darkblue">CUTTING PERMIT CLEARANCE
+                          <h1 class="mt-4 fw-bold mb-5" style="font-size:38px;color:black">CUTTING PERMIT CLEARANCE
                           </h1>
                         </div>
                         <h2 class="mt-5 fw-bold">TO WHOM IT MAY CONCERN:</h2><br>

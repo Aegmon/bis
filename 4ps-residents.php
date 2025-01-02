@@ -90,7 +90,7 @@ $residentList = (function () use ($db) {
                 <div class="card">
                   <div class="card-header">
                     <div class="card-head-row">
-                      <div class="card-title">Resident Information</div>
+                      <div class="card-title">4ps Certificate Issuance</div>
                     </div>
                   </div>
                   <div class="card-body">

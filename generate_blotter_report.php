@@ -184,6 +184,18 @@ $sec = $db
                           </div>
                         </div>
 
+                        <div class="row">
+                          <div class="col">
+                            <div class="form-group row">
+                              <h3 class="mt-5 col-lg-4 col-md-4 col-sm-4 mt-sm-2 text-left">Feedback</h3>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 text-left">
+                              <textarea class="form-control fw-bold" style="font-size:20px"
+                                rows="8"><?= ucwords(trim($resident['feedback'])) ?></textarea>
+                            </div>
+                          </div>
+                        </div>
+
                       </div>
                       <div class="col-md-12">
                         <div class="p-3 text-right mr-3">

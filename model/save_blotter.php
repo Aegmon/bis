@@ -7,7 +7,7 @@ if (!isset($_SESSION['username'])) {
     }
 }
 
-$complainant    = $conn->real_escape_string($_POST['complainant']);
+$complainant    = $conn->real_escape_string($_POST['complainant_id']);
 $respondent     = $conn->real_escape_string($_POST['respondent']);
 $victim         = $conn->real_escape_string($_POST['victim']);
 $type             = $conn->real_escape_string($_POST['type']);
@@ -16,11 +16,12 @@ $date           = $conn->real_escape_string($_POST['date']);
 $time             = $conn->real_escape_string($_POST['time']);
 $status         = $conn->real_escape_string($_POST['status']);
 $details         = $conn->real_escape_string($_POST['details']);
+$feedback         = $conn->real_escape_string($_POST['feedback']);
 
-if (!empty($complainant) && !empty($respondent) && !empty($victim) && !empty($type) && !empty($location) && !empty($date) && !empty($time) && !empty($status) && !empty($details)) {
+if (!empty($complainant) && !empty($victim) && !empty($type) && !empty($location) && !empty($date) && !empty($time) && !empty($status) && !empty($details)) {
 
-    $insert  = "INSERT INTO tblblotter (`complainant`, `respondent`, `victim`, `type`, `location`,`date`, `time`, `details`, `status`)
-                    VALUES ('$complainant', '$respondent','$victim', '$type','$location','$date', '$time','$details', '$status')";
+    $insert  = "INSERT INTO tblblotter (`complainant`, `respondent`, `victim`, `type`, `location`,`date`, `time`, `details`, `feedback`, `status`)
+                    VALUES ('$complainant', '$respondent','$victim', '$type','$location','$date', '$time','$details', '$feedback', '$status')";
     $result  = $conn->query($insert);
 
     if ($result === true) {

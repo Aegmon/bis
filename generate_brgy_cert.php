@@ -76,7 +76,7 @@ $sec = $db
                 <div class="card">
                   <div class="card-header">
                     <div class="card-head-row">
-                      <div class="card-title">
+                      <div class="card-title ">
                         Barangay Certificate</div>
                       <div class="card-tools">
                         <button class="btn btn-info btn-border btn-round btn-sm" onclick="printDiv('printThis')">
@@ -154,7 +154,7 @@ $sec = $db
                           </h5>
                         </div> -->
                       </div>
-                      <div class="col-md-9">
+                      <div class="col-md-12">
                         <div class="text-center">
                           <h2 class="mt-4 fw-bold">
                             OFFICE OF THE BARANGAY
@@ -176,10 +176,7 @@ $sec = $db
                           <span class="fw-bold" style="font-size:25px"><?= ucwords(
                                                                         $brgy
                                                                       ) ?></span>
-                          and that he/she is known
-                          to me to be
-                          of good moral character.
-                        </h2>
+                        and that he or she is known to me to be of good moral character.</h2>
                         <h2 class="mt-3" style="text-indent: 40px;">
                           This
                           certification/clearance

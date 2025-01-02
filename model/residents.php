@@ -190,12 +190,14 @@ if (!empty($profileFile["name"])) {
 		$account_id = (function () use ($db) {
 			$imgFilename = $GLOBALS["imgFilename"];
 			$username = $GLOBALS["username"];
+			$email = $GLOBALS["email"];
 			$password = sha1($GLOBALS["password"]);
 
 			$result = $db
 				->insert("users")
 				->values([
 					"username" => $username,
+					"email"=>$email,
 					"password" => $password,
 					"user_type" => "user",
 					"avatar" => $imgFilename,
@@ -283,8 +285,8 @@ if (isset($_POST["update-resident"])) {
 		"First Name" => $fname,
 		"Last Name" => $lname,
 		"Birth Place" => $birthplace,
-		"Birth Date" => $birthdate,
-		"Age" => $age,
+		//"Birth Date" => $birthdate,
+		//"Age" => $age,
 		"Civil Status" => $civil_status,
 		"Gender" => $gender,
 		"Purok" => $purok_id,

@@ -1,12 +1,6 @@
 <?php include 'bootstrap/index.php' ?>
 <?php
-$id = $_GET['id'];
 
-$resident = $db
-  ->from('residents')
-  ->where('id', $id)
-  ->first()
-  ->exec();
 
 $captain = $db
   ->from(["tblofficials" => "officials"])
@@ -18,7 +12,6 @@ $captain = $db
   ])
   ->exec();
 
-
 $sec = $db
   ->from(["tblofficials" => "officials"])
   ->join(["tblposition" => "positions"], "positions.id", "officials.position")
@@ -28,13 +21,55 @@ $sec = $db
     "name" => "officials.name"
   ])
   ->exec();
+
+  if (isset($_GET['id'], $_GET['request_id'])) {
+    $id = $_GET['id'];
+    $guardian = $db
+      ->from(["residents" => "resident"])
+      ->where('resident.id', $id)
+      ->first()
+      ->exec();
+
+  $request = $db
+    ->from(["certificate_requests" => "cr"])
+    ->where("cr.id", $_GET['request_id'])
+    ->first()
+    ->exec();
+
+  if (!empty($request)) {
+    $request['data'] = json_decode($request['data'], true);
+     
+    $guardian_name['guardian_name'] = $request['data']['guardian_name'];
+  }
+}
+
+if(isset($_GET['cr_id'])){
+  $id = $_GET['cr_id'];
+  // Prepare the query with a named placeholder
+  $query = "SELECT 
+      cr.id AS id, 
+      r.id AS resident_id, 
+      r.firstname, ' ', r.middlename, ' ', r.lastname,
+      cr.*
+  FROM certificate_requests AS cr
+  JOIN residents AS r ON cr.resident_id = r.id
+  WHERE cr.id = $id";
+  // Prepare the statement
+  $stmt = $conn->prepare($query);
+  // Execute the query
+  $stmt->execute();
+  // Fetch the result
+  $guardian = $stmt->get_result()->fetch_assoc();
+  $guardian_name= json_decode($guardian['data'], true);
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
   <head>
     <?php include 'templates/header.php' ?>
-    <title>Certificate of Indigency - Barangay Services Management System</title>
+    <title>Certificate of Guardianship - Barangay Services Management System</title>
     <style>
     @page {
       size: auto;
@@ -78,7 +113,7 @@ $sec = $db
                 <div class="card">
                   <div class="card-header">
                     <div class="card-head-row">
-                      <div class="card-title">Certificate of Indigency</div>
+                      <div class="card-title">Certificate of Guardianship</div>
                       <div class="card-tools">
                         <button class="btn btn-info btn-border btn-round btn-sm" onclick="printDiv('printThis')">
                           <i class="fa fa-print"></i>
@@ -109,30 +144,20 @@ $sec = $db
                           <h1 class="mt-4 fw-bold"><u>OFFICE OF THE BARANGAY CAPTAIN</u></h1>
                         </div>
                         <div class="text-center">
-                          <h1 class="mt-4 fw-bold mb-5" style="font-size:38px;color:black">CERTIFICATE OF INDIGENCY
+                          <h1 class="mt-4 fw-bold mb-5" style="font-size:38px;color:black">CERTIFICATE OF GUARDIANSHIP
                           </h1>
                         </div>
                         <h2 class="mt-5 fw-bold">TO WHOM IT MAY CONCERN:</h2>
-                          <h2 class="mt-3" style="text-indent: 40px;">This is to certify that the person whose name and other information appear below has passed the record verification being one of the indigent families with low-income in our community, to wit.
+                          <h2 class="mt-3" style="text-indent: 40px;">This is to certify that <?= ucwords($guardian['lastname'].', '.$guardian['firstname'].' '.$guardian['middlename']) ?> of legal age a bonafide resident of this barangay.
                         </h2>
-                           <br>
-                        <h1 class="mt-3">Name: <span class="fw-bold"
-                            style="font-size:25px"><?= ucwords($resident['firstname'] . ' ' . $resident['middlename'] . ' ' . $resident['lastname']) ?></span></h1>
-                        <h1 class="mt-3 ">Barangay: <span class="fw-bold"
-                            style="font-size:25px"><?= ucwords($brgy) ?></span></h1>
-
-
-
-
-          
-                       <h2 class="mt-3" style="text-indent: 40px;">This certification/clearance is hereby issued to the above-named person for whatever legal purpose it may serve him or her best.</h2>
-<h2 class="mt-5">Issued this day <span  style="font-size:25px"><?= date('d') ?></span> of <span style="font-size:25px"><?= date('F') ?></span>, 2024 <br>
-
-Barangay <span style="font-size:25px"><?= ucwords($brgy) ?></span> <br>
-Municipality of <span style="font-size:25px"><?= ucwords($town) ?></span>, Philippines.</h2>
-
-
-
+                        
+                           <h2 class="mt-3" style="text-indent: 40px;">This is to certify that <?= ucwords($guardian_name['guardian_name']) ?> is his/her Guardian and taking care of him-her and they are living with one roof.
+                        </h2>
+                        <h2 class="mt-3" style="text-indent: 40px;">This certifiacation is being issued for whatever legal purposes it may serve. </h2>
+                        <h2 class="mt-5">Given this <span class="fw-bold"
+                            style="font-size:25px"><?= date('m/d/Y') ?></span> at the office of the Punong Barangay,
+                          at Barangay Carino, Paniqui Tarlac.
+                        </h2>
                       </div>
                       <div class="col-md-12">
                         <div class="p-3 text-right mr-5" style="margin-top:300px">
@@ -171,7 +196,7 @@ Municipality of <span style="font-size:25px"><?= ucwords($town) ?></span>, Phili
                     <input type="date" class="form-control" name="date" value="<?= date('Y-m-d') ?>">
                   </div>
 
-           
+             
 
                   <div class="form-group">
                     <label>Feedback</label>
@@ -180,8 +205,9 @@ Municipality of <span style="font-size:25px"><?= ucwords($town) ?></span>, Phili
                   </div>
               </div>
               <div class="modal-footer">
-                <input type="hidden" name="resident_id" value="<?= $_GET['id'] ?>">
-                <input type="hidden" name="create-payment" value="<?= $_GET['id'] ?>">
+                <input type="hidden" name="resident_id" 
+       value="<?= htmlspecialchars($_GET['id'] ?? $_GET['cr_id'] ?? '') ?>">
+                <input type="hidden" name="create-payment" value="<?= htmlspecialchars($_GET['id'] ?? $_GET['cr_id'] ?? '') ?>">
                 <input type="hidden" name="request_id" value="<?= getBody('request_id', $_GET) ?>">
                 <input type="hidden" name="certificate_id" value="4">
                 <button type="button" class="btn btn-secondary" onclick="goBack()">Close</button>

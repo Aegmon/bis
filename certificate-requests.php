@@ -41,8 +41,10 @@ $request_list = (function () use ($db) {
 				"status" => "cr.status",
 				"memo" => "cr.memo",
 				"created_at" => "cr.created_at",
+           "feedback" => "cr.feedback",
 				"certificate_id" => "certificates.id",
 				"certificate_name" => "certificates.name",
+         "supporting_document" => "cr.supporting_document",
 			])
 			->exec();
 	}
@@ -61,11 +63,13 @@ $request_list = (function () use ($db) {
 				"created_at" => "cr.created_at",
 				"certificate_id" => "certificates.id",
 				"certificate_name" => "certificates.name",
+            "feedback" => "cr.feedback",
 				"certificate_url" => "cr.url",
 				"resident_id" => "residents.id",
 				"firstname" => "residents.firstname",
 				"middlename" => "residents.middlename",
 				"lastname" => "residents.lastname",
+         "supporting_document" => "cr.supporting_document",
 			])
 			->exec();
 	}
@@ -122,75 +126,91 @@ $request_list = (function () use ($db) {
                   </div>
                   <div class="card-body">
                     <div class="table-responsive">
-                      <table id="announcement-table" class="display table table-striped">
-                        <thead>
-                          <tr>
-                            <th scope="col">Certificate</th>
-                            <?php if (isAdmin()): ?>
-                            <th scope="col">Requested By</th>
-                            <?php endif; ?>
-                            <th scope="col">Purpose</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Request Date</th>
-                            <th scope="col"></th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <?php foreach ($request_list as $request): ?>
-                          <tr>
-                            <td><?= $request["certificate_name"] ?></td>
-                            <?php if (isAdmin()): ?>
-                            <td><?= fullname($request) ?></td>
-                            <?php endif; ?>
-                            <td><?= $request["memo"] ?></td>
-                            <td><?= ucwords($request["status"]) ?></td>
-                            <td>
-                              <?= Carbon::create($request["created_at"])->toDayDateTimeString() ?>
-                            </td>
-                            <td class="d-flex justify-content-center align-items-center gap-3">
-                              <?php if (isUser()): ?>
-                              <a href="javascript:void(0)" data-target="#edit-request"
-                                data-value-id="<?= $request["id"] ?>" data-value-memo="<?= $request["memo"] ?>"
-                                data-value-certificate_id="<?= $request["certificate_id"] ?>" onclick="showModal(this)">
-                                <i class="fa fa-edit"></i>
-                              </a>
-                              <?php endif; ?>
+                    <table id="announcement-table" class="display table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Certificate</th>
+            <?php if (isAdmin()): ?>
+            <th scope="col">Requested By</th>
+            <?php endif; ?>
+            <th scope="col">Purpose</th>
+            <th scope="col">Status</th>
+            <th scope="col">Request Date</th>
+            <?php if (isAdmin()): ?>
+            <th scope="col">Supporting Document</th>
+            <?php endif; ?>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($request_list as $request): ?>
+        <tr>
+            <td><?= $request["certificate_name"] ?></td>
+            <?php if (isAdmin()): ?>
+            <td><?= fullname($request) ?></td>
+            <?php endif; ?>
+            <td><?= $request["memo"] ?></td>
+            <td><?= ucwords($request["status"]) ?></td>
+            <td>
+                <?= Carbon::create($request["created_at"])->toDayDateTimeString() ?>
+            </td>
+            <?php if (isAdmin()): ?>
+            <td>
+              
+                <?php if (!empty($request["supporting_document"])): 
+        
 
-                              <?php if (role(["administrator", "staff"])): ?>
-                              <a href="javascript:void(0)" data-target="#edit-request"
-                                data-value-id="<?= $request["id"] ?>" data-value-memo="<?= $request["memo"] ?>"
-                                data-value-certificate_id="<?= $request[
-                                	"certificate_id"
-                                ] ?>" onclick="showModal(this)">
-                                <i class="fa fa-eye"></i>
-                              </a>
-                              <?php endif; ?>
+                  ?>
+                  
+                <a href="model/<?= $request["supporting_document"] ?>" download class="btn-link btn-info">
+                    <i class="fa fa-download"></i> Download
+                </a>
+                <?php else: ?>
+                No Document Attached
+                <?php endif; ?>
+            </td>
+            <?php endif; ?>
+            <td class="d-flex justify-content-center align-items-center gap-3">
+                <?php if (isUser()): ?>
+                <a href="javascript:void(0)" data-target="#edit-request"
+                    data-value-id="<?= $request["id"] ?>" data-value-memo="<?= $request["memo"] ?>"
+                    data-value-certificate_id="<?= $request["certificate_id"] ?>" 
+                    data-value-feedback="<?= $request["feedback"] ?>" 
+                    onclick="showModal(this)">
+                    <i class="fa fa-edit"></i>
+                </a>
+                <?php endif; ?>
 
-                              <?php if (
-                              	role(["administrator", "staff"]) &&
-                              	$request["status"] !== "resolved"
-                              ): ?>
-                              <a href="<?= $request[
-                              	"certificate_url"
-                              ] ?>" class="btn-link btn-info">
-                                <i class="fa fa-file"></i>
-                              </a>
-                              <?php endif; ?>
+                <?php if (role(["administrator", "staff"])): ?>
+                <a href="javascript:void(0)" data-target="#edit-request"
+                    data-value-id="<?= $request["id"] ?>" data-value-memo="<?= $request["memo"] ?>"
+                    data-value-certificate_id="<?= $request["certificate_id"] ?>"
+                     data-value-feedback="<?= $request["feedback"] ?>" 
+                    onclick="showModal(this)">
+                    <i class="fa fa-eye"></i>
+                </a>
+                <?php endif; ?>
 
-                              <?php if (role(["user", "administrator"])): ?>
-                              <a data-toggle="tooltip" data-original-title="Remove" href="model/certificate-request.php?id=<?= $request[
-                              	"id"
-                              ] ?>&delete-request=1"
-                                onclick="confirm('Are you sure you want to delete this blotter?');"
-                                class=" btn-link btn-danger">
-                                <i class="fa fa-times"></i>
-                              </a>
-                              <?php endif; ?>
-                            </td>
-                          </tr>
-                          <?php endforeach; ?>
-                        </tbody>
-                      </table>
+                <?php if (role(["administrator", "staff"]) && $request["status"] !== "released"): ?>
+                <a href="<?= $request["certificate_url"] ?>" class="btn-link btn-info">
+                    <i class="fa fa-file"></i>
+                </a>
+                <?php endif; ?>
+
+                <?php if (role(["user", "administrator"])): ?>
+                <a data-toggle="tooltip" data-original-title="Remove"
+                    href="model/certificate-request.php?id=<?= $request["id"] ?>&delete-request=1"
+                    onclick="confirm('Are you sure you want to delete this request?');"
+                    class="btn-link btn-danger">
+                    <i class="fa fa-times"></i>
+                </a>
+                <?php endif; ?>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
                     </div>
                   </div>
                 </div>
@@ -233,7 +253,12 @@ $request_list = (function () use ($db) {
                           required></textarea>
                       </div>
                     </div>
-
+                  <div class="col-md-12">
+        <div class="form-group" id="supporting-documents-container">
+          <label id="supporting-documents-label">Attached Supporting Documents</label>
+          <input type="file" class="form-control" name="supporting_document" required />
+        </div>
+      </div>
                     <div id="add_certificate_business_container">
                       <div class="col-md-12">
                         <div class="form-group">
@@ -263,6 +288,17 @@ $request_list = (function () use ($db) {
                         </div>
                       </div>
                     </div>
+
+                    <div id="add_certificate_guardian_container">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label>Guardian Name</label>
+                          <input class="form-control" placeholder="Enter Guardian name" name="guardian_name" />
+                        </div>
+                      </div>
+                    </div>
+
+              
 
                     <div id="add_certificate_cutting_container">
                       <div class="col-md-12">
@@ -333,13 +369,20 @@ $request_list = (function () use ($db) {
 
                   <div class="col-md-12">
                     <div class="form-group">
-                      <label>Memo</label>
-                      <textarea type="text" class="form-control" placeholder="Enter Complainant Name"
+                      <label>Purpose</label>
+                      <textarea type="text" class="form-control" placeholder="Purpose"
                         id="edit-request-memo" name="memo" required <?= ifThen(!isUser(), "readonly") ?>>
                       </textarea>
                     </div>
                   </div>
-
+            <div class="col-md-12">
+                    <div class="form-group">
+                      <label>Feedback</label>
+                      <textarea type="text" class="form-control" placeholder="Feedback"
+                        id="edit-request-feedback" name="feedback" required readonly >
+                      </textarea>
+                    </div>
+                  </div>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -368,29 +411,43 @@ $request_list = (function () use ($db) {
         "order": []
       });
 
-      const certificatesById = {
-        5: $('#add_certificate_business_container'),
-        6: $('#add_certificate_cutting_container')
-      }
+    const certificatesById = {
+    5: $('#add_certificate_business_container'),
+    6: $('#add_certificate_cutting_container'),
+    7: $('#add_certificate_guardian_container'),
+    4: $('#add_certificate_jobseeker_container')
+  };
 
-      function hideCertificateContainers() {
-        for (const key in certificatesById) {
-          const element = certificatesById[key];
-          element.hide()
-        }
-      }
+  const supportingDocumentsMap = {
+    '5': 'DTI Certificate',
+    '6': 'Material Approval Document',
+    '7': 'Proof of PSA',
+    '4': 'Medical Certificate',
+    '9': 'DTI Certificate',
+    '10': 'ID'
+  };
 
-      hideCertificateContainers()
+  function hideCertificateContainers() {
+    for (const key in certificatesById) {
+      certificatesById[key].hide();
+    }
+  }
 
-      $('#add_certificate_options').on('change', e => {
-        const certificateId = e.target.value
+  hideCertificateContainers();
 
-        hideCertificateContainers()
+  $('#add_certificate_options').on('change', function(e) {
+    const certificateId = e.target.value;
+    hideCertificateContainers();
 
-        if (certificatesById[certificateId]) {
-          certificatesById[certificateId].show()
-        }
-      })
+    if (certificatesById[certificateId]) {
+      certificatesById[certificateId].show();
+    }
+
+    const documentLabel = supportingDocumentsMap[certificateId] || 'Attached Supporting Documents';
+    $('#supporting-documents-label').text(documentLabel);
+
+
+  });
     });
     </script>
   </body>

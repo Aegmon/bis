@@ -1,5 +1,5 @@
 <?php
-$database = "bsms";
+$database = "bpms";
 $username = "root";
 $host = "localhost";
 $password = "";

@@ -98,16 +98,16 @@ function appendActiveClass(array $pages)
             
               <li class="<?= $currentPage == "resident_certification" ? "active" : null ?>">
                 <a href="resident_certification.php">
-                  <span class="sub-item">Barangay Certificates</span>
+                  <span class="sub-item">Barangay Clearance </span>
                 </a>
               </li>
            
          
-              <li class="<?= $currentPage == "4ps-residents" ? "active" : null ?>">
+              <!-- <li class="<?= $currentPage == "4ps-residents" ? "active" : null ?>">
                 <a href="4ps-residents.php">
                   <span class="sub-item">4ps Certification</span>
                 </a>
-              </li>
+              </li> -->
               <li class="<?= $currentPage == "resident_indigency" ? "active" : null ?>">
                 <a href="resident_indigency.php">
                   <span class="sub-item">Certificate of Indigency</span>
@@ -119,20 +119,20 @@ function appendActiveClass(array $pages)
                 </a>
               </li>
                 <li class="<?= $currentPage == "certificate_ofguardianship" ? "active" : null ?>">
-                <a href="#">
+                <a href="certificate_ofguardianship.php">
                   <span class="sub-item">Certificate of Guardianship</span>
                 </a>
               </li>
                 <li class="<?= $currentPage == "certificate_ofguardianship" ? "active" : null ?>">
-                <a href="#">
-                  <span class="sub-item">Certificate of Business Closure</span>
+                <a href="certificate_jobseeker.php">
+                  <span class="sub-item">First Time Jobseekers</span>
                 </a>
               </li>
-                  <li class="<?= $currentPage == "certificate_ofguardianship" ? "active" : null ?>">
+                  <!--li class="<?= $currentPage == "certificate_ofguardianship" ? "active" : null ?>">
                 <a href="#">
                   <span class="sub-item">Oath of Undertaking</span>
                 </a>
-              </li>
+              </li-->
             </ul>
           </div>
         </li>
@@ -197,15 +197,7 @@ function appendActiveClass(array $pages)
         </li>
     <?php endif; ?> -->
  
-        <?php if (role(["user"])): ?>
-        <li class="nav-item">
-          <a href="settings.php">
-            <i class="fas fa-cog"></i>
-            <p>Settings</p>
-          </a>
-        </li>
-    
-        <?php endif; ?>
+
       
         <!-- <li class="nav-item <?= appendActiveClass(["revenue"]) ?>">
           <a href="revenue.php">
@@ -228,9 +220,9 @@ function appendActiveClass(array $pages)
             <?php if (isAdmin()): ?>
                 Settings
             <?php elseif (role(["user"])): ?>
-                Barangay Information
+                Settings
             <?php elseif (role(["staff"])): ?>
-                 Barangay Information
+                 Settings
             <?php endif; ?>
         </p>
         <span class="caret"></span>
@@ -238,22 +230,19 @@ function appendActiveClass(array $pages)
 
     <div class="collapse <?= $isSettingsPage ? "show" : null ?>" id="settings">
         <ul class="nav nav-collapse">
-            <?php if (role(["user", "administrator"])): ?>
+               <?php if (role(["user"])): ?>
+                <li>
+                        <a href="settings.php">
+                  <span class="sub-item">Profile</span>
+                </a>
+                </li>
+            <?php endif; ?>
                 <li>
                     <a href="#barangay" data-toggle="modal">
-                        <span class="sub-item">Barangay Info</span>
+                        <span class="sub-item">Barangay Information</span>
                     </a>
                 </li>
-            <?php endif; ?>
-
-            <?php if (isAdmin() || role(["user", "staff"])): ?>
-                <li class="<?= $currentPage == "precinct" ? "active" : null ?>">
-                    <a href="precinct.php">
-                        <span class="sub-item">Contact Number</span>
-                    </a>
-                </li>
-            <?php endif; ?>
-
+                    
             <?php if (role(["administrator","staff"])): ?>
                 <li class="<?= $currentPage == "chairmanship" ? "active" : null ?>">
                     <a href="chairmanship.php">
@@ -261,8 +250,17 @@ function appendActiveClass(array $pages)
                     </a>
                 </li>
             <?php endif; ?>
-
+           <?php if (isAdmin() || role(["user", "staff"])): ?>
+                <li class="<?= $currentPage == "precinct" ? "active" : null ?>">
+                    <a href="precinct.php">
+                        <span class="sub-item">Contact Number</span>
+                    </a>
+                </li>
+            <?php endif; ?>
+              
             <?php if (isAdmin()): ?>
+
+            
                 <li class="<?= $currentPage == "users" ? "active" : null ?>">
                     <a href="users.php">
                         <span class="sub-item">Users</span>
@@ -271,6 +269,11 @@ function appendActiveClass(array $pages)
                 <li class="<?= $currentPage == "position" ? "active" : null ?>">
                     <a href="position.php">
                         <span class="sub-item">Position</span>
+                    </a>
+                </li>
+                 <li class="<?= $currentPage == "loginhistory" ? "active" : null ?>">
+                    <a href="loginhistory.php">
+                        <span class="sub-item">Login History</span>
                     </a>
                 </li>
             <?php endif; ?>

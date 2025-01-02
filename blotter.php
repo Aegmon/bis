@@ -1,6 +1,12 @@
 <?php include "bootstrap/index.php"; ?>
 <?php
-$query = "SELECT * FROM tblblotter";
+
+$userId = $_SESSION["id"];
+    if (isUser()) {
+    $query = "SELECT * FROM tblblotter WHERE complainant = (SELECT id FROM residents WHERE account_id = '$userId')";
+} else {
+    $query = "SELECT * FROM tblblotter";
+}
 $result = $conn->query($query);
 $blotter = [];
 while ($row = $result->fetch_assoc()) {
@@ -15,6 +21,61 @@ $scheduled = $result2->num_rows;
 $query3 = "SELECT * FROM tblblotter WHERE `status`='Settled'";
 $result3 = $conn->query($query3);
 $settled = $result3->num_rows;
+
+$resident_details = (function () use ($db) {
+    if (isUser()) {
+        return $db
+            ->from("residents")
+            ->join("purok", "purok.id", "residents.purok_id")
+            ->join("users", "users.id", "residents.account_id")
+            ->where("users.id", $_SESSION["id"])
+            ->first()
+            ->select([
+                "id" => "residents.id",
+                "national_id" => "residents.national_id",
+                "account_id" => "residents.account_id",
+                "firstname" => "residents.firstname",
+                "middlename" => "residents.middlename",
+                "lastname" => "residents.lastname",
+                "alias" => "residents.alias",
+                "birthplace" => "residents.birthplace",
+                "birthdate" => "residents.birthdate",
+                "age" => "residents.age",
+                "civilstatus" => "residents.civilstatus",
+                "gender" => "residents.gender",
+                "voterstatus" => "residents.voterstatus",
+                "identified_as" => "residents.identified_as",
+                "phone" => "residents.phone",
+                "email" => "residents.email",
+                "occupation" => "residents.occupation",
+                "address" => "residents.address",
+                "is_4ps" => "residents.is_4ps",
+                "is_senior" => "residents.is_senior",
+                "is_pwd" => "residents.is_pwd",
+                "resident_type" => "residents.resident_type",
+                "remarks" => "residents.remarks",
+                "username" => "users.username",
+                "user_type" => "users.user_type",
+                "avatar" => "users.avatar",
+                "purok_id" => "purok.id",
+                "purok_name" => "purok.name",
+                "purok_details" => "purok.details",
+            ])
+            ->exec();
+    }
+
+    if (isAdmin() || isStaff()) {
+        return $db
+            ->from("residents")
+            ->select([
+                "id" => "residents.id",
+                "fullname" => "CONCAT(residents.firstname, ' ', residents.middlename, ' ', residents.lastname)"
+            ])
+            ->exec();
+    }
+
+    return [];
+})();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -74,10 +135,12 @@ $settled = $result3->num_rows;
 													<th scope="col">Respondent</th>
 													<th scope="col">Victim(s)</th>
 													<th scope="col">Blotter/Incident</th>
+													<th scope="col">Details</th>
+													<th scope="col">Feedback</th>
 															<th scope="col">Status</th>
-													<?php if (isAdmin()): ?>
+								
 														<th scope="col">Action</th>
-													<?php endif; ?>
+							
 												</tr>
 											</thead>
 											<tbody>
@@ -88,7 +151,8 @@ $settled = $result3->num_rows;
 															<td><?= ucwords($row["respondent"]) ?></td>
 															<td><?= ucwords($row["victim"]) ?></td>
 															<td><?= ucwords($row["type"]) ?></td>
-															
+															<td><?= ucwords($row["details"]) ?></td>
+															<td><?= ucwords($row["feedback"]) ?></td>
 															<td>
 																<?php if ($row["status"] == "Scheduled"): ?>
 																	<span class="badge badge-warning">Scheduled</span>
@@ -100,7 +164,7 @@ $settled = $result3->num_rows;
 															</td>
 															
 															<?php if (isset($_SESSION["username"])): ?>
-																		<?php if (isAdmin()): ?>
+																		<?php if (isAdmin() || isStaff() || isUser()): ?>
 																<td>
 																	<a
 																		type="button"
@@ -126,7 +190,7 @@ $settled = $result3->num_rows;
 																			<i class="fa fa-eye"></i>
 																		<?php endif; ?>
 																	</a>
-																	<a
+																	<!-- <a
 																		type="button"
 																		data-toggle="tooltip"
 																		href="generate_blotter_report.php?id=<?= $row["id"] ?>"
@@ -134,7 +198,7 @@ $settled = $result3->num_rows;
 																		data-original-title="Generate Report"
 																	>
 																		<i class="fas fa-file-alt"></i>
-																	</a>
+																	</a> -->
 															
 																		<a
 																			type="button"
@@ -152,21 +216,7 @@ $settled = $result3->num_rows;
 														</tr>
 													<?php endforeach; ?>
 												<?php endif; ?>
-											</tbody>
-											<tfoot>
-												<tr>
-													<th scope="col">Complainant</th>
-													<th scope="col">Respondent</th>
-													<th scope="col">Victim(s)</th>
-													<th scope="col">Blotter/Incident</th>
-										
-													<th scope="col">Status</th>
-													<?php if (isAdmin()): ?>
-														<th scope="col">Action</th>
-													<?php endif; ?>
-														
-												</tr>
-											</tfoot>
+												</tbody>
 										</table>
 									</div>
 								</div>
@@ -255,18 +305,36 @@ $settled = $result3->num_rows;
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="model/save_blotter.php">
+                <form id="blotterForm" method="POST" action="model/save_blotter.php">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Complainant</label>
-                                <input type="text" class="form-control" placeholder="Enter Complainant Name" name="complainant" required>
-                            </div>
+                          <div class="form-group">
+    <label>Complainant</label>
+    <?php if (isUser()): ?>
+        <input type="text" class="form-control" 
+               value="<?= $resident_details['firstname'] . '  ' . $resident_details['lastname'] ?>" 
+               readonly>
+        <input type="hidden" name="complainant_id" value="<?= $resident_details['id'] ?>">
+    <?php elseif (isAdmin() || isStaff()): ?>
+        <select class="form-control" name="complainant_id" required>
+            <option disabled selected>Select Complainant</option>
+            <?php foreach ($resident_details as $resident): ?>
+                <option value="<?= $resident['id'] ?>"><?= $resident['fullname'] ?></option>
+            <?php endforeach; ?>
+        </select>
+    <?php endif; ?>
+</div>
+
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Respondent</label>
-                                <input type="text" class="form-control" placeholder="Enter Respondent Name" name="respondent" required>
+                                <input type="text" class="form-control" placeholder="Enter Respondent Name" name="respondent"
+																      <?php if (role(["user"])): ?>
+                                            readonly
+																				     <?php endif; ?>
+																
+																>
                             </div>
                         </div>
                     </div>
@@ -278,14 +346,20 @@ $settled = $result3->num_rows;
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Type</label>
-                                <select class="form-control" name="type">
-                                    <option disabled selected>Select Blotter Type</option>
-                                     <option value="Misunderstanding">Misunderstanding</option>
-                                    <option value="Incident">Incident</option>
-                                </select>
-                            </div>
+                           <div class="form-group">
+															<label>Type</label>
+															<select class="form-control" name="type" id="typeSelect" onchange="toggleOtherInput()">
+																	<option disabled selected>Select Blotter Type</option>
+																	<option value="Misunderstanding">Misunderstanding</option>
+																	<option value="Incident">Incident</option>
+																	<option value="Concern in surroundings">Concern in surroundings</option>
+																	<option value="Others">Others</option>
+															</select>
+													</div>
+													<div class="form-group" id="otherInputGroup" style="display: none;">
+															<label>Please specify:</label>
+															<input type="text" class="form-control" id="otherInput" name="otherType" placeholder="Enter your type">
+													</div>
                         </div>
                     </div>
                     <div class="row">
@@ -299,7 +373,7 @@ $settled = $result3->num_rows;
                             <div class="form-group">
                                 <label>Date</label>
                                 <input type="date" class="form-control" name="date" 
-                                <?php if (isAdmin()): ?>
+                                <?php if (isAdmin() || isStaff()): ?>
                                     placeholder="Enter Date"
                                 <?php else: ?>
                                     value="<?= date("Y-m-d") ?>" readonly
@@ -312,14 +386,14 @@ $settled = $result3->num_rows;
                             <div class="form-group">
                                 <label>Time</label>
                                 <input type="time" class="form-control" name="time" 
-                                <?php if (isAdmin()): ?>
+                                <?php if (isAdmin() || isStaff()): ?>
                                     placeholder="Enter Time"
                                 <?php else: ?>
                                     value="<?= date("H:i") ?>" readonly
                                 <?php endif; ?> required>
                             </div>
                         </div>
-												 <?php if (isAdmin()): ?>
+												 <?php if (isAdmin() || isStaff()): ?>
     <div class="col-md-6">
         <div class="form-group">
             <label>Status</label>
@@ -341,6 +415,13 @@ $settled = $result3->num_rows;
                     <div class="form-group">
                         <label>Details</label>
                         <textarea class="form-control" placeholder="Enter Blotter or Incident here..." name="details" required></textarea>
+                    </div>
+
+										   <div class="form-group">
+                        <label>Feddback</label>
+                        <textarea class="form-control" placeholder="Enter Feedback here..." name="feedback"       <?php if (role(["user"])): ?>
+                                            readonly
+																				     <?php endif; ?>></textarea>
                     </div>
 
             </div>
@@ -365,19 +446,36 @@ $settled = $result3->num_rows;
 							</button>
 						</div>
 						<div class="modal-body">
-							<form method="POST" action="model/edit_blotter.php">
+							<form id="blotterFormEdit" method="POST" action="model/edit_blotter.php">
 								<div class="row">
 									<div class="col-md-6">
-										<div class="form-group">
-											<label>Complainant</label>
-											<input type="text" class="form-control" placeholder="Enter Complainant Name" id="complainant" name="complainant" required>
-										</div>
+									<div class="form-group">
+    <label>Complainant</label>
+    <?php if (isUser()): ?>
+        <input type="text" class="form-control" 
+               value="<?= $resident_details['firstname'] . '  ' . $resident_details['lastname'] ?>" 
+               readonly>
+        <input type="hidden" name="complainant_id" id="complainant_id" value="<?= $resident_details['id'] ?>">
+    <?php elseif (isAdmin() || isStaff()): ?>
+        <select class="form-control" name="complainant_id" id="complainant_id" required>
+            <option disabled selected>Select Complainant</option>
+            <?php foreach ($resident_details as $resident): ?>
+                <option value="<?= $resident['id'] ?>"><?= $resident['fullname'] ?></option>
+            <?php endforeach; ?>
+        </select>
+    <?php endif; ?>
+</div>
+
 									</div>
 									<div class="col-md-6">
-										<div class="form-group">
-											<label>Respondent</label>
-											<input type="text" class="form-control" placeholder="Enter Respondent Name" id="respondent" name="respondent" required>
-										</div>
+									<div class="form-group">
+    <label>Respondent</label>
+    <input type="text" class="form-control" placeholder="Enter Respondent Name" id="respondent" name="respondent"
+           <?php if (role(["user"])): ?>
+               readonly
+           <?php endif; ?>>
+</div>
+
 									</div>
 								</div>
 								<div class="row">
@@ -387,16 +485,22 @@ $settled = $result3->num_rows;
 											<input type="text" class="form-control" placeholder="Enter Victim(s) Name" id="victim" name="victim" required>
 										</div>
 									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Type</label>
-											<select class="form-control" name="type" id="type">
-												<option disabled selected>Select Blotter Type</option>
-												<option value="Amicable">Amicable</option>
-												<option value="Incident">Incident</option>
-											</select>
+									 <div class="col-md-6">
+											<div class="form-group">
+												<label>Type</label>
+												<select class="form-control" name="type" id="typeSelectEdit" onchange="toggleOtherInputEdit()">
+														<option disabled selected>Select Blotter Type</option>
+														<option value="Misunderstanding">Misunderstanding</option>
+														<option value="Incident">Incident</option>
+														<option value="Concern in surroundings">Concern in surroundings</option>
+														<option value="Others">Others</option>
+												</select>
 										</div>
-									</div>
+										<div class="form-group" id="otherInputGroupEdit" style="display: none;">
+												<label>Please specify:</label>
+												<input type="text" class="form-control" id="otherInputEdit" name="otherTypeEdit" placeholder="Enter your type">
+										</div>
+                  </div>
 								</div>
 								<div class="row">
 									<div class="col-md-6">
@@ -406,35 +510,64 @@ $settled = $result3->num_rows;
 										</div>
 									</div>
 									<div class="col-md-6">
-										<div class="form-group">
-											<label>Date</label>
-											<input type="date" class="form-control" name="date" id="date" required>
-										</div>
+									<div class="form-group">
+    <label>Date</label>
+    <input type="date" class="form-control" name="date" id="date"
+           <?php if (isAdmin() || isStaff()): ?>
+               placeholder="Enter Date"
+           <?php else: ?>
+               readonly
+           <?php endif; ?> required>
+</div>
 									</div>
 								</div>
 								<div class="row">
 									<div class="col-md-6">
-										<div class="form-group">
-											<label>Time</label>
-											<input type="time" class="form-control" name="time" id="time" required>
-										</div>
+									<div class="form-group">
+    <label>Time</label>
+    <input type="time" class="form-control" name="time" id="time"
+           <?php if (isAdmin() || isStaff()): ?>
+               placeholder="Enter Time"
+           <?php else: ?>
+               readonly
+           <?php endif; ?> required>
+</div>
 									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Status</label>
-											<select class="form-control" name="status" id="status">
-												<option disabled selected>Select Blotter Status</option>
-												<option value="Active">Active</option>
-												<option value="Settled">Settled</option>
-												<option value="Scheduled">Scheduled</option>
-											</select>
-										</div>
-									</div>
+												 <?php if (isAdmin() || isStaff()): ?>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Status</label>
+            <select class="form-control" name="status">
+                <option disabled selected>Select Blotter Status</option>
+                <option value="Active">Active</option>
+                <option value="Settled">Settled</option>
+                <option value="Scheduled">Scheduled</option>
+            </select>
+        </div>
+    </div>
+<?php else: ?>
+    
+            <input type="hidden" class="form-control" name="status" value="Active">
+        
+<?php endif; ?>
 								</div>
 								<div class="form-group">
 									<label>Details</label>
 									<textarea class="form-control" placeholder="Enter Blotter or Incident here..." id="details" name="details" required></textarea>
 								</div>
+
+					<div class="form-group">
+    <label>Feedback</label>
+    <textarea class="form-control" placeholder="Enter Feedback here..." name="feedback" id="feedback"
+              <?php if (role(["user"])): ?>
+                  readonly
+              <?php endif; ?>></textarea>
+</div>
+ <div class="form-group">
+                        <button type="button" class="btn btn-info" id="generateReportBtn">
+                            <i class="fas fa-file-alt"></i> Generate Report
+                        </button>
+                    </div>
 
 						</div>
 						<div class="modal-footer">
@@ -467,18 +600,98 @@ $settled = $result3->num_rows;
 
 			$("#activeCase").click(function() {
 				var textSelected = 'Active';
-				oTable.columns(4).search(textSelected).draw();
+				oTable.columns(6).search(textSelected).draw();
 			});
 			$("#settledCase").click(function() {
 				var textSelected = 'Settled';
-				oTable.columns(4).search(textSelected).draw();
+				oTable.columns(6).search(textSelected).draw();
 			});
 			$("#scheduledCase").click(function() {
 				var textSelected = 'Scheduled';
-				oTable.columns(4).search(textSelected).draw();
+				oTable.columns(6).search(textSelected).draw();
 			});
 		});
 	</script>
+
+<script>
+  document.getElementById('generateReportBtn').addEventListener('click', function () {
+    const blotterId = document.getElementById('blotter_id').value;
+    if (blotterId) {
+        window.location.href = `generate_blotter_report.php?id=${blotterId}`;
+    } else {
+        alert('Blotter ID is missing!');
+    }
+});
+
+    function toggleOtherInput() {
+        const typeSelect = document.getElementById('typeSelect');
+        const otherInputGroup = document.getElementById('otherInputGroup');
+        const otherInput = document.getElementById('otherInput');
+
+        if (typeSelect.value === 'Others') {
+            otherInputGroup.style.display = 'block';
+            otherInput.setAttribute('required', 'required'); // Ensure it's required if "Others" is selected
+        } else {
+            otherInputGroup.style.display = 'none';
+            otherInput.removeAttribute('required'); // Remove required if "Others" isn't selected
+        }
+    }
+
+    // Handle form submission logic
+    document.getElementById('blotterForm').addEventListener('submit', function (e) {
+        const typeSelect = document.getElementById('typeSelect');
+        const otherInput = document.getElementById('otherInput');
+
+        // If "Others" is selected, replace the "type" field value with the custom input
+        if (typeSelect.value === 'Others') {
+            // Create a hidden input with the custom value
+            const otherValueInput = document.createElement('input');
+            otherValueInput.type = 'hidden';
+            otherValueInput.name = 'type'; // Override the "type" field value
+            otherValueInput.value = otherInput.value;
+            this.appendChild(otherValueInput);
+
+            // Remove the original "type" select to avoid confusion
+            typeSelect.removeAttribute('name');
+        }
+    });
+
+
+		//Edit
+				// Toggle the visibility of the "Other" input field
+				function toggleOtherInputEdit() {
+        const typeSelect = document.getElementById('typeSelectEdit');
+        const otherInputGroup = document.getElementById('otherInputGroupEdit');
+        const otherInput = document.getElementById('otherInputEdit');
+
+        if (typeSelect.value === 'Others') {
+            otherInputGroup.style.display = 'block';
+            otherInput.setAttribute('required', 'required'); // Ensure it's required if "Others" is selected
+        } else {
+            otherInputGroup.style.display = 'none';
+            otherInput.removeAttribute('required'); // Remove required if "Others" isn't selected
+        }
+    }
+
+				// Handle form submission logic
+				document.getElementById('blotterFormEdit').addEventListener('submit', function (e) {
+        const typeSelect = document.getElementById('typeSelectEdit');
+        const otherInput = document.getElementById('otherInputEdit');
+
+        // If "Others" is selected, replace the "type" field value with the custom input
+        if (typeSelect.value === 'Others') {
+            // Create a hidden input with the custom value
+            const otherValueInput = document.createElement('input');
+            otherValueInput.type = 'hidden';
+            otherValueInput.name = 'type'; // Override the "type" field value
+            otherValueInput.value = otherInput.value;
+            this.appendChild(otherValueInput);
+
+            // Remove the original "type" select to avoid confusion
+            typeSelect.removeAttribute('name');
+        }
+    });
+</script>
 </body>
 
 </html>

@@ -37,7 +37,6 @@ $documents = $conn->query($query9)->num_rows;
 $certificate_requests_summary = (function () use ($db) {
 	return $db
 		->from("certificate_requests")
-		->whereRaw("DATE(created_at) = CURDATE()")
 		->select([
 			"total" => "COUNT(id)",
 		])

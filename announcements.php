@@ -94,7 +94,7 @@ $announcementList = (function () use ($db) {
                             <td><?= ucwords($announcement["content"]) ?></td>
                             <td><?= Carbon::create($announcement["created_at"])->toDayDateTimeString() ?></td>
                             <td>
-                              <?php if (role(['administrator', 'staff'])): ?>
+                              <?php if (role(['administrator'])): ?>
                               <a href="javascript:void(0)" data-target="#edit-announcement"
                                 data-value-id="<?= $announcement["id"] ?>"
                                 data-value-title="<?= $announcement["title"] ?>"
@@ -106,13 +106,13 @@ $announcementList = (function () use ($db) {
                               </a>
                               <?php endif; ?>
 
-                              <?php if (isUser()): ?>
+                              <?php if (isUser()|| isStaff()): ?>
                               <a href="announcements-view.php?id=<?= $announcement["id"] ?>">
                                 <i class="fa fa-eye"></i>
                               </a>
                               <?php endif; ?>
 
-                              <?php if (role(['administrator', 'staff'])): ?>
+                              <?php if (role(['administrator'])): ?>
                               <a type="button" data-toggle="tooltip" data-original-title="Remove"
                                 href="model/announcement.php?id=<?= $announcement["id"] ?>&delete-announcement=1"
                                 onclick="return confirm('Are you sure you want to delete this blotter?');"
@@ -187,7 +187,7 @@ $announcementList = (function () use ($db) {
             <div class="modal-content">
               <form method="POST" action="model/announcement.php" enctype="multipart/form-data">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Edit Blotter</h5>
+                  <h5 class="modal-title" id="exampleModalLabel">Edit Announcement</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>

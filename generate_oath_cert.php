@@ -1,12 +1,6 @@
 <?php include 'bootstrap/index.php' ?>
 <?php
-$id = $_GET['id'];
 
-$resident = $db
-  ->from('residents')
-  ->where('id', $id)
-  ->first()
-  ->exec();
 
 $captain = $db
   ->from(["tblofficials" => "officials"])
@@ -18,7 +12,6 @@ $captain = $db
   ])
   ->exec();
 
-
 $sec = $db
   ->from(["tblofficials" => "officials"])
   ->join(["tblposition" => "positions"], "positions.id", "officials.position")
@@ -28,13 +21,55 @@ $sec = $db
     "name" => "officials.name"
   ])
   ->exec();
+
+  if (isset($_GET['request_id'])) {
+    $id = $_GET['id'];
+    $job = $db
+      ->from(["residents" => "resident"])
+      ->where('resident.id', $id)
+      ->first()
+      ->exec();
+
+  $request = $db
+    ->from(["certificate_requests" => "cr"])
+    ->where("cr.id", $_GET['request_id'])
+    ->first()
+    ->exec();
+
+  if (!empty($request)) {
+    $request['data'] = json_decode($request['data'], true);
+     
+    $residence['year_residence'] = $request['data']['year_residence'];
+  }
+}
+
+if(isset($_GET['cr_id'])){
+  $id = $_GET['cr_id'];
+  // Prepare the query with a named placeholder
+  $query = "SELECT 
+      cr.id AS id, 
+      r.id AS resident_id, 
+      r.firstname, ' ', r.middlename, ' ', r.lastname, r.age,
+      cr.*
+  FROM certificate_requests AS cr
+  JOIN residents AS r ON cr.resident_id = r.id
+  WHERE cr.id = $id";
+  // Prepare the statement
+  $stmt = $conn->prepare($query);
+  // Execute the query
+  $stmt->execute();
+  // Fetch the result
+  $job = $stmt->get_result()->fetch_assoc();
+  $residence= json_decode($job['data'], true);
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
   <head>
     <?php include 'templates/header.php' ?>
-    <title>Certificate of Indigency - Barangay Services Management System</title>
+    <title>Certificate of Guardianship - Barangay Services Management System</title>
     <style>
     @page {
       size: auto;
@@ -78,7 +113,7 @@ $sec = $db
                 <div class="card">
                   <div class="card-header">
                     <div class="card-head-row">
-                      <div class="card-title">Certificate of Indigency</div>
+                      <div class="card-title">Certificate of Guardianship</div>
                       <div class="card-tools">
                         <button class="btn btn-info btn-border btn-round btn-sm" onclick="printDiv('printThis')">
                           <i class="fa fa-print"></i>
@@ -109,28 +144,57 @@ $sec = $db
                           <h1 class="mt-4 fw-bold"><u>OFFICE OF THE BARANGAY CAPTAIN</u></h1>
                         </div>
                         <div class="text-center">
-                          <h1 class="mt-4 fw-bold mb-5" style="font-size:38px;color:black">CERTIFICATE OF INDIGENCY
+                          <h1 class="mt-4 fw-bold mb-5" style="font-size:38px;color:black">OATH OF UNDERTAKING <br>
+                                      Republic Act 11261  First Time Jobseekers Assistance Act
+
                           </h1>
                         </div>
                         <h2 class="mt-5 fw-bold">TO WHOM IT MAY CONCERN:</h2>
-                          <h2 class="mt-3" style="text-indent: 40px;">This is to certify that the person whose name and other information appear below has passed the record verification being one of the indigent families with low-income in our community, to wit.
+                          <h2 class="mt-3" style="text-indent: 40px;">I <?= ucwords($job['firstname'].' '.$job['middlename'].'. '.$job['lastname']) ?>  <?= ucwords($job['age']) ?> years of age, resident of Barangay Carino, Paniqui Tarlac, for <?= ucwords($residence['year_residence']) ?> years/months,availing the benefits of Republic Act 11261, otherwise known as the First Time Jobseekers Act of 2019, do hereby declare, agree and undertake to abide and be bound by the following:
                         </h2>
-                           <br>
-                        <h1 class="mt-3">Name: <span class="fw-bold"
-                            style="font-size:25px"><?= ucwords($resident['firstname'] . ' ' . $resident['middlename'] . ' ' . $resident['lastname']) ?></span></h1>
-                        <h1 class="mt-3 ">Barangay: <span class="fw-bold"
-                            style="font-size:25px"><?= ucwords($brgy) ?></span></h1>
+                        <br>
+                        
+                        <h2 style="text-indent: 40px;">
+                          1. That this is the first time that I will actively look for a job, and therefore requesting that a
+                              Barangay Certification be issued in my favor to avail the benefits of the law;
+                        </h2>
 
+                        <h2 style="text-indent: 40px;">
+                          2. That I am aware that the benefit and privilege/s under the said law shall be valid only for
+                              one (1) year from the date that the Barangay Certification is issued
+                        </h2>
 
+                        <h2 style="text-indent: 40px;">
+                          3. That I can avail the benefits of the law only once;
+                        </h2>
 
+                        <h2 style="text-indent: 40px;">
+                          4. That I understand that my personal information shall be included in the Roster/List of
+                              First Time Jobseekers and will not be used for any unlawful purpose;
+                        </h2>
 
-          
-                       <h2 class="mt-3" style="text-indent: 40px;">This certification/clearance is hereby issued to the above-named person for whatever legal purpose it may serve him or her best.</h2>
-<h2 class="mt-5">Issued this day <span  style="font-size:25px"><?= date('d') ?></span> of <span style="font-size:25px"><?= date('F') ?></span>, 2024 <br>
+                        <h2 style="text-indent: 40px;">
+                          5. That I will inform and/or report to the Barangay personally, through text or other means,
+                              or through my family/relatives once I get employed;
+                        </h2>
 
-Barangay <span style="font-size:25px"><?= ucwords($brgy) ?></span> <br>
-Municipality of <span style="font-size:25px"><?= ucwords($town) ?></span>, Philippines.</h2>
+                        <h2 style="text-indent: 40px;">
+                          6. That I am not a beneficiary of the JobStart Program under R.A. No. 10869 and other
+                              laws that give similar exemptions for the documents or transactions exempted under R.A No. 11261;
+                        </h2>
+                            
+                        <h2 style="text-indent: 40px;">
+                          7. That if issued the requested Certification, I will not use the same in any fraud, neither
+                              falsify nor help and/or assist in the fabrication of the said certification;
+                        </h2>
 
+                         <h2 style="text-indent: 40px;">
+                          8. That this undertaking is made solely for the purpose of obtaining a Barangay Certification consistent with the objective of R.A. No. 11261 and not for any other purpose; and
+                        </h2>
+                        <h2 style="text-indent: 40px;">
+                          9. That I consent to the use of my personal information pursuant to the Data Privacy Act
+                              and other applicable laws, rules, and regulations.
+                        </h2>
 
 
                       </div>
@@ -138,7 +202,13 @@ Municipality of <span style="font-size:25px"><?= ucwords($town) ?></span>, Phili
                         <div class="p-3 text-right mr-5" style="margin-top:300px">
                           <h1 class="fw-bold mb-0 text-uppercase"><?= ucwords($captain['name']) ?></h1>
                           <p class="mr-5">PUNONG BARANGAY</p>
-                          <small>**NOT VALID without the official Dry Seal</small>
+                        </div>
+                      </div>
+
+                      <div class="col-md-12">
+                        <div class="p-3 text-right mr-5" style="margin-top:30px">
+                          <h1 class="fw-bold mb-0 text-uppercase"><?= ucwords($sec['name']) ?></h1>
+                          <p class="mr-5">Secretary</p>
                         </div>
                       </div>
                     </div>
@@ -149,7 +219,7 @@ Municipality of <span style="font-size:25px"><?= ucwords($town) ?></span>, Phili
           </div>
         </div>
         <!-- Modal -->
-        <div class="modal fade" id="pment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        div class="modal fade" id="pment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
           aria-hidden="true" data-backdrop="static" data-keyboard="false">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -171,17 +241,17 @@ Municipality of <span style="font-size:25px"><?= ucwords($town) ?></span>, Phili
                     <input type="date" class="form-control" name="date" value="<?= date('Y-m-d') ?>">
                   </div>
 
-           
+              
 
-                  <div class="form-group">
+                <div class="form-group">
                     <label>Feedback</label>
                     <textarea class="form-control" placeholder="Enter Feedback"
                       name="details">Enter Feedback</textarea>
                   </div>
               </div>
               <div class="modal-footer">
-                <input type="hidden" name="resident_id" value="<?= $_GET['id'] ?>">
-                <input type="hidden" name="create-payment" value="<?= $_GET['id'] ?>">
+                <input type="hidden" name="resident_id" value="<?= htmlspecialchars($_GET['id'] ?? $_GET['cr_id'] ?? '') ?>">
+                <input type="hidden" name="create-payment" value="<?= htmlspecialchars($_GET['id'] ?? $_GET['cr_id'] ?? '') ?>">
                 <input type="hidden" name="request_id" value="<?= getBody('request_id', $_GET) ?>">
                 <input type="hidden" name="certificate_id" value="4">
                 <button type="button" class="btn btn-secondary" onclick="goBack()">Close</button>
@@ -190,7 +260,7 @@ Municipality of <span style="font-size:25px"><?= ucwords($town) ?></span>, Phili
               </form>
             </div>
           </div>
-        </div>
+        </div
         <!-- Main Footer -->
         <?php include 'templates/main-footer.php' ?>
         <!-- End Main Footer -->

@@ -8,6 +8,50 @@ if (isset($_POST["request-certificate"])) {
 	$resident_id = getBody("resident_id", $_POST);
 	$request_data = (object) [];
 
+
+    $uploadDir = __DIR__ . '/uploads/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true); // Create the uploads directory if it doesn't exist
+    }
+
+
+
+
+
+
+   $uploadedFilePath = null;
+    if (isset($_FILES['supporting_document']) && $_FILES['supporting_document']['error'] === UPLOAD_ERR_OK) {
+        $fileName = basename($_FILES['supporting_document']['name']);
+        $targetFilePath = $uploadDir . $fileName;
+
+        if (move_uploaded_file($_FILES['supporting_document']['tmp_name'], $targetFilePath)) {
+            $uploadedFilePath = 'uploads/' . $fileName; // Store relative path for database
+        } else {
+            $_SESSION["message"] = "Failed to upload file.";
+            $_SESSION["status"] = "danger";
+            header("Location: ../certificate-requests.php");
+            return $conn->close();
+        }
+    } else {
+        $_SESSION["message"] = "Supporting document is required!";
+        $_SESSION["status"] = "danger";
+        header("Location: ../certificate-requests.php");
+        return $conn->close();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	$requiredFields = [
 		"Certificate" => $certificate_id,
 		"Resident" => $resident_id,
@@ -25,6 +69,8 @@ if (isset($_POST["request-certificate"])) {
 		header("Location: ../certificate-requests.php");
 		return $conn->close();
 	}
+
+
 
 	$certificateDetails = $db
 		->from("certificates")
@@ -77,8 +123,23 @@ if (isset($_POST["request-certificate"])) {
 	}
 
 	/**
-	 * Check required fields
+	 * Is guardian permit
 	 */
+	if ($certificate_id == 7) {
+		$request_data = [
+			"guardian_name" => getBody("guardian_name", $_POST),
+
+		];
+
+		$requiredFields = [
+			"guardian_name" => $request_data["guardian_name"],
+
+		];
+
+		$has_empty_cert_field = array_find_key($requiredFields, fn($item) => empty($item));
+	}
+
+
 
 	if ($has_empty_cert_field) {
 		$_SESSION["message"] = "<b>$has_empty_cert_field</b> is required!";
@@ -96,6 +157,7 @@ if (isset($_POST["request-certificate"])) {
 			"memo" => $memo,
 			"status" => "pending",
 			"data" => json_encode($request_data),
+			 "supporting_document" => $uploadedFilePath, 
 		])
 		->exec();
 

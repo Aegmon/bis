@@ -368,9 +368,6 @@ $admin_dashboard_cards = [
               <div class="col-md-12">
                 <?php include "templates/resident-review-card.php"; ?>
               </div>
-
-           
-
             </div>
             <?php endif; ?>
 

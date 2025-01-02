@@ -118,7 +118,7 @@ if (isset($_GET['request_id'])) {
                           <h1 class="mt-4 fw-bold"><u>OFFICE OF THE BARANGAY CAPTAIN</u></h1>
                         </div>
                         <div class="text-center">
-                          <h1 class="mt-4 fw-bold mb-5" style="font-size:38px;color:darkblue">BARANGAY BUSINESS
+                          <h1 class="mt-4 fw-bold mb-5" style="font-size:38px;color:black">BARANGAY BUSINESS
                             CLEARANCE</h1>
                         </div>
                         <h2 class="mt-5 fw-bold">GRANTED TO:</h2>
@@ -179,7 +179,7 @@ if (isset($_GET['request_id'])) {
               <div class="modal-body">
                 <form method="POST" action="model/save_pment.php">
                   <div class="form-group">
-                    <label>Amount</label>
+                    <label>Amount of Payment</label>
                     <input type="number" class="form-control" name="amount" placeholder="Enter amount to pay" value='25' required>
                   </div>
 
@@ -188,19 +188,12 @@ if (isset($_GET['request_id'])) {
                     <input type="date" class="form-control" name="date" value="<?= date('Y-m-d') ?>">
                   </div>
 
-                  <div class="form-group">
-                    <label>Mode</label>
-                    <select class="form-control" name="mode" required>
-                      <option selected disabled>Choose payment mode</option>
-                      <option value="online">Online</option>
-                      <option value="cash">Cash</option>
-                    </select>
-                  </div>
+            
 
                   <div class="form-group">
-                    <label>Payment Details(Optional)</label>
-                    <textarea class="form-control" placeholder="Enter Payment Details"
-                      name="details">Business Permit Payment</textarea>
+                    <label>Feedback</label>
+                    <textarea class="form-control" placeholder="Enter Feedback"
+                      name="details">Enter Feedback</textarea>
                   </div>
               </div>
               <div class="modal-footer">

@@ -192,41 +192,73 @@ Paniqui Tarlac
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
+          <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <form method="POST" action="model/change_password.php">
           <div class="form-group">
             <label>Username</label>
-            <input type="text" class="form-control" placeholder="Enter Name" readonly name="username" value="<?= $_SESSION[
-            	"username"
-            ] ?>" required >
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter Name"
+              readonly
+              name="username"
+              value="<?= $_SESSION["username"] ?>"
+              required
+            />
           </div>
           <div class="form-group form-floating-label">
             <label>Current Password</label>
-            <input type="password" id="cur_pass" class="form-control" placeholder="Enter Current Password" name="cur_pass" required >
+            <input
+              type="password"
+              id="cur_pass"
+              class="form-control"
+              placeholder="Enter Current Password"
+              name="cur_pass"
+              required
+            />
             <span toggle="#cur_pass" class="fa fa-fw fa-eye field-icon toggle-password"></span>
           </div>
           <div class="form-group form-floating-label">
             <label>New Password</label>
-            <input type="password" id="new_pass" class="form-control" placeholder="Enter New Password" name="new_pass" required >
+            <input
+              type="password"
+              id="new_pass"
+              class="form-control"
+              placeholder="Enter New Password"
+              name="new_pass"
+              pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}"
+              title="Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character."
+              required
+            />
             <span toggle="#new_pass" class="fa fa-fw fa-eye field-icon toggle-password"></span>
           </div>
           <div class="form-group form-floating-label">
             <label>Confirm Password</label>
-            <input type="password" id="con_pass" class="form-control" placeholder="Confirm Password" name="con_pass" required >
+            <input
+              type="password"
+              id="con_pass"
+              class="form-control"
+              placeholder="Confirm Password"
+              name="con_pass"
+              pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}"
+              title="Password must match the requirements for the New Password."
+              required
+            />
             <span toggle="#con_pass" class="fa fa-fw fa-eye field-icon toggle-password"></span>
           </div>
       </div>
       <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-      <button type="submit" class="btn btn-primary">Change</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Change</button>
       </div>
       </form>
     </div>
   </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade" id="restore" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">

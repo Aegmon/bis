@@ -49,10 +49,12 @@ while ($row = $result->fetch_assoc()) {
                     <div class="card-head-row">
                       <div class="card-title">Chairmanship</div>
                       <div class="card-tools">
+                                  <?php if (isAdmin()): ?>
                         <a href="#add" data-toggle="modal" class="btn btn-info btn-border btn-round btn-sm">
                           <i class="fa fa-plus"></i>
                           Chairmanship
                         </a>
+                        <?php endif; ?>
                       </div>
                     </div>
                   </div>

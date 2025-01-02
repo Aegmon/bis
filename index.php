@@ -53,35 +53,26 @@
       <h2 class="text-center mb-4">Our Services</h2>
       <div class="row text-center">
         <!-- Certificate Request -->
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div class="card shadow-sm">
             <div class="card-body">
               <h5 class="card-title">Certificate Request</h5>
               <p class="card-text">Request certificates such as Barangay Clearance, Indigency Certificate, and more.</p>
-              <a href="#" class="btn btn-primary">Request Now</a>
+              <a href="login.php" class="btn btn-primary">Request Now</a>
             </div>
           </div>
         </div>
         <!-- Business Permit -->
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div class="card shadow-sm">
             <div class="card-body">
               <h5 class="card-title">Business Permit</h5>
               <p class="card-text">Apply for business permits and renewals with ease.</p>
-              <a href="#" class="btn btn-primary">Apply Now</a>
+              <a href="login.php" class="btn btn-primary">Apply Now</a>
             </div>
           </div>
         </div>
-        <!-- Community Tax Certificate -->
-        <div class="col-md-4">
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">Community Tax Certificate</h5>
-              <p class="card-text">Request your Community Tax Certificate (Cedula) quickly and easily.</p>
-              <a href="#" class="btn btn-primary">Request Now</a>
-            </div>
-          </div>
-        </div>
+      
       </div>
     </div>
   </section>

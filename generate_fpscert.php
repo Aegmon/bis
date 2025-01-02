@@ -109,7 +109,7 @@ $captain = $db
                           <h1 class="mt-4 fw-bold"><u>BARANGAY CERTIFICATION</u></h1>
                         </div>
                         <div class="text-center">
-                          <h1 class="mt-4 fw-bold mb-5" style="font-size:38px;color:darkblue"> 4ps Beneficiary Clearance
+                          <h1 class="mt-4 fw-bold mb-5" style="font-size:38px;color:black"> 4ps Beneficiary Clearance
                           </h1>
                         </div>
                         <h2 class="mt-5 fw-bold">TO WHOM IT MAY CONCERN;</h2><br>
