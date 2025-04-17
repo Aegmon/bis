@@ -155,7 +155,7 @@ if(isset($_GET['cr_id'])){
                         </h2>
                         <h2 class="mt-3" style="text-indent: 40px;">This certifiacation is being issued for whatever legal purposes it may serve. </h2>
                         <h2 class="mt-5">Given this <span class="fw-bold"
-                            style="font-size:25px"><?= date('m/d/Y') ?></span> at the office of the Punong Barangay,
+                            style="font-size:20px"><?= date('m/d/Y') ?></span> at the office of the Punong Barangay,
                           at Barangay Carino, Paniqui Tarlac.
                         </h2>
                       </div>

@@ -3,7 +3,7 @@
 $policies = [
 	"announcements-view" => role(["administrator", "user", "staff"]),
 	"announcements" => role(["administrator", "user", "staff"]),
-	"blotter" => role(["administrator", "staff"]),
+	"blotter" => role(["administrator", "staff", "user"]),
 	"business_permit" => role(["administrator", "staff"]),
 	"certificate-requests" => role(["administrator", "user", "staff"]),
 	"chairmanship" => role(["administrator", "staff"]),

@@ -117,25 +117,25 @@ $sec = $db
                         </h2>
                            <br>
                         <h1 class="mt-3">Name: <span class="fw-bold"
-                            style="font-size:25px"><?= ucwords($resident['firstname'] . ' ' . $resident['middlename'] . ' ' . $resident['lastname']) ?></span></h1>
+                            style="font-size:20px"><?= ucwords($resident['firstname'] . ' ' . $resident['middlename'] . ' ' . $resident['lastname']) ?></span></h1>
                         <h1 class="mt-3 ">Barangay: <span class="fw-bold"
-                            style="font-size:25px"><?= ucwords($brgy) ?></span></h1>
+                            style="font-size:20px"><?= ucwords($brgy) ?></span></h1>
 
 
 
 
           
                        <h2 class="mt-3" style="text-indent: 40px;">This certification/clearance is hereby issued to the above-named person for whatever legal purpose it may serve him or her best.</h2>
-<h2 class="mt-5">Issued this day <span  style="font-size:25px"><?= date('d') ?></span> of <span style="font-size:25px"><?= date('F') ?></span>, 2024 <br>
+<h2 class="mt-5">Issued this day <span  style="font-size:20px"><?= date('d') ?></span> of <span style="font-size:20px"><?= date('F') ?></span>, 2024 <br>
 
-Barangay <span style="font-size:25px"><?= ucwords($brgy) ?></span> <br>
-Municipality of <span style="font-size:25px"><?= ucwords($town) ?></span>, Philippines.</h2>
+Barangay <span style="font-size:20px"><?= ucwords($brgy) ?></span> <br>
+Municipality of <span style="font-size:20px"><?= ucwords($town) ?></span>, Philippines.</h2>
 
 
 
                       </div>
                       <div class="col-md-12">
-                        <div class="p-3 text-right mr-5" style="margin-top:300px">
+                        <div class="p-3 text-right mr-5" style="margin-top:200px">
                           <h1 class="fw-bold mb-0 text-uppercase"><?= ucwords($captain['name']) ?></h1>
                           <p class="mr-5">PUNONG BARANGAY</p>
                           <small>**NOT VALID without the official Dry Seal</small>

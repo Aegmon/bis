@@ -103,9 +103,9 @@ $sec = $db
                         <h3 class="fw-bold mb-0">
                           <i><?= ucwords($town) ?></i>
                         </h3>
-                        <h1 class="fw-bold mb-0">
+                        <h2 class="fw-bold mb-0">
                           <i><?= ucwords($brgy) ?></i>
-                        </h1>
+                        </h2>
                         <p><i>Mobile No.
                             <?= $number ?></i></p>
                       </div>
@@ -156,58 +156,58 @@ $sec = $db
                       </div>
                       <div class="col-md-12">
                         <div class="text-center">
-                          <h2 class="mt-4 fw-bold">
+                          <h3 class="mt-4 fw-bold">
                             OFFICE OF THE BARANGAY
-                            CAPTAIN</h2>
+                            CAPTAIN</h3>
                         </div>
                         <div class="text-center">
-                          <h1 class="mt-4 fw-bold mb-5">
+                          <h2 class="mt-2 fw-bold mb-5">
                             BARANGAY CLEARANCE
-                          </h1>
+                          </h2>
                         </div>
-                        <h2 class="mt-5">TO WHOM
-                          IT MAY CONCERN:</h2>
-                        <h2 class="mt-3" style="text-indent: 40px;">
+                        <h3 class="mt-5">TO WHOM
+                          IT MAY CONCERN:</h3>
+                        <h3 class="mt-3" style="text-indent: 40px;">
                           This is to certify that
-                          <span class="fw-bold" style="font-size:25px">
+                          <span class="fw-bold" style="font-size:20px">
                             <?= fullname($resident) ?>
                           </span>, is a permanent
                           resident of
-                          <span class="fw-bold" style="font-size:25px"><?= ucwords(
+                          <span class="fw-bold" style="font-size:20px"><?= ucwords(
                                                                         $brgy
                                                                       ) ?></span>
-                        and that he or she is known to me to be of good moral character.</h2>
-                        <h2 class="mt-3" style="text-indent: 40px;">
+                        and that he or she is known to me to be of good moral character.</h3>
+                        <h4 class="mt-3" style="text-indent: 40px;">
                           This
                           certification/clearance
                           is hereby issued to the
                           above-named person for
                           whatever legal purpose
                           it may serve him/her
-                          best.</h2>
-                        <h2 class="mt-3">Given
-                          this <span class="fw-bold" style="font-size:25px"><?= date(
+                          best.</h4>
+                        <h3 class="mt-3">Given
+                          this <span class="fw-bold" style="font-size:20px"><?= date(
                                                                             "m/d/Y"
                                                                           ) ?></span>
                           at the
                           office of the Punong
                           Barangay,
-                          <span class="fw-bold" style="font-size:25px">
+                          <span class="fw-bold" style="font-size:20px">
                             <?= ucwords($brgy) ?>
                           </span>
                           this Municipality,
                           Philippines.
-                        </h2></span></h2>
-                        <h2 class="text-uppercase" style="margin-top:180px;">
+                        </h3></span></h2>
+                        <h3 class="text-uppercase" style="margin-top:80px;">
                           NOT VALID WITHOUT SEAL:
-                        </h2>
+                        </h3>
                       </div>
                       <div class="col-md-12">
                         <div class="p-3 text-right mr-3">
-                          <h2 class="fw-bold mb-0 text-uppercase">
+                          <h3 class="fw-bold mb-0 text-uppercase">
                             <?= ucwords(
                             $captain["name"]
-                          ) ?></h2>
+                          ) ?></h3>
                           <p class="mr-3">PUNONG
                             BARANGAY</p>
                         </div>
@@ -223,10 +223,7 @@ $sec = $db
                       </div>
                       <div class="col-md-12 d-flex flex-wrap justify-content-end">
                         <div class="p-3 text-center">
-                          <div class="border mx-auto mb-3" style="height:150px;width:290px">
-                            <p class="mt-5 mb-0 pt-5">
-                              Right Thumb Mark</p>
-                          </div>
+                        
                           <h2 class="fw-bold mb-0">
                             <?= fullname($resident) ?>
                           </h2>
