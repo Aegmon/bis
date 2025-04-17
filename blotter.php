@@ -1,26 +1,51 @@
 <?php include "bootstrap/index.php"; ?>
 <?php
 
+
 $userId = $_SESSION["id"];
-    if (isUser()) {
-    $query = "SELECT * FROM tblblotter WHERE complainant = (SELECT id FROM residents WHERE account_id = '$userId')";
-} else {
-    $query = "SELECT * FROM tblblotter";
-}
-$result = $conn->query($query);
+$accountCheck = $conn->query("SELECT user_type FROM users WHERE id = '$userId'");
+$accountType = $accountCheck->fetch_assoc()['user_type'] ?? null;
+
 $blotter = [];
+
+if ($accountType === 'user') {
+	// Blotter list for users
+	$query = "SELECT b.*, r.firstname, r.lastname 
+			  FROM tblblotter b
+			  JOIN residents r ON b.complainant = r.id
+			  WHERE r.account_id = '$userId'";
+
+	// Filtered status counts for the user
+	$query1 = "SELECT COUNT(*) AS total FROM tblblotter b
+			   JOIN residents r ON b.complainant = r.id
+			   WHERE b.status = 'Active' AND r.account_id = '$userId'";
+	$query2 = "SELECT COUNT(*) AS total FROM tblblotter b
+			   JOIN residents r ON b.complainant = r.id
+			   WHERE b.status = 'Scheduled' AND r.account_id = '$userId'";
+	$query3 = "SELECT COUNT(*) AS total FROM tblblotter b
+			   JOIN residents r ON b.complainant = r.id
+			   WHERE b.status = 'Settled' AND r.account_id = '$userId'";
+} else {
+	// For admin and staff
+	$query = "SELECT b.*, r.firstname, r.lastname 
+			  FROM tblblotter b
+			  LEFT JOIN residents r ON b.complainant = r.id";
+
+	$query1 = "SELECT COUNT(*) AS total FROM tblblotter WHERE status = 'Active'";
+	$query2 = "SELECT COUNT(*) AS total FROM tblblotter WHERE status = 'Scheduled'";
+	$query3 = "SELECT COUNT(*) AS total FROM tblblotter WHERE status = 'Settled'";
+}
+
+// Execute main query
+$result = $conn->query($query);
 while ($row = $result->fetch_assoc()) {
 	$blotter[] = $row;
 }
-$query1 = "SELECT * FROM tblblotter WHERE `status`='Active'";
-$result1 = $conn->query($query1);
-$active = $result1->num_rows;
-$query2 = "SELECT * FROM tblblotter WHERE `status`='Scheduled'";
-$result2 = $conn->query($query2);
-$scheduled = $result2->num_rows;
-$query3 = "SELECT * FROM tblblotter WHERE `status`='Settled'";
-$result3 = $conn->query($query3);
-$settled = $result3->num_rows;
+
+// Status counts
+$active = $conn->query($query1)->fetch_assoc()['total'];
+$scheduled = $conn->query($query2)->fetch_assoc()['total'];
+$settled = $conn->query($query3)->fetch_assoc()['total'];
 
 $resident_details = (function () use ($db) {
     if (isUser()) {
@@ -147,7 +172,7 @@ $resident_details = (function () use ($db) {
 												<?php if (!empty($blotter)): ?>
 													<?php foreach ($blotter as $row): ?>
 														<tr>
-															<td><?= ucwords($row["complainant"]) ?></td>
+															<td><?= $row['firstname'] . '  ' . $row['lastname'] ?></td>
 															<td><?= ucwords($row["respondent"]) ?></td>
 															<td><?= ucwords($row["victim"]) ?></td>
 															<td><?= ucwords($row["type"]) ?></td>
@@ -174,7 +199,7 @@ $resident_details = (function () use ($db) {
 																		title="Edit Blotter"
 																		onclick="editBlotter1(this)"
 																		data-id="<?= $row["id"] ?>"
-																		data-complainant="<?= $row["complainant"] ?>"
+																		data-complainant="<?= $row["firstname"] . ' ' . $row["lastname"] ?>"
 																		data-respondent="<?= $row["respondent"] ?>"
 																		data-victim="<?= $row["victim"] ?>"
 																		data-type="<?= $row["type"] ?>"
@@ -214,6 +239,145 @@ $resident_details = (function () use ($db) {
 																</td>
 															<?php endif; ?>
 														</tr>
+														<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+																	<div class="modal-dialog modal-lg" role="document">
+																		<div class="modal-content">
+																			<div class="modal-header">
+																				<h5 class="modal-title" id="exampleModalLabel">Edit Blotter</h5>
+																				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																					<span aria-hidden="true">&times;</span>
+																				</button>
+																			</div>
+																			<div class="modal-body">
+																				<form id="blotterFormEdit" method="POST" action="model/edit_blotter.php">
+																					<div class="row">
+																						<div class="col-md-6">
+																						<div class="form-group">
+															<label>Complainant</label>
+
+															<input type="text" class="form-control" id="complainant" name="complainant" readonly>
+
+
+																	<input type="hidden" name="complainant_id" id="complainant_id" value="<?= $row['id'] ?>">
+														
+
+													</div>
+
+									</div>
+									<div class="col-md-6">
+									<div class="form-group">
+										<label>Respondent</label>
+										<input type="text" class="form-control" placeholder="Enter Respondent Name" id="respondent" name="respondent"
+													<?php if (role(["user"])): ?>
+															readonly
+													<?php endif; ?>>
+								</div>
+
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Victim(s)</label>
+											<input type="text" class="form-control" placeholder="Enter Victim(s) Name" id="victim" name="victim" required>
+										</div>
+									</div>
+									 <div class="col-md-6">
+											<div class="form-group">
+												<label>Type</label>
+												<select class="form-control" name="type" id="typeSelectEdit" onchange="toggleOtherInputEdit()">
+														<option disabled selected>Select Blotter Type</option>
+														<option value="Misunderstanding">Misunderstanding</option>
+														<option value="Incident">Incident</option>
+														<option value="Concern in surroundings">Concern in surroundings</option>
+														<option value="Others">Others</option>
+												</select>
+										</div>
+										<div class="form-group" id="otherInputGroupEdit" style="display: none;">
+												<label>Please specify:</label>
+												<input type="text" class="form-control" id="otherInputEdit" name="otherTypeEdit" placeholder="Enter your type">
+										</div>
+                  </div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Location</label>
+											<input type="text" class="form-control" placeholder="Enter Location" id="location" name="location" required>
+										</div>
+									</div>
+									<div class="col-md-6">
+									<div class="form-group">
+    <label>Date</label>
+    <input type="date" class="form-control" name="date" id="date"
+           <?php if (isAdmin() || isStaff()): ?>
+               placeholder="Enter Date"
+           <?php else: ?>
+               readonly
+           <?php endif; ?> required>
+</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+									<div class="form-group">
+    <label>Time</label>
+    <input type="time" class="form-control" name="time" id="time"
+           <?php if (isAdmin() || isStaff()): ?>
+               placeholder="Enter Time"
+           <?php else: ?>
+               readonly
+           <?php endif; ?> required>
+</div>
+									</div>
+												 <?php if (isAdmin() || isStaff()): ?>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Status</label>
+            <select class="form-control" name="status">
+                <option disabled selected>Select Blotter Status</option>
+                <option value="Active">Active</option>
+                <option value="Settled">Settled</option>
+                <option value="Scheduled">Scheduled</option>
+            </select>
+        </div>
+    </div>
+<?php else: ?>
+    
+            <input type="hidden" class="form-control" name="status" value="Active">
+        
+<?php endif; ?>
+								</div>
+								<div class="form-group">
+									<label>Details</label>
+									<textarea class="form-control" placeholder="Enter Blotter or Incident here..." id="details" name="details" required></textarea>
+								</div>
+
+					<div class="form-group">
+    <label>Feedback</label>
+    <textarea class="form-control" placeholder="Enter Feedback here..." name="feedback" id="feedback"
+              <?php if (role(["user"])): ?>
+                  readonly
+              <?php endif; ?>></textarea>
+</div>
+ <div class="form-group">
+                        <button type="button" class="btn btn-info" id="generateReportBtn">
+                            <i class="fas fa-file-alt"></i> Generate Report
+                        </button>
+                    </div>
+
+						</div>
+						<div class="modal-footer">
+							<input type="hidden" id="blotter_id" name="id">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<?php if (isset($_SESSION["username"])): ?>
+								<button type="submit" class="btn btn-primary">Update</button>
+							<?php endif; ?>
+						</div>
+						</form>
+					</div>
+				</div>
+			</div>
 													<?php endforeach; ?>
 												<?php endif; ?>
 												</tbody>
@@ -436,151 +600,7 @@ $resident_details = (function () use ($db) {
 
 
 			<!-- Modal -->
-			<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-lg" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="exampleModalLabel">Edit Blotter</h5>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<form id="blotterFormEdit" method="POST" action="model/edit_blotter.php">
-								<div class="row">
-									<div class="col-md-6">
-									<div class="form-group">
-    <label>Complainant</label>
-    <?php if (isUser()): ?>
-        <input type="text" class="form-control" 
-               value="<?= $resident_details['firstname'] . '  ' . $resident_details['lastname'] ?>" 
-               readonly>
-        <input type="hidden" name="complainant_id" id="complainant_id" value="<?= $resident_details['id'] ?>">
-    <?php elseif (isAdmin() || isStaff()): ?>
-        <select class="form-control" name="complainant_id" id="complainant_id" required>
-            <option disabled selected>Select Complainant</option>
-            <?php foreach ($resident_details as $resident): ?>
-                <option value="<?= $resident['id'] ?>"><?= $resident['fullname'] ?></option>
-            <?php endforeach; ?>
-        </select>
-    <?php endif; ?>
-</div>
 
-									</div>
-									<div class="col-md-6">
-									<div class="form-group">
-    <label>Respondent</label>
-    <input type="text" class="form-control" placeholder="Enter Respondent Name" id="respondent" name="respondent"
-           <?php if (role(["user"])): ?>
-               readonly
-           <?php endif; ?>>
-</div>
-
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Victim(s)</label>
-											<input type="text" class="form-control" placeholder="Enter Victim(s) Name" id="victim" name="victim" required>
-										</div>
-									</div>
-									 <div class="col-md-6">
-											<div class="form-group">
-												<label>Type</label>
-												<select class="form-control" name="type" id="typeSelectEdit" onchange="toggleOtherInputEdit()">
-														<option disabled selected>Select Blotter Type</option>
-														<option value="Misunderstanding">Misunderstanding</option>
-														<option value="Incident">Incident</option>
-														<option value="Concern in surroundings">Concern in surroundings</option>
-														<option value="Others">Others</option>
-												</select>
-										</div>
-										<div class="form-group" id="otherInputGroupEdit" style="display: none;">
-												<label>Please specify:</label>
-												<input type="text" class="form-control" id="otherInputEdit" name="otherTypeEdit" placeholder="Enter your type">
-										</div>
-                  </div>
-								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Location</label>
-											<input type="text" class="form-control" placeholder="Enter Location" id="location" name="location" required>
-										</div>
-									</div>
-									<div class="col-md-6">
-									<div class="form-group">
-    <label>Date</label>
-    <input type="date" class="form-control" name="date" id="date"
-           <?php if (isAdmin() || isStaff()): ?>
-               placeholder="Enter Date"
-           <?php else: ?>
-               readonly
-           <?php endif; ?> required>
-</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-6">
-									<div class="form-group">
-    <label>Time</label>
-    <input type="time" class="form-control" name="time" id="time"
-           <?php if (isAdmin() || isStaff()): ?>
-               placeholder="Enter Time"
-           <?php else: ?>
-               readonly
-           <?php endif; ?> required>
-</div>
-									</div>
-												 <?php if (isAdmin() || isStaff()): ?>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label>Status</label>
-            <select class="form-control" name="status">
-                <option disabled selected>Select Blotter Status</option>
-                <option value="Active">Active</option>
-                <option value="Settled">Settled</option>
-                <option value="Scheduled">Scheduled</option>
-            </select>
-        </div>
-    </div>
-<?php else: ?>
-    
-            <input type="hidden" class="form-control" name="status" value="Active">
-        
-<?php endif; ?>
-								</div>
-								<div class="form-group">
-									<label>Details</label>
-									<textarea class="form-control" placeholder="Enter Blotter or Incident here..." id="details" name="details" required></textarea>
-								</div>
-
-					<div class="form-group">
-    <label>Feedback</label>
-    <textarea class="form-control" placeholder="Enter Feedback here..." name="feedback" id="feedback"
-              <?php if (role(["user"])): ?>
-                  readonly
-              <?php endif; ?>></textarea>
-</div>
- <div class="form-group">
-                        <button type="button" class="btn btn-info" id="generateReportBtn">
-                            <i class="fas fa-file-alt"></i> Generate Report
-                        </button>
-                    </div>
-
-						</div>
-						<div class="modal-footer">
-							<input type="hidden" id="blotter_id" name="id">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-							<?php if (isset($_SESSION["username"])): ?>
-								<button type="submit" class="btn btn-primary">Update</button>
-							<?php endif; ?>
-						</div>
-						</form>
-					</div>
-				</div>
-			</div>
 			<!-- Main Footer -->
 			<?php include "templates/main-footer.php"; ?>
 			<!-- End Main Footer -->

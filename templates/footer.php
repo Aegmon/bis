@@ -52,6 +52,29 @@
 <script>
 // Function to set the maximum date to 15 years ago
 document.addEventListener('DOMContentLoaded', function() {
+  console.log("DOM Loaded");
+  // Check initial state of radio buttons for "4Ps" and "PWD"
+  toggle4psUploadField();
+  togglePwdUploadField();
+
+  // Add event listeners to toggle the fields based on radio button selection
+  document.getElementById('4ps_yes').addEventListener('change', function() {
+    console.log("4Ps Yes selected");
+    toggle4psUploadField();
+  });
+  document.getElementById('4ps_no').addEventListener('change', function() {
+    console.log("4Ps No selected");
+    toggle4psUploadField();
+  });
+  document.getElementById('pwd_yes').addEventListener('change', function() {
+    console.log("PWD Yes selected");
+    togglePwdUploadField();
+  });
+  document.getElementById('pwd_no').addEventListener('change', function() {
+    console.log("PWD No selected");
+    togglePwdUploadField();
+  });
+
   const birthdateInput = document.getElementById('birthdate');
   const today = new Date();
   
@@ -60,8 +83,40 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Set the max attribute for the date input to 15 years ago
   birthdateInput.max = minDate.toISOString().split("T")[0];
+
+
 });
 
+function togglePwdUploadField() {
+  const pwdYes = document.getElementById('pwd_yes');
+  const pwdNo = document.getElementById('pwd_no');
+  const pwdUploadField = document.getElementById('pwd-id-upload');
+  
+  console.log("PWD ID Upload Field:", pwdUploadField);
+
+  if (pwdYes && pwdYes.checked) {
+    console.log("Displaying PWD upload field");
+    pwdUploadField.style.display = 'block'; // Show upload field if Yes is selected
+  } else {
+    console.log("Hiding PWD upload field");
+    pwdUploadField.style.display = 'none'; // Hide upload field if No is selected
+  }
+}
+function toggle4psUploadField() {
+  const psYes = document.getElementById('4ps_yes');
+  const psNo = document.getElementById('4ps_no');
+  const psUploadField = document.getElementById('4ps-id-upload');
+  
+  console.log("4Ps ID Upload Field:", psUploadField);
+
+  if (psYes && psYes.checked) {
+    console.log("Displaying 4Ps upload field");
+    psUploadField.style.display = 'block'; // Show upload field if Yes is selected
+  } else {
+    console.log("Hiding 4Ps upload field");
+    psUploadField.style.display = 'none'; // Hide upload field if No is selected
+  }
+}
 document.getElementById('birthdate').addEventListener('change', function() {
   const birthdate = new Date(this.value);
   const today = new Date();

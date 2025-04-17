@@ -24,6 +24,8 @@ $resident = (function () use ($db) {
     ->select([
       "id" => "residents.id",
       "national_id" => "residents.national_id",
+      "pwd_id" => "residents.pwd_id",
+      "4ps_id" => "residents.4ps_id",
       "account_id" => "residents.account_id",
       "citizenship" => "residents.citizenship",
       "firstname" => "residents.firstname",
@@ -118,11 +120,50 @@ $resident = (function () use ($db) {
           </div>
           <hr>
           <div class="row">
-            <h4 class="text-center"><strong>Identification Card</strong></h4>
-            <img src="<?= imgSrc($resident["national_id"]) ??
-            	"assets/img/person.png" ?>" alt="..." class="img "
-              width="250" height="250" style="max-height: 250; object-fit: cover;">
-          </div>
+    <h4 class="text-center"><strong>Identification Card</strong></h4>
+    <img src="<?= imgSrc($resident["national_id"]) ?? 'assets/img/person.png' ?>" 
+         alt="..." class="img-fluid" 
+         width="250" height="250" 
+         style="max-height: 250px; object-fit: cover;" 
+         data-bs-toggle="modal" 
+         data-bs-target="#imageModal">
+</div>
+<div class="row">
+  
+    <h4 class="text-center"><strong>PWD ID</strong></h4>
+    <img src="<?= imgSrc($resident["pwd_id"]) ?? 'assets/img/person.png' ?>" 
+         alt="..." class="img-fluid" 
+         width="250" height="250" 
+         style="max-height: 250px; object-fit: cover;" 
+         data-bs-toggle="modal" 
+         data-bs-target="#imageModal">
+</div>
+<div class="row">
+    <h4 class="text-center"><strong>4Ps ID</strong></h4>
+    <img src="<?= imgSrc($resident["4ps_id"]) ?? 'assets/img/person.png' ?>" 
+         alt="..." class="img-fluid" 
+         width="250" height="250" 
+         style="max-height: 250px; object-fit: cover;" 
+         data-bs-toggle="modal" 
+         data-bs-target="#imageModal">
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="imageModalLabel">Identification Card</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <img src="<?= imgSrc($resident["national_id"]) ?? 'assets/img/person.png' ?>" 
+             alt="..." class="img-fluid">
+      </div>
+    </div>
+  </div>
+</div>
+
         </div>
 
         <div class="col-md-8">
@@ -274,18 +315,25 @@ $resident = (function () use ($db) {
                   value="<?= $resident["voterstatus"] ?>">
                   <option disabled selected>Select Voters Status</option>
 
-                  <option value="Yes" <?= ifThen(
-                  	$resident["voterstatus"] == "Yes",
+                  <option value="Active" <?= ifThen(
+                  	$resident["voterstatus"] == "Active",
                   	'selected="true"'
                   ) ?>>
-                    Yes
+                    Active
                   </option>
 
-                  <option value="No" <?= ifThen(
-                  	$resident["voterstatus"] == "No",
-                  	'selected="true"'
+                  <option value="Inactive" <?= ifThen(
+                  	$resident["voterstatus"] == "Inactive",
+                  	'selected="Inactive"'
                   ) ?>>
-                    No
+                    Inactive
+                  </option>
+
+                  <option value="Canceled" <?= ifThen(
+                  	$resident["voterstatus"] == "Canceled",
+                  	'selected="Canceled"'
+                  ) ?>>
+                    Canceled
                   </option>
                 </select>
               </div>
@@ -296,9 +344,9 @@ $resident = (function () use ($db) {
                 <label>Identified As</label>
                 <select class="form-control indetity" name="identified_as"
                   value="<?= $resident["identified_as"] ?>">
-                  <option value="Positive">Positive</option>
-                  <option value="Negative">Negative</option>
-                  <option value="Unidentified" selected>Unidentified</option>
+                  <option value="Register">Register</option>
+                  <option value="Unregister">Unregister</option>
+              
                 </select>
               </div>
             </div>
@@ -316,69 +364,69 @@ $resident = (function () use ($db) {
             <div class="col-sm-4">
               <div class="form-group">
                 <label>Contact Number</label>
-                <input class="form-control" placeholder="Enter Contact Number" name="number"
-                  value="<?= $resident["phone"] ?>">
+                <input type="number" class="form-control" placeholder="Enter Contact Number" name="number"
+       value="<?= $resident["phone"] ?>" min="0" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
               </div>
             </div>
             <div class="col-sm-4">
               <div class="form-group">
                 <label>Occupation</label>
-                <input class="form-control" placeholder="Enter Occupation" name="occupation"
+                <input type="text" class="form-control" placeholder="Enter Occupation" name="occupation"
                   value="<?= $resident["occupation"] ?>">
               </div>
             </div>
           </div>
 
           <div class="row g-0">
-            <div class="col-sm-4">
-              <div class="form-group">
-                <label>Are you a 4Ps Beneficiary?</label>
+  <div class="col-sm-4">
+    <div class="form-group">
+      <label>Are you a 4Ps Beneficiary?</label>
+      <div class="form-check">
+    
+          <label class="btn" id="4ps-yes">
+            <input type="radio" name="is_4ps"  value="1" id="4ps_yes"   <?= $resident["is_4ps"] == 1 ? "checked" : null ?> value="1">  Yes
+          </label>
+          <label class="btn" id="4ps-no">
+            <input type="radio" name="is_4ps"  value="0" id="4ps_no"   <?= $resident["is_4ps"] == 0 ? "checked" : null ?>  value="0"> No
+          </label>
+     
+      </div>
+    </div>
+  </div>
 
-                <div class="form-check">
-                  <div class="btn-group btn-group-justified" data-toggle="buttons">
-                    <label class="btn <?= $resident["is_4ps"] == 1 ? "active" : "" ?>">
-                      <input type="radio" name="is_4ps" class="hidden"
-                        <?= $resident["is_4ps"] == 1 ? "checked" : null ?> value="1"> Yes
-                    </label>
-                    <label class="btn <?= $resident["is_4ps"] == 0 ? "active" : "" ?>">
-                      <input type="radio" name="is_4ps" class="hidden" value="0"
-                        <?= $resident["is_4ps"] == 0 ? "checked" : null ?>> No
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
+  <div class="col-sm-4">
+    <div class="form-group">
+      <label>Are you a PWD?</label>
+      <div class="form-check">
+   
+          <label class="btn" id="pwd-yes">
+            <input type="radio" name="is_pwd" value="1" id="pwd_yes"  <?= $resident["is_pwd"] == 1 ? "checked" : null ?>> Yes
+          </label>
+          <label class="btn" id="pwd-no">
+            <input type="radio" name="is_pwd"  value="0" id="pwd_no"  <?= $resident["is_pwd"] == 0 ? "checked" : null ?>> No
+          </label>
+      
+      </div>
+    </div>
+  </div>
 
-            <div class="col-sm-4">
-              <div class="form-group">
-                <label>Are you a PWD?</label>
 
-                <div class="form-check">
-                  <div class="btn-group" data-toggle="buttons">
-                    <label class="btn <?= $resident["is_pwd"] == 1 ? "active" : "" ?>">
-                      <input type="radio" name="is_pwd" class="hidden"
-                        <?= $resident["is_pwd"] == 1 ? "checked" : null ?> value="1"> Yes
-                    </label>
-                    <label class="btn <?= $resident["is_pwd"] == 0 ? "active" : "" ?>">
-                      <input type="radio" name="is_pwd" class="hidden" value="0"
-                        <?= $resident["is_pwd"] == 0 ? "checked" : null ?>> No
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
+</div>
 
-            <div class="col-sm-4">
-              <div class="form-group">
-                <label>Is senior?</label>
+<!-- Hidden 4Ps ID upload field -->
+<div class="form-group" id="4ps-id-upload" style="display:none;">
+  <label>Upload 4Ps ID</label>
+  <input type="file" class="form-control" name="four_ps_id" accept="image/*">
+  <small style="color:red">**Jpeg, jpg only</small>
+</div>
 
-                <div class="form-check">
-                <input class="form-control" readonly placeholder="Is senior" name="is_senior"
-                  value="<?= $resident["is_senior"] ? "Yes" : "No" ?>">
-                </div>
-              </div>
-            </div>
-          </div>
+<!-- Hidden PWD ID upload field -->
+<div class="form-group" id="pwd-id-upload" style="display:none;">
+  <label>Upload PWD ID</label>
+  <input type="file" class="form-control" name="pwd_id" accept="image/*">
+  <small style="color:red">**Jpeg, jpg only</small>
+</div>
+
 
           <div class="row g-0">
             <div class="col-12">

@@ -21,7 +21,7 @@ $details       = $conn->real_escape_string($_POST['details']);
 
 // Check if the ID is not empty
 if (!empty($id)) {
-    $query = "UPDATE tblblotter SET `complainant`='$complainant', `respondent`='$respondent', `victim`='$victim', `type`='$type', `location`='$location', `date`='$date',
+    $query = "UPDATE tblblotter SET `respondent`='$respondent', `victim`='$victim', `type`='$type', `location`='$location', `date`='$date',
               `time`='$time', `status`='$status', `details`='$details' WHERE id=$id;";
     $result = $conn->query($query);
 
@@ -29,7 +29,7 @@ if (!empty($id)) {
     if ($result === true) {
         // Check if the user is an administrator before logging the action
         if ($_SESSION['role'] === 'administrator') {
-            $logMessage = "Admin edited blotter ID: $id, Complainant: $complainant, Respondent: $respondent";
+            $logMessage = "Admin edited blotter ID: $id";
             $logQuery = $conn->prepare("INSERT INTO admin_logs (logs) VALUES (?)");
             $logQuery->bind_param("s", $logMessage);
             $logQuery->execute();

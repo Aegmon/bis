@@ -143,7 +143,7 @@ $purokList = (function () use ($db) {
                         <div class="col-sm-4">
                           <div class="form-group">
                             <label>Middle name</label>
-                            <input class="form-control" placeholder="Middel Name (optional)" name="mname" >
+                            <input class="form-control" placeholder="Middle Name (optional)" name="mname" >
                           </div>
                         </div>
 
@@ -229,8 +229,9 @@ $purokList = (function () use ($db) {
                             <label>Voters Status</label>
                             <select class="form-control vstatus" required name="voter_status">
                               <option disabled selected>Select Voters Status</option>
-                              <option value="Yes">Yes</option>
-                              <option value="No">No</option>
+                              <option value="Active">Active</option>
+                              <option value="Inactive">Inactive</option>
+                              <option value="Canceled">Canceled</option>
                             </select>
                           </div>
                         </div>
@@ -241,7 +242,7 @@ $purokList = (function () use ($db) {
                             <select class="form-control indetity" name="identified_as">
                               <option value="Register">Register</option>
                               <option value="Unregister">Unregister</option>
-                              <option value="Unidentified" selected>Unidentified</option>
+                       
                             </select>
                           </div>
                         </div>
@@ -260,62 +261,68 @@ $purokList = (function () use ($db) {
                         <div class="col-sm-4">
                           <div class="form-group">
                             <label>Contact Number</label>
-                            <input class="form-control" placeholder="Enter Contact Number" name="number">
+                            <input type="number" class="form-control" placeholder="Enter Contact Number" name="number" min="0" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                           </div>
                         </div>
                         <div class="col-sm-4">
                           <div class="form-group">
                             <label>Occupation</label>
-                            <input class="form-control" placeholder="Enter Occupation" name="occupation">
+                            <input  type="text" class="form-control" placeholder="Enter Occupation" name="occupation">
                           </div>
                         </div>
                       </div>
                      <div class="container mt-5">
-                       <div class="row g-0">
-    <div class="col-sm-6">
-      <div class="form-group">
-        <label>Are you a 4Ps Beneficiary?</label>
-        <div class="form-check">
-      <div class="btn-group btn-group-justified" >
-            <label class="btn" id="4ps-yes">
-              <input type="radio" name="is_4ps" class="hidden" value="1" id="4ps_yes"> Yes
-            </label>
-            <label class="btn active" id="4ps-no">
-              <input type="radio" name="is_4ps" class="hidden" value="0" id="4ps_no"> No
-            </label>
-          </div>
-        </div>
-      </div>
-      <!-- Hidden 4Ps ID upload field -->
-      <div class="form-group" id="4ps-id-upload" style="display:none;">
-        <label>Upload 4Ps ID</label>
-        <input type="file" class="form-control" name="four_ps_id" accept="image/*">
-        <small style="color:red">**Jpeg, jpg only</small>
-      </div>
-    </div>
-
-    <div class="col-sm-6">
-      <div class="form-group">
-        <label>Are you a PWD?</label>
-        <div class="form-check">
-   <div class="btn-group" >
-            <label class="btn" id="pwd-yes">
-              <input type="radio" name="is_pwd" class="hidden" value="1" id="pwd_yes"> Yes
-            </label>
-            <label class="btn active" id="pwd-no">
-              <input type="radio" name="is_pwd" class="hidden" value="0" id="pwd_no"> No
-            </label>
-          </div>
-        </div>
-      </div>
-      <!-- Hidden PWD ID upload field -->
-      <div class="form-group" id="pwd-id-upload" style="display:none;">
-        <label>Upload PWD ID</label>
-        <input type="file" class="form-control" name="pwd_id" accept="image/*">
-        <small style="color:red">**Jpeg, jpg only</small>
+                     <div class="row g-0">
+  <div class="col-sm-4">
+    <div class="form-group">
+      <label>Are you a 4Ps Beneficiary?</label>
+      <div class="form-check">
+    
+          <label class="btn" id="4ps-yes">
+            <input type="radio" name="is_4ps"  value="1" id="4ps_yes"> Yes
+          </label>
+          <label class="btn" id="4ps-no">
+            <input type="radio" name="is_4ps"  value="0" id="4ps_no"> No
+          </label>
+     
       </div>
     </div>
   </div>
+
+  <div class="col-sm-4">
+    <div class="form-group">
+      <label>Are you a PWD?</label>
+      <div class="form-check">
+   
+          <label class="btn" id="pwd-yes">
+            <input type="radio" name="is_pwd" value="1" id="pwd_yes"> Yes
+          </label>
+          <label class="btn" id="pwd-no">
+            <input type="radio" name="is_pwd"  value="0" id="pwd_no"> No
+          </label>
+      
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<!-- Hidden 4Ps ID upload field -->
+<div class="form-group" id="4ps-id-upload" style="display:none;">
+  <label>Upload 4Ps ID</label>
+  <input type="file" class="form-control" name="four_ps_id" accept="image/*">
+  <small style="color:red">**Jpeg, jpg only</small>
+</div>
+
+<!-- Hidden PWD ID upload field -->
+<div class="form-group" id="pwd-id-upload" style="display:none;">
+  <label>Upload PWD ID</label>
+  <input type="file" class="form-control" name="pwd_id" accept="image/*">
+  <small style="color:red">**Jpeg, jpg only</small>
+</div>
+
+
 
                       <div class="row g-0">
                         <div class="col-12">
@@ -385,6 +392,7 @@ $purokList = (function () use ($db) {
     </div>
 
     <?php include "templates/footer.php"; ?>
+    
  <script>
   document.getElementById('email').addEventListener('input', function() {
     const emailField = this;
@@ -401,22 +409,9 @@ $purokList = (function () use ($db) {
     }
   });
 
-   // Show or hide the 4Ps ID upload field based on the radio selection
-  document.getElementById('4ps_yes').addEventListener('change', function() {
-    document.getElementById('4ps-id-upload').style.display = 'block';
-  });
-  document.getElementById('4ps_no').addEventListener('change', function() {
-    document.getElementById('4ps-id-upload').style.display = 'none';
-  });
 
-  // Show or hide the PWD ID upload field based on the radio selection
-  document.getElementById('pwd_yes').addEventListener('change', function() {
-    document.getElementById('pwd-id-upload').style.display = 'block';
-  });
-  document.getElementById('pwd_no').addEventListener('change', function() {
-    document.getElementById('pwd-id-upload').style.display = 'none';
-  });
 </script>
-  </body>
+
+ </body>
 
 </html>

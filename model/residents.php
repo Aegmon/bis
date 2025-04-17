@@ -15,6 +15,8 @@ function toNumberOrZero($val)
 if (isset($_POST["register-resident"])) {
 	try {
 	  $nationalIDFile = $_FILES["issuedID"]; 
+		$fourPsIDFile = $_FILES["four_ps_id"];
+		$pwdIDFile = $_FILES["pwd_id"];
 		$citizenship = getBody("citizenship", $_POST);
 		$address = getBody("address", $_POST);
 		$fname = getBody("fname", $_POST);
@@ -40,6 +42,8 @@ if (isset($_POST["register-resident"])) {
 		$is_senior = $age > 60;
 
 		$profileimg = getBody("profileimg", $_POST);
+		$fourPsIDFilename = null;
+		$pwdIDFilename = null;
 
 		$requiredFields = [
 			"Address" => $address,
@@ -108,6 +112,26 @@ unset($_SESSION['formData']);
 		/**
 		 * Check password
 		 */
+
+
+		 if (!empty($fourPsIDFile["name"])) {
+			$uniqId = uniqid("4ps_" . date("YmdhisU"));
+			$ext = pathinfo($fourPsIDFile["name"], PATHINFO_EXTENSION);
+			$fourPsIDFilename = "$uniqId.$ext";
+			$targetDir = "../assets/uploads/$fourPsIDFilename";
+
+			move_uploaded_file($fourPsIDFile["tmp_name"], $targetDir);
+	}
+
+	// Upload PWD ID if provided
+	if (!empty($pwdIDFile["name"])) {
+			$uniqId = uniqid("pwd_" . date("YmdhisU"));
+			$ext = pathinfo($pwdIDFile["name"], PATHINFO_EXTENSION);
+			$pwdIDFilename = "$uniqId.$ext";
+			$targetDir = "../assets/uploads/$pwdIDFilename";
+
+			move_uploaded_file($pwdIDFile["tmp_name"], $targetDir);
+	}
 		if ($password != $password_confirm) {
 			$_SESSION["message"] = "Please confirm your password!";
 			$_SESSION["status"] = "danger";
@@ -232,6 +256,8 @@ if (!empty($profileFile["name"])) {
 				"is_4ps" => $is_4ps,
 				"is_pwd" => $is_pwd,
 				"is_senior" => $is_senior,
+				"4ps_id" => $fourPsIDFilename,
+				"pwd_id" => $pwdIDFilename,
 			])
 			->exec();
 

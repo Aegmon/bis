@@ -424,7 +424,7 @@ $admin_dashboard_cards = [
               <?php foreach ($admin_dashboard_cards as $row): ?>
               <div class="col-md-4">
                 <div class="card card-stats card-round"
-                style="background-color: <?= getRandomColor() ?>; color: #fff"
+                style="background-color: #1269DB; color: #fff"
                 >
                   <div class="card-body">
                     <div class="row">

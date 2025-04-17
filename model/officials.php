@@ -20,24 +20,23 @@ if (getBody("register-official", $_POST)) {
 			return $conn->close();
 		}
 
-		if ($position == 4) {
+		if ($position == 1) {
 			$hasCaptain = $db
-				->from("tblofficials")
-				->where("position", 4)
-				->where("status", "Active")
-				->select([
-					"id" => "tblofficials.id",
-				])
-				->exec();
-
-			if (isset($hasCaptain)) {
-				$_SESSION["message"] = "A captain is already registered!";
-				$_SESSION["status"] = "danger";
-
-				header("location: ../officials.php");
-				return $conn->close();
+					->from("tblofficials")
+					->where("position", 1)
+					->where("status", "Active")
+					->select(["id" => "tblofficials.id"])
+					->exec();
+	
+			if (count($hasCaptain) > 0) {  // Ensure we're checking if there are results
+					$_SESSION["message"] = "A captain is already registered!";
+					$_SESSION["status"] = "danger";
+					
+					header("location: ../officials.php");
+					exit; // Use exit instead of return for proper redirection
 			}
-		}
+	}
+	
 
 		$result = $db
 			->insert("tblofficials")
