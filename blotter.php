@@ -346,8 +346,12 @@ $resident_details = (function () use ($db) {
     </div>
 <?php else: ?>
     
+<<<<<<< HEAD
 	<input type="hidden" class="form-control" name="status" id="statusHidden" value="Active">
 
+=======
+            <input type="hidden" class="form-control" name="status" value="Active">
+>>>>>>> 4bea30e1c3ccfb56c27612a76902532a25ee193c
         
 <?php endif; ?>
 								</div>
@@ -363,13 +367,20 @@ $resident_details = (function () use ($db) {
                   readonly
               <?php endif; ?>></textarea>
 </div>
+<<<<<<< HEAD
            <?php if (role(["administrator"])): ?>
                   <div class="form-group">
+=======
+ <div class="form-group">
+>>>>>>> 4bea30e1c3ccfb56c27612a76902532a25ee193c
                         <button type="button" class="btn btn-info" id="generateReportBtn">
                             <i class="fas fa-file-alt"></i> Generate Report
                         </button>
                     </div>
+<<<<<<< HEAD
 										<?php endif; ?>
+=======
+>>>>>>> 4bea30e1c3ccfb56c27612a76902532a25ee193c
 
 						</div>
 						<div class="modal-footer">

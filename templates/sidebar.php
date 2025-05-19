@@ -141,6 +141,7 @@ function appendActiveClass(array $pages)
 // Add this before the HTML to get the count
 $unreadCount = 0;
 
+<<<<<<< HEAD
 if (isset($_SESSION["id"])) {
     $userId = $_SESSION["id"];
 
@@ -185,6 +186,14 @@ if (isset($_SESSION["id"])) {
      
         <?php if ($unreadCount > 0): ?>
           <span class="badge badge-danger"><?= $unreadCount ?></span>
+=======
+                   <li class="nav-item <?= appendActiveClass(["purok", "generate_resident"]) ?>">
+          <a href="purok.php">
+            <i class="icon-pin"></i>
+            <p>Purok</p>
+          </a>
+        </li>
+>>>>>>> 4bea30e1c3ccfb56c27612a76902532a25ee193c
         <?php endif; ?>
       </p>
     </a>

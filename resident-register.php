@@ -143,7 +143,11 @@ $purokList = (function () use ($db) {
                         <div class="col-sm-4">
                           <div class="form-group">
                             <label>Middle name</label>
+<<<<<<< HEAD
                             <input class="form-control" placeholder="Middle Name (optional)" name="mname" value="<?= $_SESSION['formData']['mname'] ?? '' ?>">
+=======
+                            <input class="form-control" placeholder="Middle Name (optional)" name="mname" >
+>>>>>>> 4bea30e1c3ccfb56c27612a76902532a25ee193c
                           </div>
                         </div>
 
@@ -234,6 +238,17 @@ $purokList = (function () use ($db) {
                               </option>
                             <?php endforeach; ?>
 
+<<<<<<< HEAD
+=======
+                        <div class="col-sm-4">
+                          <div class="form-group">
+                            <label>Voters Status</label>
+                            <select class="form-control vstatus" required name="voter_status">
+                              <option disabled selected>Select Voters Status</option>
+                              <option value="Active">Active</option>
+                              <option value="Inactive">Inactive</option>
+                              <option value="Canceled">Canceled</option>
+>>>>>>> 4bea30e1c3ccfb56c27612a76902532a25ee193c
                             </select>
                           </div>
                         </div>
@@ -247,6 +262,7 @@ $purokList = (function () use ($db) {
                         </div>
                       </div>
 
+<<<<<<< HEAD
                       <div class="col-sm-4">
                         <div class="form-group">
                           <label>Voters Status</label>
@@ -256,6 +272,17 @@ $purokList = (function () use ($db) {
                             <option value="Inactive" <?= (isset($_SESSION['formData']['voter_status']) && $_SESSION['formData']['voter_status'] == 'Inactive') ? 'selected' : '' ?>>Inactive</option>
                             <option value="Canceled" <?= (isset($_SESSION['formData']['voter_status']) && $_SESSION['formData']['voter_status'] == 'Canceled') ? 'selected' : '' ?>>Cancelled</option>
                           </select>
+=======
+                        <div class="col-sm-4">
+                          <div class="form-group">
+                            <label>Identified As</label>
+                            <select class="form-control indetity" name="identified_as">
+                              <option value="Register">Register</option>
+                              <option value="Unregister">Unregister</option>
+                       
+                            </select>
+                          </div>
+>>>>>>> 4bea30e1c3ccfb56c27612a76902532a25ee193c
                         </div>
                       </div>
                 
@@ -275,18 +302,27 @@ $purokList = (function () use ($db) {
                         <div class="col-sm-4">
                           <div class="form-group">
                             <label>Contact Number</label>
+<<<<<<< HEAD
                             <input type="number" class="form-control" placeholder="Enter Contact Number" name="number" min="0" oninput="this.value = this.value.replace(/[^0-9]/g, '')"  value="<?= $_SESSION['formData']['number'] ?? '' ?>">
+=======
+                            <input type="number" class="form-control" placeholder="Enter Contact Number" name="number" min="0" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+>>>>>>> 4bea30e1c3ccfb56c27612a76902532a25ee193c
                           </div>
                         </div>
                         <div class="col-sm-4">
                           <div class="form-group">
                             <label>Occupation</label>
+<<<<<<< HEAD
                             <input  type="text" class="form-control" placeholder="Enter Occupation" name="occupation"  value="<?= $_SESSION['formData']['number'] ?? '' ?>" value="<?= $_SESSION['formData']['occupation'] ?? '' ?>">
+=======
+                            <input  type="text" class="form-control" placeholder="Enter Occupation" name="occupation">
+>>>>>>> 4bea30e1c3ccfb56c27612a76902532a25ee193c
                           </div>
                         </div>
                       </div>
                      <div class="container mt-5">
                      <div class="row g-0">
+<<<<<<< HEAD
                   <div class="col-sm-4">
                     <div class="form-group">
                       <label>Are you a 4Ps Beneficiary?</label>
@@ -342,6 +378,58 @@ $purokList = (function () use ($db) {
                       <input type="file" class="form-control" name="pwd_id" accept="image/*">
                       <small style="color:red">**Jpeg, jpg only</small>
                     </div>
+
+
+=======
+  <div class="col-sm-4">
+    <div class="form-group">
+      <label>Are you a 4Ps Beneficiary?</label>
+      <div class="form-check">
+    
+          <label class="btn" id="4ps-yes">
+            <input type="radio" name="is_4ps"  value="1" id="4ps_yes"> Yes
+          </label>
+          <label class="btn" id="4ps-no">
+            <input type="radio" name="is_4ps"  value="0" id="4ps_no"> No
+          </label>
+     
+      </div>
+    </div>
+  </div>
+>>>>>>> 4bea30e1c3ccfb56c27612a76902532a25ee193c
+
+  <div class="col-sm-4">
+    <div class="form-group">
+      <label>Are you a PWD?</label>
+      <div class="form-check">
+   
+          <label class="btn" id="pwd-yes">
+            <input type="radio" name="is_pwd" value="1" id="pwd_yes"> Yes
+          </label>
+          <label class="btn" id="pwd-no">
+            <input type="radio" name="is_pwd"  value="0" id="pwd_no"> No
+          </label>
+      
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<!-- Hidden 4Ps ID upload field -->
+<div class="form-group" id="4ps-id-upload" style="display:none;">
+  <label>Upload 4Ps ID</label>
+  <input type="file" class="form-control" name="four_ps_id" accept="image/*">
+  <small style="color:red">**Jpeg, jpg only</small>
+</div>
+
+<!-- Hidden PWD ID upload field -->
+<div class="form-group" id="pwd-id-upload" style="display:none;">
+  <label>Upload PWD ID</label>
+  <input type="file" class="form-control" name="pwd_id" accept="image/*">
+  <small style="color:red">**Jpeg, jpg only</small>
+</div>
 
 
 

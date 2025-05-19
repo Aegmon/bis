@@ -83,6 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Set the max attribute for the date input to 15 years ago
   birthdateInput.max = minDate.toISOString().split("T")[0];
+<<<<<<< HEAD
   const identifiedSelect = document.querySelector('.identity');
     const voterStatusSelect = document.querySelector('.vstatus');
 
@@ -101,6 +102,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Call it initially on load (in case value is already set)
     handleIdentityChange();
+=======
+
+>>>>>>> 4bea30e1c3ccfb56c27612a76902532a25ee193c
 
 });
 

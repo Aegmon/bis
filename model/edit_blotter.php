@@ -22,17 +22,32 @@ $feedback       = $conn->real_escape_string($_POST['feedback']);
 // Check if the ID is not empty
 if (!empty($id)) {
     $query = "UPDATE tblblotter SET `respondent`='$respondent', `victim`='$victim', `type`='$type', `location`='$location', `date`='$date',
+<<<<<<< HEAD
               `time`='$time', `status`='$status', `details`='$details' ,  `feedback`='$feedback'  WHERE id=$id;";
+=======
+              `time`='$time', `status`='$status', `details`='$details' WHERE id=$id;";
+>>>>>>> 4bea30e1c3ccfb56c27612a76902532a25ee193c
     $result = $conn->query($query);
 
     // Check if the update was successful
     if ($result === true) {
+<<<<<<< HEAD
     
 		$role = $_SESSION["username"];
 		$logMessage = "$role Modified Blotter/Incident Report";
 		$logQuery = $conn->prepare("INSERT INTO admin_logs (logs) VALUES (?)");
 		$logQuery->bind_param("s", $logMessage);
 		$logQuery->execute();
+=======
+        // Check if the user is an administrator before logging the action
+        if ($_SESSION['role'] === 'administrator') {
+            $logMessage = "Admin edited blotter ID: $id";
+            $logQuery = $conn->prepare("INSERT INTO admin_logs (logs) VALUES (?)");
+            $logQuery->bind_param("s", $logMessage);
+            $logQuery->execute();
+        }
+
+>>>>>>> 4bea30e1c3ccfb56c27612a76902532a25ee193c
         $_SESSION['message'] = 'Blotter details have been updated!';
         $_SESSION['status'] = 'success';
     } else {
