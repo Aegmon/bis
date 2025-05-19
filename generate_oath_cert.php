@@ -5,7 +5,7 @@
 $captain = $db
   ->from(["tblofficials" => "officials"])
   ->join(["tblposition" => "positions"], "positions.id", "officials.position")
-  ->where("positions.id", 4)
+  ->where("positions.id", 1)
   ->first()
   ->select([
     "name" => "officials.name"
@@ -15,7 +15,7 @@ $captain = $db
 $sec = $db
   ->from(["tblofficials" => "officials"])
   ->join(["tblposition" => "positions"], "positions.id", "officials.position")
-  ->where("positions.id", 15)
+  ->where("positions.id", 4)
   ->first()
   ->select([
     "name" => "officials.name"
@@ -36,11 +36,7 @@ $sec = $db
     ->first()
     ->exec();
 
-  if (!empty($request)) {
-    $request['data'] = json_decode($request['data'], true);
-     
-    $residence['year_residence'] = $request['data']['year_residence'];
-  }
+
 }
 
 if(isset($_GET['cr_id'])){
@@ -144,69 +140,69 @@ if(isset($_GET['cr_id'])){
                           <h1 class="mt-4 fw-bold"><u>OFFICE OF THE BARANGAY CAPTAIN</u></h1>
                         </div>
                         <div class="text-center">
-                          <h1 class="mt-4 fw-bold mb-5" style="font-size:38px;color:black">OATH OF UNDERTAKING <br>
+                          <h1 class="mt-4 fw-bold mb-5" style="font-size:20;color:black">OATH OF UNDERTAKING <br>
                                       Republic Act 11261  First Time Jobseekers Assistance Act
 
                           </h1>
                         </div>
-                        <h2 class="mt-5 fw-bold">TO WHOM IT MAY CONCERN:</h2>
-                          <h2 class="mt-3" style="text-indent: 40px;">I <?= ucwords($job['firstname'].' '.$job['middlename'].'. '.$job['lastname']) ?>  <?= ucwords($job['age']) ?> years of age, resident of Barangay Carino, Paniqui Tarlac, for <?= ucwords($residence['year_residence']) ?> years/months,availing the benefits of Republic Act 11261, otherwise known as the First Time Jobseekers Act of 2019, do hereby declare, agree and undertake to abide and be bound by the following:
-                        </h2>
+                        <h3 class="mt-5 fw-bold">TO WHOM IT MAY CONCERN:</h3>
+                          <h3 class="mt-3" style="text-indent: 40px;">I <?= ucwords($job['firstname'].' '.$job['middlename'].'. '.$job['lastname']) ?>  <?= ucwords($job['age']) ?> years of age, resident of Barangay Carino, Paniqui Tarlac, availing the benefits of Republic Act 11261, otherwise known as the First Time Jobseekers Act of 2019, do hereby declare, agree and undertake to abide and be bound by the following:
+                        </h3>
                         <br>
                         
-                        <h2 style="text-indent: 40px;">
+                        <h3 style="text-indent: 40px;">
                           1. That this is the first time that I will actively look for a job, and therefore requesting that a
                               Barangay Certification be issued in my favor to avail the benefits of the law;
-                        </h2>
+                        </h3>
 
-                        <h2 style="text-indent: 40px;">
+                        <h3 style="text-indent: 40px;">
                           2. That I am aware that the benefit and privilege/s under the said law shall be valid only for
                               one (1) year from the date that the Barangay Certification is issued
-                        </h2>
+                        </h3>
 
-                        <h2 style="text-indent: 40px;">
+                        <h3 style="text-indent: 40px;">
                           3. That I can avail the benefits of the law only once;
-                        </h2>
+                        </h3>
 
-                        <h2 style="text-indent: 40px;">
+                        <h3 style="text-indent: 40px;">
                           4. That I understand that my personal information shall be included in the Roster/List of
                               First Time Jobseekers and will not be used for any unlawful purpose;
-                        </h2>
+                        </h3>
 
-                        <h2 style="text-indent: 40px;">
+                        <h3 style="text-indent: 40px;">
                           5. That I will inform and/or report to the Barangay personally, through text or other means,
                               or through my family/relatives once I get employed;
-                        </h2>
+                        </h3>
 
-                        <h2 style="text-indent: 40px;">
+                        <h3 style="text-indent: 40px;">
                           6. That I am not a beneficiary of the JobStart Program under R.A. No. 10869 and other
                               laws that give similar exemptions for the documents or transactions exempted under R.A No. 11261;
-                        </h2>
+                        </h3>
                             
-                        <h2 style="text-indent: 40px;">
+                        <h3 style="text-indent: 40px;">
                           7. That if issued the requested Certification, I will not use the same in any fraud, neither
                               falsify nor help and/or assist in the fabrication of the said certification;
-                        </h2>
+                        </h3>
 
-                         <h2 style="text-indent: 40px;">
+                         <h3 style="text-indent: 40px;">
                           8. That this undertaking is made solely for the purpose of obtaining a Barangay Certification consistent with the objective of R.A. No. 11261 and not for any other purpose; and
-                        </h2>
-                        <h2 style="text-indent: 40px;">
+                        </h3>
+                        <h3 style="text-indent: 40px;">
                           9. That I consent to the use of my personal information pursuant to the Data Privacy Act
                               and other applicable laws, rules, and regulations.
-                        </h2>
+                        </h3>
 
 
                       </div>
-                      <div class="col-md-12">
-                        <div class="p-3 text-right mr-5" style="margin-top:300px">
+                      <div class="col-md-12">   
+                        <div class="p-3 text-right mr-5" style="margin-top:70px">
                           <h1 class="fw-bold mb-0 text-uppercase"><?= ucwords($captain['name']) ?></h1>
                           <p class="mr-5">PUNONG BARANGAY</p>
                         </div>
                       </div>
 
                       <div class="col-md-12">
-                        <div class="p-3 text-right mr-5" style="margin-top:30px">
+                        <div class="p-3 text-right mr-5" style="margin-top:20px">
                           <h1 class="fw-bold mb-0 text-uppercase"><?= ucwords($sec['name']) ?></h1>
                           <p class="mr-5">Secretary</p>
                         </div>
@@ -219,7 +215,7 @@ if(isset($_GET['cr_id'])){
           </div>
         </div>
         <!-- Modal -->
-        div class="modal fade" id="pment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+       <div class="modal fade" id="pment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
           aria-hidden="true" data-backdrop="static" data-keyboard="false">
           <div class="modal-dialog" role="document">
             <div class="modal-content">

@@ -127,7 +127,7 @@ $purokList = (function () use ($db) {
 
                       <div class="form-group">
                         <label>Address</label>
-                        <textarea class="form-control" name="address" required placeholder="Enter Address"></textarea>
+                        <textarea class="form-control" name="address" required placeholder="Enter Address"><?= $_SESSION['formData']['address'] ?? '' ?></textarea>
                       </div>
                     </div>
 
@@ -136,21 +136,21 @@ $purokList = (function () use ($db) {
                         <div class="col-sm-4">
                           <div class="form-group">
                             <label>First name</label>
-                            <input class="form-control" placeholder="Enter First name" name="fname" required>
+                            <input class="form-control" placeholder="Enter First name" name="fname" value="<?= $_SESSION['formData']['fname'] ?? '' ?>" required>
                           </div>
                         </div>
 
                         <div class="col-sm-4">
                           <div class="form-group">
                             <label>Middle name</label>
-                            <input class="form-control" placeholder="Middel Name (optional)" name="mname" >
+                            <input class="form-control" placeholder="Middle Name (optional)" name="mname" value="<?= $_SESSION['formData']['mname'] ?? '' ?>">
                           </div>
                         </div>
 
                         <div class="col-sm-4">
                           <div class="form-group">
                             <label>Last name</label>
-                            <input class="form-control" placeholder="Enter Last name" name="lname" required>
+                            <input class="form-control" placeholder="Enter Last name" name="lname" required value="<?= $_SESSION['formData']['lname'] ?? '' ?>">
                           </div>
                         </div>
                       </div>
@@ -159,21 +159,30 @@ $purokList = (function () use ($db) {
                         <div class="col-sm-4">
                           <div class="form-group">
                             <label>Alias</label>
-                            <input class="form-control" placeholder="Enter Alias" name="alias">
+                            <input class="form-control" placeholder="Enter Alias" name="alias" value="<?= $_SESSION['formData']['alias'] ?? '' ?>">
                           </div>
                         </div>
 
                         <div class="col-sm-4">
                           <div class="form-group">
                             <label>Place of Birth</label>
-                            <input class="form-control" placeholder="Enter Birthplace" name="birthplace" required>
+                            <input class="form-control" placeholder="Enter Birthplace" name="birthplace" required value="<?= $_SESSION['formData']['birthplace'] ?? '' ?>">
                           </div>
                         </div>
 
                        <div class="col-sm-4">
                         <div class="form-group">
                           <label>Birthdate</label>
-                          <input type="date" class="form-control" placeholder="Enter Birthdate" name="birthdate" id="birthdate" required>
+                          <input 
+                            type="date" 
+                            class="form-control" 
+                            placeholder="Enter Birthdate" 
+                            name="birthdate" 
+                            id="birthdate" 
+                            value="<?= isset($_SESSION['formData']['birthdate']) ? $_SESSION['formData']['birthdate'] : '' ?>" 
+                            required
+                          >
+
                         </div>
                       </div>
                       </div>
@@ -183,7 +192,7 @@ $purokList = (function () use ($db) {
                           <div class="form-group">
                             <label>Age</label>
                             <input type="number"  id="age" class="form-control" placeholder="Enter Age" min="1" name="age" value="0"
-                              required readonly>
+                              required readonly value="<?= $_SESSION['formData']['age'] ?? '' ?>">
                           </div>
                         </div>
 
@@ -191,11 +200,12 @@ $purokList = (function () use ($db) {
                           <div class="form-group">
                             <label>Civil Status</label>
                             <select class="form-control" name="civil_status">
-                              <option disabled selected>Select Civil Status</option>
-                              <option value="Single">Single</option>
-                              <option value="Married">Married</option>
-                              <option value="Widow">Widow</option>
+                              <option disabled <?= empty($_SESSION['formData']['civil_status']) ? 'selected' : '' ?>>Select Civil Status</option>
+                              <option value="Single" <?= ($_SESSION['formData']['civil_status'] ?? '') == 'Single' ? 'selected' : '' ?>>Single</option>
+                              <option value="Married" <?= ($_SESSION['formData']['civil_status'] ?? '') == 'Married' ? 'selected' : '' ?>>Married</option>
+                              <option value="Widow" <?= ($_SESSION['formData']['civil_status'] ?? '') == 'Widow' ? 'selected' : '' ?>>Widow</option>
                             </select>
+
                           </div>
                         </div>
 
@@ -204,8 +214,9 @@ $purokList = (function () use ($db) {
                             <label>Sex</label>
                             <select class="form-control" required name="gender">
                               <option disabled selected value="">Select Sex</option>
-                              <option value="Male">Male</option>
-                              <option value="Female">Female</option>
+                      
+                              <option value="Male" <?= ($_SESSION['formData']['gender'] ?? '') == 'Male' ? 'selected' : '' ?>>Male</option>
+                              <option value="Female" <?= ($_SESSION['formData']['gender'] ?? '') == 'Female' ? 'selected' : '' ?>>Female</option>
                             </select>
                           </div>
                         </div>
@@ -218,40 +229,44 @@ $purokList = (function () use ($db) {
                             <select class="form-control" required name="purok_id">
                               <option disabled selected>Select Purok Name</option>
                               <?php foreach ($purokList as $purok): ?>
-                              <option value="<?= $purok["id"] ?>"><?= $purok["name"] ?></option>
-                              <?php endforeach; ?>
-                            </select>
-                          </div>
-                        </div>
+                              <option value="<?= $purok["id"] ?>" <?= ($_SESSION['formData']['purok_id'] ?? '') == $purok["id"] ? 'selected' : '' ?>>
+                                <?= $purok["name"] ?>
+                              </option>
+                            <?php endforeach; ?>
 
-                        <div class="col-sm-4">
-                          <div class="form-group">
-                            <label>Voters Status</label>
-                            <select class="form-control vstatus" required name="voter_status">
-                              <option disabled selected>Select Voters Status</option>
-                              <option value="Yes">Yes</option>
-                              <option value="No">No</option>
                             </select>
                           </div>
                         </div>
+                        <div class="col-sm-4">
+                        <div class="form-group">
+                          <label>Identified As</label>
+                          <select class="form-control identity" name="identified_as" id="identifiedAs">
+                            <option value="Register" <?= (isset($_SESSION['formData']['identified_as']) && $_SESSION['formData']['identified_as'] == 'Register') ? 'selected' : '' ?>>Register</option>
+                            <option value="Unregister" <?= (isset($_SESSION['formData']['identified_as']) && $_SESSION['formData']['identified_as'] == 'Unregister') ? 'selected' : '' ?>>Unregister</option>
+                          </select>
+                        </div>
+                      </div>
 
-                        <div class="col-sm-4">
-                          <div class="form-group">
-                            <label>Identified As</label>
-                            <select class="form-control indetity" name="identified_as">
-                              <option value="Register">Register</option>
-                              <option value="Unregister">Unregister</option>
-                              <option value="Unidentified" selected>Unidentified</option>
-                            </select>
-                          </div>
+                      <div class="col-sm-4">
+                        <div class="form-group">
+                          <label>Voters Status</label>
+                          <select class="form-control vstatus" required name="voter_status" id="voterStatus">
+                            <option value="" disabled <?= !isset($_SESSION['formData']['voter_status']) ? 'selected' : '' ?>>Select Voters Status</option>
+                            <option value="Active" <?= (isset($_SESSION['formData']['voter_status']) && $_SESSION['formData']['voter_status'] == 'Active') ? 'selected' : '' ?>>Active</option>
+                            <option value="Inactive" <?= (isset($_SESSION['formData']['voter_status']) && $_SESSION['formData']['voter_status'] == 'Inactive') ? 'selected' : '' ?>>Inactive</option>
+                            <option value="Canceled" <?= (isset($_SESSION['formData']['voter_status']) && $_SESSION['formData']['voter_status'] == 'Canceled') ? 'selected' : '' ?>>Cancelled</option>
+                          </select>
                         </div>
+                      </div>
+                
+
                       </div>
 
                       <div class="row g-0">
                         <div class="col-sm-4">
                        <div class="form-group">
                     <label>Email Address</label>
-                    <input type="email" class="form-control" placeholder="Enter Email" name="email" id="email">
+                    <input type="email" class="form-control" placeholder="Enter Email" name="email" id="email"  value="<?= $_SESSION['formData']['email'] ?? '' ?>">
                     <small id="emailHelp" class="form-text"></small>
                   </div>
 
@@ -260,68 +275,81 @@ $purokList = (function () use ($db) {
                         <div class="col-sm-4">
                           <div class="form-group">
                             <label>Contact Number</label>
-                            <input class="form-control" placeholder="Enter Contact Number" name="number">
+                            <input type="number" class="form-control" placeholder="Enter Contact Number" name="number" min="0" oninput="this.value = this.value.replace(/[^0-9]/g, '')"  value="<?= $_SESSION['formData']['number'] ?? '' ?>">
                           </div>
                         </div>
                         <div class="col-sm-4">
                           <div class="form-group">
                             <label>Occupation</label>
-                            <input class="form-control" placeholder="Enter Occupation" name="occupation">
+                            <input  type="text" class="form-control" placeholder="Enter Occupation" name="occupation"  value="<?= $_SESSION['formData']['number'] ?? '' ?>" value="<?= $_SESSION['formData']['occupation'] ?? '' ?>">
                           </div>
                         </div>
                       </div>
                      <div class="container mt-5">
-                       <div class="row g-0">
-    <div class="col-sm-6">
-      <div class="form-group">
-        <label>Are you a 4Ps Beneficiary?</label>
-        <div class="form-check">
-      <div class="btn-group btn-group-justified" >
-            <label class="btn" id="4ps-yes">
-              <input type="radio" name="is_4ps" class="hidden" value="1" id="4ps_yes"> Yes
-            </label>
-            <label class="btn active" id="4ps-no">
-              <input type="radio" name="is_4ps" class="hidden" value="0" id="4ps_no"> No
-            </label>
-          </div>
-        </div>
-      </div>
-      <!-- Hidden 4Ps ID upload field -->
-      <div class="form-group" id="4ps-id-upload" style="display:none;">
-        <label>Upload 4Ps ID</label>
-        <input type="file" class="form-control" name="four_ps_id" accept="image/*">
-        <small style="color:red">**Jpeg, jpg only</small>
-      </div>
-    </div>
+                     <div class="row g-0">
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label>Are you a 4Ps Beneficiary?</label>
+                      <div class="form-check">
+                    
+                          <label class="btn" id="4ps-yes">
+                          <input type="radio" name="is_4ps" value="1" id="4ps_yes" <?= ($_SESSION['formData']['is_4ps'] ?? '') == '1' ? 'checked' : '' ?>> Yes
 
-    <div class="col-sm-6">
-      <div class="form-group">
-        <label>Are you a PWD?</label>
-        <div class="form-check">
-   <div class="btn-group" >
-            <label class="btn" id="pwd-yes">
-              <input type="radio" name="is_pwd" class="hidden" value="1" id="pwd_yes"> Yes
-            </label>
-            <label class="btn active" id="pwd-no">
-              <input type="radio" name="is_pwd" class="hidden" value="0" id="pwd_no"> No
-            </label>
-          </div>
-        </div>
-      </div>
-      <!-- Hidden PWD ID upload field -->
-      <div class="form-group" id="pwd-id-upload" style="display:none;">
-        <label>Upload PWD ID</label>
-        <input type="file" class="form-control" name="pwd_id" accept="image/*">
-        <small style="color:red">**Jpeg, jpg only</small>
-      </div>
-    </div>
-  </div>
+                          </label>
+                          <label class="btn" id="4ps-no">
+                          <input type="radio" name="is_4ps" value="0" id="4ps_no" <?= ($_SESSION['formData']['is_4ps'] ?? '') == '0' ? 'checked' : '' ?>> No
+                          </label>
+                    
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Are you a PWD?</label>
+                    <div class="form-check">
+
+                      <label class="btn" id="pwd-yes">
+                        <input type="radio" name="is_pwd" value="1" id="pwd_yes"
+                          <?= (isset($_SESSION['formData']['is_pwd']) && $_SESSION['formData']['is_pwd'] == '1') ? 'checked' : '' ?>>
+                        Yes
+                      </label>
+
+                      <label class="btn" id="pwd-no">
+                        <input type="radio" name="is_pwd" value="0" id="pwd_no"
+                          <?= (isset($_SESSION['formData']['is_pwd']) && $_SESSION['formData']['is_pwd'] == '0') ? 'checked' : '' ?>>
+                        No
+                      </label>
+
+                    </div>
+                  </div>
+                </div>
+
+
+
+                    </div>
+
+                    <!-- Hidden 4Ps ID upload field -->
+                    <div class="form-group" id="4ps-id-upload" style="display:none;">
+                      <label>Upload 4Ps ID</label>
+                      <input type="file" class="form-control" name="four_ps_id" accept="image/*">
+                      <small style="color:red">**Jpeg, jpg only</small>
+                    </div>
+
+                    <!-- Hidden PWD ID upload field -->
+                    <div class="form-group" id="pwd-id-upload" style="display:none;">
+                      <label>Upload PWD ID</label>
+                      <input type="file" class="form-control" name="pwd_id" accept="image/*">
+                      <small style="color:red">**Jpeg, jpg only</small>
+                    </div>
+
+
 
                       <div class="row g-0">
                         <div class="col-12">
                           <div class="form-group">
                             <label>Username</label>
-                            <input class="form-control" placeholder="Enter Username" name="username">
+                            <input class="form-control" placeholder="Enter Username" name="username" required value="<?= $_SESSION['formData']['username'] ?? '' ?>">
                           </div>
                         </div>
 
@@ -330,7 +358,7 @@ $purokList = (function () use ($db) {
                             <label>Password</label>
 
                           <input id="password" name="password" type="password" class="form-control"
-       placeholder="Password" title="Password must be at least 8 characters long, contain at least 1 uppercase letter, 1 lowercase letter, 1 numeric digit, and 1 special character.">
+                            placeholder="Password" title="Password must be at least 8 characters long, contain at least 1 uppercase letter, 1 lowercase letter, 1 numeric digit, and 1 special character.">
 
 
                             <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password">
@@ -385,6 +413,7 @@ $purokList = (function () use ($db) {
     </div>
 
     <?php include "templates/footer.php"; ?>
+    
  <script>
   document.getElementById('email').addEventListener('input', function() {
     const emailField = this;
@@ -401,22 +430,9 @@ $purokList = (function () use ($db) {
     }
   });
 
-   // Show or hide the 4Ps ID upload field based on the radio selection
-  document.getElementById('4ps_yes').addEventListener('change', function() {
-    document.getElementById('4ps-id-upload').style.display = 'block';
-  });
-  document.getElementById('4ps_no').addEventListener('change', function() {
-    document.getElementById('4ps-id-upload').style.display = 'none';
-  });
 
-  // Show or hide the PWD ID upload field based on the radio selection
-  document.getElementById('pwd_yes').addEventListener('change', function() {
-    document.getElementById('pwd-id-upload').style.display = 'block';
-  });
-  document.getElementById('pwd_no').addEventListener('change', function() {
-    document.getElementById('pwd-id-upload').style.display = 'none';
-  });
 </script>
-  </body>
+
+ </body>
 
 </html>

@@ -261,7 +261,7 @@ $sec = $db
                     <label>Date Issued</label>
                     <input type="date" class="form-control" name="date" value="<?= date("Y-m-d") ?>">
                   </div>
-
+<!-- 
                   <div class="form-group">
                     <label>Mode</label>
                     <select class="form-control" name="mode" required>
@@ -269,11 +269,11 @@ $sec = $db
                       <option value="online">Online</option>
                       <option value="cash">Cash</option>
                     </select>
-                  </div>
+                  </div> -->
 
                   <div class="form-group">
-                    <label>Payment Details(Optional)</label>
-                    <textarea class="form-control" placeholder="Enter Payment Details"
+                    <label>Feedback(Optional)</label>
+                    <textarea class="form-control" placeholder="Enter Feedback"
                       name="details">Barangay Clearance Payment</textarea>
                   </div>
               </div>

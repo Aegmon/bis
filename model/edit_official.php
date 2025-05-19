@@ -24,12 +24,13 @@ if (!empty($id)) {
         $_SESSION['status'] = 'success';
 
         // Log the action if the user is an administrator
-        if ($_SESSION['role'] === 'administrator') {
-            $logMessage = "Admin updated Brgy Official: ID: $id, Name: $name, Position: $pos, Status: $status";
+            $role = $_SESSION["username"];
+            $logMessage = "$role Modified Brgy Officials and Staff Information";
             $logQuery = $conn->prepare("INSERT INTO admin_logs (logs) VALUES (?)");
             $logQuery->bind_param("s", $logMessage);
             $logQuery->execute();
-        }
+        
+
     } else {
         $_SESSION['message'] = 'Something went wrong!';
         $_SESSION['status'] = 'danger';

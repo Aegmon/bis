@@ -129,10 +129,10 @@ while ($row = $result->fetch_assoc()) {
 													</tbody>
 
                         <tfoot>
-                          <tr>
-                            <th scope="col">Name of Business</th>
-                            <th scope="col">Business Owner</th>
-                            <th scope="col">Nature</th>
+                              <tr>
+                            <th scope="col">Request ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Guardian Name</th>
                             <th scope="col">Date Applied</th>
                             <?php if (isset($_SESSION['username'])) : ?>
                             <th scope="col">Action</th>

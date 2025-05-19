@@ -2,7 +2,35 @@
 include "bootstrap/index.php";
 
 use Carbon\Carbon;
+if (isset($_SESSION["id"])) {
+  $userId = $_SESSION["id"];
 
+  // Get resident ID
+  $stmt = $conn->prepare("
+      SELECT r.id AS resident_id
+      FROM residents r
+      JOIN users u ON u.id = r.account_id
+      WHERE u.id = ?
+  ");
+  $stmt->bind_param("i", $userId);
+  $stmt->execute();
+  $result = $stmt->get_result()->fetch_assoc();
+  $stmt->close();
+
+  if ($result && isset($result['resident_id'])) {
+      $residentId = $result['resident_id'];
+
+      // Update isRead to 1
+      $update = $conn->prepare("
+          UPDATE certificate_requests 
+          SET isRead = 1 
+          WHERE resident_id = ? AND status = 'released' AND isRead = 0
+      ");
+      $update->bind_param("i", $residentId);
+      $update->execute();
+      $update->close();
+  }
+}
 $certificates = $db
 	->from("certificates")
 	->select([
@@ -122,6 +150,18 @@ $request_list = (function () use ($db) {
                         </a>
                       </div>
                       <?php endif; ?>
+                        <?php if (isAdmin()): ?>
+                      <div class="card-tools">
+                        <a
+                          href="model/export_request_csv.php"
+                          class="btn btn-danger btn-border btn-round btn-sm"
+                        >
+                          <i class="fa fa-file"></i>
+                          YEARLY CERTIFICATE REPORT
+                        </a>
+                        
+                      </div>
+                    <?php endif; ?>
                     </div>
                   </div>
                   <div class="card-body">
@@ -136,9 +176,7 @@ $request_list = (function () use ($db) {
             <th scope="col">Purpose</th>
             <th scope="col">Status</th>
             <th scope="col">Request Date</th>
-            <?php if (isAdmin()): ?>
-            <th scope="col">Supporting Document</th>
-            <?php endif; ?>
+      
             <th scope="col"></th>
         </tr>
     </thead>
@@ -155,20 +193,7 @@ $request_list = (function () use ($db) {
                 <?= Carbon::create($request["created_at"])->toDayDateTimeString() ?>
             </td>
             <?php if (isAdmin()): ?>
-            <td>
-              
-                <?php if (!empty($request["supporting_document"])): 
-        
-
-                  ?>
-                  
-                <a href="model/<?= $request["supporting_document"] ?>" download class="btn-link btn-info">
-                    <i class="fa fa-download"></i> Download
-                </a>
-                <?php else: ?>
-                No Document Attached
-                <?php endif; ?>
-            </td>
+      
             <?php endif; ?>
             <td class="d-flex justify-content-center align-items-center gap-3">
                 <?php if (isUser()): ?>
@@ -253,12 +278,10 @@ $request_list = (function () use ($db) {
                           required></textarea>
                       </div>
                     </div>
-                  <div class="col-md-12">
-        <div class="form-group" id="supporting-documents-container">
-          <label id="supporting-documents-label">Attached Supporting Documents</label>
-          <input type="file" class="form-control" name="supporting_document" required />
-        </div>
-      </div>
+              
+          <input type="hidden" class="form-control" name="supporting_document" value=""  />
+     
+      
                     <div id="add_certificate_business_container">
                       <div class="col-md-12">
                         <div class="form-group">

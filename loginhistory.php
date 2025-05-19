@@ -82,13 +82,7 @@ $staff_logs = $db
                                                         <tr>
                                                             <td><?= $no ?></td>
                                                             <td>
-                                                                <div class="avatar avatar-xs">
-                                                                    <img
-                                                                        src="<?= imgSrc($row["avatar"], "img/person.png") ?>"
-                                                                        alt="User Profile"
-                                                                        class="avatar-img rounded-circle"
-                                                                    >
-                                                                </div>
+                                                               
                                                                 <?= ucwords($row["username"]) ?>
                                                             </td>
                                                             <td><?= $row["log_message"] ?></td>

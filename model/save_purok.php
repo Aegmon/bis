@@ -17,6 +17,11 @@ if (!empty($purok) && !empty($details)) {
 	if ($result === true) {
 		$_SESSION["message"] = "Purok added!";
 		$_SESSION["status"] = "success";
+		$role = $_SESSION["username"];
+		$logMessage = "$role Add Purok";
+		$logQuery = $conn->prepare("INSERT INTO admin_logs (logs) VALUES (?)");
+		$logQuery->bind_param("s", $logMessage);
+		$logQuery->execute();
 	} else {
 		$_SESSION["message"] = "Something went wrong!";
 		$_SESSION["status"] = "danger";

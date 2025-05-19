@@ -1,4 +1,8 @@
 <?php
+// $database = "u286208807_bpms";
+// $username = "u286208807_bpms";
+// $host = "localhost";
+// $password = "Barangay@1234";
 $database = "bpms";
 $username = "root";
 $host = "localhost";

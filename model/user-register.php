@@ -64,7 +64,10 @@ if ($result !== true) {
 }
 
 move_uploaded_file($_FILES["avatar"]["tmp_name"], $avatarDir);
-
+$logMessage = "New User Added";
+$logQuery = $conn->prepare("INSERT INTO admin_logs (logs) VALUES (?)");
+$logQuery->bind_param("s", $logMessage);
+$logQuery->execute();
 $_SESSION["message"] = "You are now registered";
 $_SESSION["status"] = "success";
 header("location: ../login.php");

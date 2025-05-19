@@ -195,8 +195,8 @@ if (isset($_GET['request_id'])) {
                   </div>
 
                   <div class="form-group">
-                    <label>Payment Details(Optional)</label>
-                    <textarea class="form-control" placeholder="Enter Payment Details"
+                    <label>Feedback(Optional)</label>
+                    <textarea class="form-control" placeholder="Enter Feedback"
                       name="details">Business Permit Payment</textarea>
                   </div>
               </div>

@@ -92,7 +92,7 @@ $residentList = (function () use ($db) {
 											<thead>
 												<tr>
 													<th scope="col">Fullname</th>
-													<th scope="col">National ID</th>
+										
 													<th scope="col">Alias</th>
 													<th scope="col">Birthdate</th>
 													<th scope="col">Age</th>
@@ -125,7 +125,7 @@ $residentList = (function () use ($db) {
                                   </div>
                                 </div>
                               </td>
-															<td><?= $row["national_id"] ?></td>
+
 															<td><?= $row["alias"] ?></td>
                               <td><?= empty($row["birthdate"]) ? "-" : $row["birthdate"] ?></td>
 															<td><?= $row["age"] ?></td>
@@ -158,7 +158,7 @@ $residentList = (function () use ($db) {
 											<tfoot>
 												<tr>
 													<th scope="col">Fullname</th>
-													<th scope="col">National ID</th>
+											
 													<th scope="col">Alias</th>
 													<th scope="col">Birthdate</th>
 													<th scope="col">Age</th>

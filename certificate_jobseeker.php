@@ -74,7 +74,7 @@ while ($row = $result->fetch_assoc()) {
                           <tr>
                             <th scope="col">Request ID</th>
                             <th scope="col">Name</th>
-                            <th scope="col">Year Of Residency</th>
+                           
                             <?php if (isset($_SESSION['username'])) : ?>
                             <th scope="col">Action</th>
                             <?php endif ?>
@@ -86,17 +86,7 @@ while ($row = $result->fetch_assoc()) {
 																<tr>
 																	<td><?= ucwords($row['id']) ?></td>
 																	<td><?= ucwords($row['name']) ?></td>
-																	<td>
-																		<?php
-																		// Decode JSON in 'data' column if applicable
-																		$data = json_decode($row['data'], true);
-																		if (isset($data['year_residence'])) {
-																				echo ucwords($data['year_residence']);
-																		} else {
-																				echo "N/A";
-																		}
-																		?>
-																	</td>
+												
 																	<td><?= $row['created_at'] ?></td>
 																	<?php if (isset($_SESSION['username'])) : ?>
 																		<td>

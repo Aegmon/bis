@@ -33,7 +33,11 @@ if (!empty($id)) {
     $_SESSION['message'] = 'No title ID found!';
     $_SESSION['status'] = 'danger';
 }
-
+$role = $_SESSION["username"];
+$logMessage = "$role Edited Chairmanship";
+$logQuery = $conn->prepare("INSERT INTO admin_logs (logs) VALUES (?)");
+$logQuery->bind_param("s", $logMessage);
+$logQuery->execute();
 header("Location: ../chairmanship.php");
 
 $conn->close();
