@@ -147,20 +147,20 @@ if(isset($_GET['cr_id'])){
                           <h1 class="mt-4 fw-bold mb-5" style="font-size:38px;color:black">First Time Jobseekers Assistance Act - RA 11261
                           </h1>
                         </div>
-                        <h2 class="mt-5 fw-bold">TO WHOM IT MAY CONCERN:</h2>
-                          <h2 class="mt-3" style="text-indent: 40px;">This is to certify that MR./Ms. <?= ucwords($job['firstname'].' '.$job['middlename'].'. '.$job['lastname']) ?> a resident of Barangay Carino, Paniqui Tarlac,
+                        <h4 class="mt-5 fw-bold">TO WHOM IT MAY CONCERN:</h4>
+                          <h4 class="mt-3" style="text-indent: 40px;">This is to certify that MR./Ms. <?= ucwords($job['firstname'].' '.$job['middlename'].'. '.$job['lastname']) ?> a resident of Barangay Carino, Paniqui Tarlac,
                            is a qualified availed of RA 11261 or the First Time Jobseekers Act of 2019.
-                        </h2>
-                        <h2 class="mt-3" style="text-indent: 40px;">I further certify that the holder/bearer was Informed of his/her rights, including the duties and responsibilities accorded by RA 11261 through the Oath of Undertaking he/she has signed and executed in the presence of our Barangay Official.</h2>
-                        <h2 class="mt-5">Given this <span class="fw-bold"
-                            style="font-size:25px"><?= date('m/d/Y') ?></span> at the office of the Punong Barangay,
-                          <span class="fw-bold" style="font-size:25px"><?= ucwords($brgy) ?></span>
+                        </h4>
+                        <h4 class="mt-3" style="text-indent: 40px;">I further certify that the holder/bearer was Informed of his/her rights, including the duties and responsibilities accorded by RA 11261 through the Oath of Undertaking he/she has signed and executed in the presence of our Barangay Official.</h4>
+                        <h4 class="mt-5">Given this <span class="fw-bold"
+                            style="font-size:20px"><?= date('m/d/Y') ?></span> at the office of the Punong Barangay,
+                          <span class="fw-bold" style="font-size:20px"><?= ucwords($brgy) ?></span>
                           Paniqui, Tarlac. 
-                        </h2>
+                        </h4>
                       </div>
                       <div class="col-md-12">
-                        <div class="p-3 text-right mr-5" style="margin-top:300px">
-                          <h1 class="fw-bold mb-0 text-uppercase"><?= ucwords($captain['name']) ?></h1>
+                        <div class="p-3 text-right mr-5" style="margin-top:80px">
+                          <h2 class="fw-bold mb-0 text-uppercase"><?= ucwords($captain['name']) ?></h2>
                           <p class="mr-5">PUNONG BARANGAY</p>
                           <small>**NOT VALID without the official Dry Seal</small>
                         </div>
@@ -168,7 +168,7 @@ if(isset($_GET['cr_id'])){
 
                       <div class="col-md-12">
                         <div class="p-3 text-right mr-5" style="margin-top:30px">
-                          <h1 class="fw-bold mb-0 text-uppercase"><?= ucwords($sec['name']) ?></h1>
+                          <h2 class="fw-bold mb-0 text-uppercase"><?= ucwords($sec['name']) ?></h2>
                           <p class="mr-5">Secretary</p>
                         </div>
                       </div>

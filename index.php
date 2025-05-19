@@ -32,7 +32,7 @@
   </nav>
 
   <!-- Hero Section -->
-  <section class="bg-light text-dark p-5 text-center">
+  <section class=" text-dark p-5 text-center">
     <div class="container">
       <div class="row align-items-center">
         <div class="col-md-6">
@@ -41,7 +41,7 @@
           <a href="#features" class="btn btn-primary btn-lg">Explore Services</a>
         </div>
         <div class="col-md-6">
-          <img src="https://via.placeholder.com/500" class="img-fluid" alt="Barangay Services">
+          <img src="bg.jpg" class="img-fluid" alt="Barangay Services">
         </div>
       </div>
     </div>

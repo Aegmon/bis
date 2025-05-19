@@ -118,25 +118,25 @@ if (isset($_GET['request_id'])) {
                           <h1 class="mt-4 fw-bold"><u>OFFICE OF THE BARANGAY CAPTAIN</u></h1>
                         </div>
                         <div class="text-center">
-                          <h1 class="mt-4 fw-bold mb-5" style="font-size:38px;color:black">BARANGAY BUSINESS
+                          <h1 class="mt-4 fw-bold mb-5" style="font-size:30px;color:black">BARANGAY BUSINESS
                             CLEARANCE</h1>
                         </div>
-                        <h2 class="mt-5 fw-bold">GRANTED TO:</h2>
+                        <h4 class="mt-5 fw-bold">GRANTED TO:</h4>
                         <div class="text-center pt-4">
-                          <h1 class="mt-4 fw-bold mb-0"><?= ucfirst($permit['name']) ?></h1>
+                          <h4 class="mt-4 fw-bold mb-0"><?= ucfirst($permit['name']) ?></h4>
                           <hr class="w-50 mt-0 mb-0 mx-auto" style="border-top: 2px solid black;">
-                          <h2 class="mt-0">NAME OF BUSINESS OR ESTABLISHMENT</h2>
+                          <h4 class="mt-0">NAME OF BUSINESS OR ESTABLISHMENT</h4>
                         </div>
                         <div class="text-center pt-4 mb-5">
-                          <h1 class="mt-4 fw-bold mb-0">
+                          <h4 class="mt-4 fw-bold mb-0">
                             <?= empty($permit['owner2']) ? $permit['owner1'] : ucwords($permit['owner1'] . ' & ' . $permit['owner2']) ?>
-                          </h1>
+                          </h4>
                           <hr class="w-50 mt-0 mb-0 mx-auto" style="border-top: 2px solid black;">
-                          <h2 class="mt-0">NAME OF BUSINESS OR ESTABLISHMENT</h2>
+                          <h4 class="mt-0">NAME OF BUSINESS OR ESTABLISHMENT</h4>
                         </div>
-                        <h2 class="mt-5" style="text-indent: 40px;">This clearance is granted in accordance with section
+                        <h4 class="mt-5" style="text-indent: 40px;">This clearance is granted in accordance with section
                           152 of R.A. 7160 of Barangay Tax Ordinance, provided however, that the necessary fees are paid
-                          to the Barangay Treasurer.</h2>
+                          to the Barangay Treasurer.</h4>
                         <h2 class="mt-3" style="text-indent: 40px;">This is non-transferable and shall be deemed null
                           and void upon failure by the owner to follow the said rules and regulations set forth by the
                           Local Government Unit of <span style="font-size:22px"><?= ucwords($town) ?>.</h2>
@@ -145,8 +145,8 @@ if (isset($_GET['request_id'])) {
                             style="font-size:20px"><?= ucwords($brgy . ', ' . $town) ?></span>.</h2>
                       </div>
                       <div class="col-md-12">
-                        <div class="p-3 text-right mr-5" style="margin-top:120px">
-                          <h1 class="fw-bold mb-0 text-uppercase"><?= ucwords($captain['name']) ?></h1>
+                        <div class="p-3 text-right mr-5" style="margin-top:50px">
+                          <h4 class="fw-bold mb-0 text-uppercase"><?= ucwords($captain['name']) ?></h4>
                           <p class="mr-5">PUNONG BARANGAY</p>
                         </div>
                       </div>

@@ -97,12 +97,12 @@ $sec = $conn->query($s)->fetch_assoc();
                           <h1 class="mt-4 fw-bold mb-5">BARANGAY CLEARANCE</h1>
                         </div>
                         <h2 class="mt-5">TO WHOM IT MAY CONCERN:</h2>
-                      <h2 class="mt-3" style="text-indent: 40px;">This is to certify that <span class="fw-bold" style="font-size:25px"><?= ucwords($resident['firstname'] . ' ' . $resident['middlename'] . ' ' . $resident['lastname']) ?></span>, is a permanent resident of <span class="fw-bold" style="font-size:25px"><?= ucwords($brgy) ?></span> and that he or she is known to me to be of good moral character.</h2>
+                      <h2 class="mt-3" style="text-indent: 40px;">This is to certify that <span class="fw-bold" style="font-size:20px"><?= ucwords($resident['firstname'] . ' ' . $resident['middlename'] . ' ' . $resident['lastname']) ?></span>, is a permanent resident of <span class="fw-bold" style="font-size:20px"><?= ucwords($brgy) ?></span> and that he or she is known to me to be of good moral character.</h2>
 
                         <h2 class="mt-3" style="text-indent: 40px;">This certification/clearance is hereby issued to the
                           above-named person for whatever legal purpose it may serve him/her best.</h2>
                         <h2 class="mt-5">Given this <span class="fw-bold"
-                            style="font-size:25px"><?= date('m/d/Y') ?>.</span></h2>
+                            style="font-size:20px"><?= date('m/d/Y') ?>.</span></h2>
                         <h2 class="text-uppercase" style="margin-top:180px;">NOT VALID WITHOUT SEAL:</h2>
                       </div>
                       <div class="col-md-12">

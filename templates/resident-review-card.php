@@ -112,9 +112,16 @@ $resident = (function () use ($db) {
 
           <div class="form-group">
             <label>Address</label>
-            <textarea class="form-control" name="address" required placeholder="Enter Address">
+            <textarea class="form-control" name="address" required placeholder="sEnter Address">
             <?= $resident["address"] ?>
           </textarea>
+          </div>
+          <hr>
+          <div class="row">
+            <h4 class="text-center"><strong>Identification Card</strong></h4>
+            <img src="<?= imgSrc($resident["national_id"]) ??
+            	"assets/img/person.png" ?>" alt="..." class="img "
+              width="250" height="250" style="max-height: 250; object-fit: cover;">
           </div>
         </div>
 
