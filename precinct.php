@@ -1,5 +1,5 @@
-<?php include 'bootstrap/index.php' ?>
 <?php
+require_once "bootstrap/index.php";
 $query = "SELECT * FROM tblprecinct";
 $result = $conn->query($query);
 
@@ -34,7 +34,7 @@ while ($row = $result->fetch_assoc()) {
             <div class="page-inner">
               <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
                 <div>
-                  <h2 class="text-white fw-bold">Settings</h2>
+                  <h2 class="text-white fw-bold">Contact Number</h2>
                 </div>
               </div>
             </div>
@@ -50,10 +50,12 @@ while ($row = $result->fetch_assoc()) {
                     <div class="card-head-row">
                       <div class="card-title">Contact Number Information</div>
                       <div class="card-tools">
+                      <?php if (isAdmin()): ?>
                         <a href="#add" data-toggle="modal" class="btn btn-info btn-border btn-round btn-sm">
                           <i class="fa fa-plus"></i>
                           Contact Number
                         </a>
+                        <?php endif ?>
                       </div>
                     </div>
                   </div>

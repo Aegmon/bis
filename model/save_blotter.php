@@ -25,6 +25,11 @@ if (!empty($complainant) && !empty($victim) && !empty($type) && !empty($location
     $result  = $conn->query($insert);
 
     if ($result === true) {
+        $role = $_SESSION["username"];
+		$logMessage = "$role Add Blotter/Incident Report";
+		$logQuery = $conn->prepare("INSERT INTO admin_logs (logs) VALUES (?)");
+		$logQuery->bind_param("s", $logMessage);
+		$logQuery->execute();
         $_SESSION['message'] = 'Blotter added!';
         $_SESSION['status'] = 'success';
     } else {

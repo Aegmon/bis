@@ -9,8 +9,8 @@ $residents_summary = $db
 		"total" => "COUNT(residents.id)",
 		"male" => "SUM(residents.gender = 'Male')",
 		"female" => "SUM(residents.gender = 'Female')",
-		"voters" => "SUM(residents.voterstatus = 'Yes')",
-		"non_voters" => "SUM(residents.voterstatus = 'No')",
+		"voters" => "SUM(residents.identified_as = 'Register')",
+		"non_voters" => "SUM(residents.identified_as = 'Unregister')",
 		"total_pwds" => "SUM(residents.is_pwd)",
 		"total_4ps" => "SUM(residents.is_4ps)",
 		"total_seniors" => "SUM(residents.is_senior)",
@@ -197,15 +197,15 @@ $admin_dashboard_cards = [
 	],
 	[
 		"icon" => "fas fa-fingerprint",
-		"title" => "Voters",
-		"subtitle" => "Total Voters",
+		"title" => "Register",
+		"subtitle" => "Total Register Voters",
 		"value" => $residents_summary["voters"] ? number_format($residents_summary["voters"]) : 0,
 		"href" => "resident.php?voter=yes",
 	],
 	[
 		"icon" => "fas fa-fingerprint",
-		"title" => "Non voters",
-		"subtitle" => "Total Non voters",
+		"title" => "Unregister Voters",
+		"subtitle" => "Total Unregister voters",
 		"value" => $residents_summary["non_voters"] ? number_format($residents_summary["non_voters"]) : 0,
 		"href" => "resident.php?voter=no",
 	],
@@ -424,7 +424,7 @@ $admin_dashboard_cards = [
               <?php foreach ($admin_dashboard_cards as $row): ?>
               <div class="col-md-4">
                 <div class="card card-stats card-round"
-                style="background-color: <?= getRandomColor() ?>; color: #fff"
+                style="background-color: #1269DB; color: #fff"
                 >
                   <div class="card-body">
                     <div class="row">

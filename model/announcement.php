@@ -46,7 +46,13 @@ if (isset($_POST["register-announcement"])) {
 
     $_SESSION["message"] = "Announcement published";
     $_SESSION["status"] = "success";
-
+    $role = $_SESSION["username"];
+    $logMessage = "$role Add Announcement";
+		$logQuery = $conn->prepare("INSERT INTO admin_logs (logs) VALUES (?)");
+		$logQuery->bind_param("s", $logMessage);
+		$logQuery->execute();
+        $_SESSION['message'] = 'Blotter added!';
+        $_SESSION['status'] = 'success';
     header("location: ../announcements.php");
     $conn->close();
 

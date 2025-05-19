@@ -97,7 +97,13 @@ if (isset($_POST['create-payment'])) {
 
   $_SESSION["message"] = "Amount Sent";
   $_SESSION["status"] = "success";
-
+  $role = $_SESSION["username"];
+  $logMessage = "$role Processed Certificate Request";
+  $logQuery = $conn->prepare("INSERT INTO admin_logs (logs) VALUES (?)");
+  $logQuery->bind_param("s", $logMessage);
+  $logQuery->execute();
+  header("location: ../officials.php");
+  $conn->close();
   header("Location: " . $_SERVER["HTTP_REFERER"] . "&closeModal=1");
   return $conn->close();
 }

@@ -2,7 +2,35 @@
 include "bootstrap/index.php";
 
 use Carbon\Carbon;
+if (isset($_SESSION["id"])) {
+  $userId = $_SESSION["id"];
 
+  // Get resident ID
+  $stmt = $conn->prepare("
+      SELECT r.id AS resident_id
+      FROM residents r
+      JOIN users u ON u.id = r.account_id
+      WHERE u.id = ?
+  ");
+  $stmt->bind_param("i", $userId);
+  $stmt->execute();
+  $result = $stmt->get_result()->fetch_assoc();
+  $stmt->close();
+
+  if ($result && isset($result['resident_id'])) {
+      $residentId = $result['resident_id'];
+
+      // Update isRead to 1
+      $update = $conn->prepare("
+          UPDATE certificate_requests 
+          SET isRead = 1 
+          WHERE resident_id = ? AND status = 'released' AND isRead = 0
+      ");
+      $update->bind_param("i", $residentId);
+      $update->execute();
+      $update->close();
+  }
+}
 $certificates = $db
 	->from("certificates")
 	->select([
@@ -198,9 +226,9 @@ $request_list = (function () use ($db) {
                 <?php endif; ?>
 
                 <?php if (role(["user", "administrator"])): ?>
-                <a data-toggle="tooltip" data-original-title="Remove"
+                <a data-toggle="tooltip" data-original-title="Reject"
                     href="model/certificate-request.php?id=<?= $request["id"] ?>&delete-request=1"
-                    onclick="confirm('Are you sure you want to delete this request?');"
+                    onclick="confirm('Are you sure you want to reject this request?');"
                     class="btn-link btn-danger">
                     <i class="fa fa-times"></i>
                 </a>

@@ -73,6 +73,11 @@ if (!empty($user) && !empty($pass) && !empty($usertype)) {
 				$_SESSION["status"] = "danger";
 			}
 		}
+	
+		$logMessage = "Add User Account";
+		$logQuery = $conn->prepare("INSERT INTO admin_logs (logs) VALUES (?)");
+		$logQuery->bind_param("s", $logMessage);
+		$logQuery->execute();
 	}
 } else {
 	$_SESSION["message"] = "Please fill up the form completely!";

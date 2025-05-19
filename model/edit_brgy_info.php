@@ -129,12 +129,7 @@ if (!empty($brgy) && !empty($town)) {
 				$_SESSION['status'] = 'success';
 			}
 
-			  if ($_SESSION['role'] === 'administrator') {
-            $logMessage = "Admin updated barangay info: Province: $province, Town: $town, Barangay: $brgy";
-            $logQuery = $conn->prepare("INSERT INTO admin_logs (logs) VALUES (?)");
-            $logQuery->bind_param("s", $logMessage);
-            $logQuery->execute();
-        }
+	
 		}
 	} else if (empty($city_logo) && !empty($brgy_logo) && empty($db_image)) {
 
@@ -163,6 +158,11 @@ if (!empty($brgy) && !empty($town)) {
 			$_SESSION['status'] = 'danger';
 		}
 	}
+	$role = $_SESSION["username"];
+			$logMessage = "$role Edited Brgy Information";
+			$logQuery = $conn->prepare("INSERT INTO admin_logs (logs) VALUES (?)");
+			$logQuery->bind_param("s", $logMessage);
+			$logQuery->execute();
 } else {
 
 	$_SESSION['message'] = 'Please complete the form!';

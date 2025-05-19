@@ -177,8 +177,9 @@ $residentList = (function () use ($db) {
                                     <label for="voter">Voter Status</label>
                                     <select class="form-control" name="voter" id="voter">
                                         <option value="">All</option>
-                                        <option value="Voter" <?= (isset($_GET['voter']) && $_GET['voter'] == 'Voter') ? 'selected' : '' ?>>Voter</option>
-                                        <option value="Non-voter" <?= (isset($_GET['voter']) && $_GET['voter'] == 'Non-voter') ? 'selected' : '' ?>>Non-voter</option>
+                                        <option value="Active" <?= (isset($_GET['voter']) && $_GET['voter'] == 'Active') ? 'selected' : '' ?>>Active</option>
+                                        <option value="Inactive" <?= (isset($_GET['voter']) && $_GET['voter'] == 'Inactive') ? 'selected' : '' ?>>Inactive</option>
+                                        <option value="Cancelled" <?= (isset($_GET['voter']) && $_GET['voter'] == 'Cancelled') ? 'selected' : '' ?>>Cancelled</option>
                                     </select>
                                 </div>
                             </div>
@@ -207,8 +208,9 @@ $residentList = (function () use ($db) {
                           <?php if (isAuthenticated()): ?>
                             <?php if (isAdmin()): ?>
                               <th scope="col">Voter Status</th>
-                            <?php endif; ?>
+                          
                             <th scope="col">Action</th>
+                          <?php endif; ?>
                           <?php endif; ?>
                         </tr>
                       </thead>
@@ -248,7 +250,7 @@ $residentList = (function () use ($db) {
                                 <?php if (isAdmin()): ?>
                                   <td><?= $row["voterstatus"] ?></td>
                                 <?php endif; ?>
-
+                                <?php if (isAdmin()): ?>
                                 <td>
                                   <div class="form-button-action">
                                     <a
@@ -263,7 +265,7 @@ $residentList = (function () use ($db) {
                                         <i class="fa fa-eye"></i>
                                       <?php endif; ?>
                                     </a>
-                                    <?php if (isAdmin()): ?>
+                                  
                                       <!-- <a
                                         type="button"
                                         data-toggle="tooltip"
@@ -283,9 +285,10 @@ $residentList = (function () use ($db) {
                                       >
                                         <i class="fa fa-times"></i>
                                       </button>
-                                    <?php endif; ?>
+                                  
                                   </div>
                                 </td>
+                                <?php endif; ?>
                               <?php endif; ?>
                             </tr>
                           <?php endforeach; ?>

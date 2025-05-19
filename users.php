@@ -6,6 +6,7 @@ $users = $db
 	->from("users")
 	->orderBy("created_at", "desc")
 	->whereNot("users.username", $_SESSION["username"])
+	->whereNot("users.user_type", "user")
 	->select([
 		"id" => "users.id",
 		"username" => "users.username",

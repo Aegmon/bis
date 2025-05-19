@@ -17,7 +17,11 @@ if (!empty($id)) {
 	$result 	= $conn->query($query);
 
 	if ($result === true) {
-
+		$role = $_SESSION["username"];
+		$logMessage = "$role Edited Position";
+		$logQuery = $conn->prepare("INSERT INTO admin_logs (logs) VALUES (?)");
+		$logQuery->bind_param("s", $logMessage);
+		$logQuery->execute();
 		$_SESSION['message'] = 'Position has been updated!';
 		$_SESSION['status'] = 'success';
 	} else {

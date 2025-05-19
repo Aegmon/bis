@@ -5,7 +5,7 @@
 $captain = $db
   ->from(["tblofficials" => "officials"])
   ->join(["tblposition" => "positions"], "positions.id", "officials.position")
-  ->where("positions.id", 4)
+  ->where("positions.id", 1)
   ->first()
   ->select([
     "name" => "officials.name"
@@ -15,7 +15,7 @@ $captain = $db
 $sec = $db
   ->from(["tblofficials" => "officials"])
   ->join(["tblposition" => "positions"], "positions.id", "officials.position")
-  ->where("positions.id", 15)
+  ->where("positions.id", 4)
   ->first()
   ->select([
     "name" => "officials.name"

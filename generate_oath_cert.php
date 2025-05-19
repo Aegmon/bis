@@ -5,7 +5,7 @@
 $captain = $db
   ->from(["tblofficials" => "officials"])
   ->join(["tblposition" => "positions"], "positions.id", "officials.position")
-  ->where("positions.id", 4)
+  ->where("positions.id", 1)
   ->first()
   ->select([
     "name" => "officials.name"
@@ -15,7 +15,7 @@ $captain = $db
 $sec = $db
   ->from(["tblofficials" => "officials"])
   ->join(["tblposition" => "positions"], "positions.id", "officials.position")
-  ->where("positions.id", 15)
+  ->where("positions.id", 4)
   ->first()
   ->select([
     "name" => "officials.name"
@@ -36,11 +36,7 @@ $sec = $db
     ->first()
     ->exec();
 
-  if (!empty($request)) {
-    $request['data'] = json_decode($request['data'], true);
-     
-    $residence['year_residence'] = $request['data']['year_residence'];
-  }
+
 }
 
 if(isset($_GET['cr_id'])){
@@ -150,7 +146,7 @@ if(isset($_GET['cr_id'])){
                           </h1>
                         </div>
                         <h2 class="mt-5 fw-bold">TO WHOM IT MAY CONCERN:</h2>
-                          <h2 class="mt-3" style="text-indent: 40px;">I <?= ucwords($job['firstname'].' '.$job['middlename'].'. '.$job['lastname']) ?>  <?= ucwords($job['age']) ?> years of age, resident of Barangay Carino, Paniqui Tarlac, for <?= ucwords($residence['year_residence']) ?> years/months,availing the benefits of Republic Act 11261, otherwise known as the First Time Jobseekers Act of 2019, do hereby declare, agree and undertake to abide and be bound by the following:
+                          <h2 class="mt-3" style="text-indent: 40px;">I <?= ucwords($job['firstname'].' '.$job['middlename'].'. '.$job['lastname']) ?>  <?= ucwords($job['age']) ?> years of age, resident of Barangay Carino, Paniqui Tarlac, availing the benefits of Republic Act 11261, otherwise known as the First Time Jobseekers Act of 2019, do hereby declare, agree and undertake to abide and be bound by the following:
                         </h2>
                         <br>
                         
@@ -219,7 +215,7 @@ if(isset($_GET['cr_id'])){
           </div>
         </div>
         <!-- Modal -->
-        div class="modal fade" id="pment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+       <div class="modal fade" id="pment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
           aria-hidden="true" data-backdrop="static" data-keyboard="false">
           <div class="modal-dialog" role="document">
             <div class="modal-content">

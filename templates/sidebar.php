@@ -137,32 +137,76 @@ function appendActiveClass(array $pages)
           </div>
         </li>
    <?php endif; ?>
-       <?php if (role(["user", ""])): ?>
-       <li class="
-              nav-item
-              <?= appendActiveClass(["certificate-requests"]) ?>
-            ">
-          <a href="certificate-requests.php">
-            <i class="fas fa-user-tie"></i>
-            <p>Certificate Requests</p>
-          </a>
-        </li>
-          <?php endif; ?>
-        <?php if (role(["administrator", "staff"])): ?>
-        <li class="nav-item <?= appendActiveClass(["resident", "generate_resident"]) ?>">
-          <a href="resident.php">
-            <i class="icon-people"></i>
-            <p>Resident Information</p>
-          </a>
-        </li>
+   <?php
+// Add this before the HTML to get the count
+$unreadCount = 0;
 
-                   <li class="nav-item <?= appendActiveClass(["purok", "generate_resident"]) ?>">
-          <a href="purok.php">
-            <i class="icon-pin"></i>
-            <p>Purok</p>
-          </a>
-        </li>
+if (isset($_SESSION["id"])) {
+    $userId = $_SESSION["id"];
+
+    // First get the resident.id based on the logged-in user's id
+    $stmt = $conn->prepare("
+        SELECT r.id AS resident_id
+        FROM residents r
+        JOIN users u ON u.id = r.account_id
+        WHERE u.id = ?
+    ");
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
+
+    if ($result && isset($result['resident_id'])) {
+        $residentId = $result['resident_id'];
+
+        // Then use that resident ID to count unread released certificate requests
+        $stmt = $conn->prepare("
+            SELECT COUNT(*) AS count 
+            FROM certificate_requests 
+            WHERE isRead = 0 AND status = 'released' AND resident_id = ?
+        ");
+        $stmt->bind_param("i", $residentId);
+        $stmt->execute();
+        $countResult = $stmt->get_result()->fetch_assoc();
+        $unreadCount = $countResult['count'];
+        $stmt->close();
+    }
+}
+?>
+
+<?php if (role(["user", ""])): 
+  echo $residentId;
+  ?>
+  <li class="nav-item <?= appendActiveClass(["certificate-requests"]) ?>">
+    <a href="certificate-requests-read.php">
+      <i class="fas fa-user-tie"></i>
+      <p>
+        Certificate Requests 
+     
+        <?php if ($unreadCount > 0): ?>
+          <span class="badge badge-danger"><?= $unreadCount ?></span>
         <?php endif; ?>
+      </p>
+    </a>
+  </li>
+<?php endif; ?>
+
+<?php if (role(["administrator", "staff"])): ?>
+  <li class="nav-item <?= appendActiveClass(["resident", "generate_resident"]) ?>">
+    <a href="resident.php">
+      <i class="icon-people"></i>
+      <p>Resident Information</p>
+    </a>
+  </li>
+
+  <li class="nav-item <?= appendActiveClass(["purok", "generate_resident"]) ?>">
+    <a href="purok.php">
+      <i class="icon-pin"></i>
+      <p>Purok</p>
+    </a>
+  </li>
+<?php endif; ?>
+
 
         <li class="nav-item <?= appendActiveClass(["blotter", "generate_blotter_report"]) ?>">
           <a href="blotter.php">
@@ -179,20 +223,7 @@ function appendActiveClass(array $pages)
           </a>
         </li>
 
-        <!-- <?php if (role(["staff", "user"])): ?>
-        <li class="nav-section">
-          <span class="sidebar-mini-icon">
-            <i class="fa fa-ellipsis-h"></i>
-          </span>
-          <h4 class="text-section">System</h4>
-        </li>
-        <li class="nav-item">
-          <a href="#support" data-toggle="modal">
-            <i class="fas fa-flag"></i>
-            <p>Support</p>
-          </a>
-        </li>
-    <?php endif; ?> -->
+
  
 
       
@@ -247,13 +278,13 @@ function appendActiveClass(array $pages)
                     </a>
                 </li>
             <?php endif; ?>
-           <?php if (isAdmin() || role(["user", "staff"])): ?>
+      
                 <li class="<?= $currentPage == "precinct" ? "active" : null ?>">
                     <a href="precinct.php">
                         <span class="sub-item">Contact Number</span>
                     </a>
                 </li>
-            <?php endif; ?>
+        
               
             <?php if (isAdmin()): ?>
 
@@ -268,11 +299,12 @@ function appendActiveClass(array $pages)
                         <span class="sub-item">Position</span>
                     </a>
                 </li>
-                 <li class="<?= $currentPage == "loginhistory" ? "active" : null ?>">
-                    <a href="loginhistory.php">
-                        <span class="sub-item">Login History</span>
+                <li class="<?= $currentPage == "logs" ? "active" : null ?>">
+                    <a href="logs.php">
+                        <span class="sub-item">Transaction Logs</span>
                     </a>
                 </li>
+             
             <?php endif; ?>
         </ul>
     </div>
@@ -324,6 +356,284 @@ function appendActiveClass(array $pages)
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Update</button>
         </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="barangay" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          <?= isAdmin() ? "Update Barangay Info" : "Barangay Information" ?>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="model/edit_brgy_info.php" enctype="multipart/form-data">
+          <input type="hidden" name="size" value="1000000">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Province Name</label>
+                <input type="text" class="form-control" placeholder="Enter Province Name" name="province" required value="<?= $province ?>" 
+                <?= isAdmin() ? "" : "readonly" ?>>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Town Name</label>
+                <input type="text" class="form-control" placeholder="Enter Town Name" name="town" required value="<?= $town ?>" 
+                <?= isAdmin() ? "" : "readonly" ?>>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Barangay Name</label>
+                <input type="text" class="form-control" placeholder="Enter Barangay Name" name="brgy" required value="<?= $brgy ?>" 
+                <?= isAdmin() ? "" : "readonly" ?>>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Contact Number</label>
+                <input type="text" class="form-control" placeholder="Enter Contact Number" name="number" required value="<?= $number ?>" 
+                <?= isAdmin() ? "" : "readonly" ?>>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Dashboard Text</label>
+            <textarea class="form-control" name="db_msg" required <?= isAdmin() ? "" : "readonly" ?>><?= $db_txt ?></textarea>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Municipality/City Logo</label><br>
+                <img src="assets/uploads/<?= $city_logo ?>" class="img-fluid" width="120">
+                <?php if (isAdmin()): ?>
+                  <input type="file" class='form-control' name="city_logo" accept="image/*">
+                <?php endif; ?>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Barangay Logo</label><br>
+                <img src="assets/uploads/<?= $brgy_logo ?>" class="img-fluid" width="120">
+                <?php if (isAdmin()): ?>
+                  <input type="file" class='form-control' name="brgy_logo" accept="image/*">
+                <?php endif; ?>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Dashboard Image</label><br>
+            <img src="<?= !empty($db_img) ? "assets/uploads/" . $db_img : "assets/img/bg-abstract.png" ?>" class="img-fluid">
+            <?php if (isAdmin()): ?>
+              <input type="file" class='form-control' name="db_img" accept="image/*">
+            <?php endif; ?>
+          </div>
+                  <?php if (isAdmin()): ?>
+          <small class="form-text text-muted">Note: Please upload only images and not more than 20MB.</small>
+           <?php endif; ?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <?php if (isAdmin()): ?>
+          <button type="submit" class="btn btn-primary">Update</button>
+        <?php endif; ?>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="support" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Contact Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>If you need assistance, please reach out to one of the following contacts:</p>
+                
+                <h6>𝗠𝗗𝗥𝗥𝗠𝗖 𝗣𝗔𝗡𝗜𝗤𝗨𝗜</h6>
+                <ul>
+                  
+                    <li>0948-8675-614</li>
+                    <li>(045) 606-3952</li>
+                </ul>
+                
+                <h6>𝗣𝗡𝗣 𝗣𝗔𝗡𝗜𝗤𝗨𝗜</h6>
+                <ul>
+                    <li>0908-9882-818</li>
+                    <li>(045) 931-1110</li>
+                 
+                </ul>
+                
+                <h6>𝗕𝗙𝗣 𝗣𝗔𝗡𝗜𝗤𝗨𝗜</h6>
+                <p>0923-1357-153</p>
+                <p>(045) 491-0362</p>
+                
+                <h6>𝗥𝗛𝗨-𝗜 𝗣𝗔𝗡𝗜𝗤𝗨𝗜</h6>
+                <ul>
+                    <li>800-9882-818</li>
+         
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="requestdoc" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Request Certificate</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="background-image:url('assets/img/db.jpg'); background-size:cover;">
+        <form method="POST" action="model/save_requestdoc.php">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Enter Name" name="name" required >
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <input type="email" class="form-control" placeholder="Enter Email Address" name="email" required >
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Enter Contact Number(optional)" name="number">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Enter Requested Document" name="subject" required>
+          </div>
+          <div class="form-group">
+            <textarea type="text" class="form-control" placeholder="Enter Purpose" name="message" required ></textarea>
+          </div>
+      </div>
+      <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      <button type="submit" class="btn btn-primary">Request</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="changepass" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="model/change_password.php">
+          <div class="form-group">
+            <label>Username</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter Name"
+              readonly
+              name="username"
+              value="<?= $_SESSION["username"] ?>"
+              required
+            />
+          </div>
+          <div class="form-group form-floating-label">
+            <label>Current Password</label>
+            <input
+              type="password"
+              id="cur_pass"
+              class="form-control"
+              placeholder="Enter Current Password"
+              name="cur_pass"
+              required
+            />
+            <span toggle="#cur_pass" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+          </div>
+          <div class="form-group form-floating-label">
+            <label>New Password</label>
+            <input
+              type="password"
+              id="new_pass"
+              class="form-control"
+              placeholder="Enter New Password"
+              name="new_pass"
+              pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}"
+              title="Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character."
+              required
+            />
+            <span toggle="#new_pass" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+          </div>
+          <div class="form-group form-floating-label">
+            <label>Confirm Password</label>
+            <input
+              type="password"
+              id="con_pass"
+              class="form-control"
+              placeholder="Confirm Password"
+              name="con_pass"
+              pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}"
+              title="Password must match the requirements for the New Password."
+              required
+            />
+            <span toggle="#con_pass" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Change</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="restore" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Restore Database</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="model/restore.php" enctype="multipart/form-data">
+          <input type="hidden" name="size" value="1000000">
+          <div class="form-group form-floating-label">
+            <label>Upload Sql file</label>
+            <input type="file" class="form-control" accept=".sql" name="backup_file" required>
+          </div>
+      </div>
+      <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      <button type="submit" class="btn btn-primary">Restore</button>
+      </div>
       </form>
     </div>
   </div>

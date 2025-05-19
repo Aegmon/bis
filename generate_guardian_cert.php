@@ -138,13 +138,13 @@ if(isset($_GET['cr_id'])){
                         <img src="assets/uploads/<?= $brgy_logo ?>" class="img-fluid" width="100">
                       </div>
                     </div>
-                    <div class="row mt-2">
+                    <div class="row mt-1">
                       <div class="col-md-12">
-                        <div class="text-center mt-5">
+                        <div class="text-center mt-2">
                           <h1 class="mt-4 fw-bold"><u>OFFICE OF THE BARANGAY CAPTAIN</u></h1>
                         </div>
                         <div class="text-center">
-                          <h1 class="mt-4 fw-bold mb-5" style="font-size:38px;color:black">CERTIFICATE OF GUARDIANSHIP
+                          <h1 class="mt-4 fw-bold mb-5" style="font-size:25px;color:black">CERTIFICATE OF GUARDIANSHIP
                           </h1>
                         </div>
                         <h2 class="mt-5 fw-bold">TO WHOM IT MAY CONCERN:</h2>
@@ -160,7 +160,7 @@ if(isset($_GET['cr_id'])){
                         </h2>
                       </div>
                       <div class="col-md-12">
-                        <div class="p-3 text-right mr-5" style="margin-top:300px">
+                        <div class="p-3 text-right mr-5" style="margin-top:50px">
                           <h1 class="fw-bold mb-0 text-uppercase"><?= ucwords($captain['name']) ?></h1>
                           <p class="mr-5">PUNONG BARANGAY</p>
                           <small>**NOT VALID without the official Dry Seal</small>

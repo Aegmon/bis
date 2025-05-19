@@ -19,6 +19,11 @@ if (!empty($precinct)) {
     if ($result === true) {
         $_SESSION['message'] = 'Precinct has been updated!';
         $_SESSION['status'] = 'success';
+        $role = $_SESSION["username"];
+        $logMessage = "$role Edited Contact Number";
+        $logQuery = $conn->prepare("INSERT INTO admin_logs (logs) VALUES (?)");
+        $logQuery->bind_param("s", $logMessage);
+        $logQuery->execute();
     } else {
         $_SESSION['message'] = 'Something went wrong!';
         $_SESSION['status'] = 'danger';

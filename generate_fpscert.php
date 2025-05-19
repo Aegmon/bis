@@ -190,8 +190,8 @@ $captain = $db
                               </div>
 
                               <div class="form-group">
-                                <label>Payment Details(Optional)</label>
-                                <textarea class="form-control" placeholder="Enter Payment Details"
+                                <label>Feedback(Optional)</label>
+                                <textarea class="form-control" placeholder="Enter Feedback"
                                   name="details">4PS Certification Payment</textarea>
                               </div>
                           </div>

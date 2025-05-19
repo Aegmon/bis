@@ -17,24 +17,22 @@ $date          = $conn->real_escape_string($_POST['date']);
 $time          = $conn->real_escape_string($_POST['time']);
 $status        = $conn->real_escape_string($_POST['status']);
 $details       = $conn->real_escape_string($_POST['details']);
-//$feedback       = $conn->real_escape_string($_POST['feedback']);
+$feedback       = $conn->real_escape_string($_POST['feedback']);
 
 // Check if the ID is not empty
 if (!empty($id)) {
-    $query = "UPDATE tblblotter SET `complainant`='$complainant', `respondent`='$respondent', `victim`='$victim', `type`='$type', `location`='$location', `date`='$date',
-              `time`='$time', `status`='$status', `details`='$details' WHERE id=$id;";
+    $query = "UPDATE tblblotter SET `respondent`='$respondent', `victim`='$victim', `type`='$type', `location`='$location', `date`='$date',
+              `time`='$time', `status`='$status', `details`='$details' ,  `feedback`='$feedback'  WHERE id=$id;";
     $result = $conn->query($query);
 
     // Check if the update was successful
     if ($result === true) {
-        // Check if the user is an administrator before logging the action
-        if ($_SESSION['role'] === 'administrator') {
-            $logMessage = "Admin edited blotter ID: $id, Complainant: $complainant, Respondent: $respondent";
-            $logQuery = $conn->prepare("INSERT INTO admin_logs (logs) VALUES (?)");
-            $logQuery->bind_param("s", $logMessage);
-            $logQuery->execute();
-        }
-
+    
+		$role = $_SESSION["username"];
+		$logMessage = "$role Modified Blotter/Incident Report";
+		$logQuery = $conn->prepare("INSERT INTO admin_logs (logs) VALUES (?)");
+		$logQuery->bind_param("s", $logMessage);
+		$logQuery->execute();
         $_SESSION['message'] = 'Blotter details have been updated!';
         $_SESSION['status'] = 'success';
     } else {
