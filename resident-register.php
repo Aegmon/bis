@@ -128,6 +128,7 @@ $purokList = (function () use ($db) {
                       <div class="form-group">
                         <label>Address</label>
                         <textarea class="form-control" name="address" required placeholder="Enter Address"><?= $_SESSION['formData']['address'] ?? '' ?></textarea>
+                        <textarea class="form-control" name="address" required placeholder="Enter Address"><?= $_SESSION['formData']['address'] ?? '' ?></textarea>
                       </div>
                     </div>
 
@@ -136,6 +137,7 @@ $purokList = (function () use ($db) {
                         <div class="col-sm-4">
                           <div class="form-group">
                             <label>First name</label>
+                            <input class="form-control" placeholder="Enter First name" name="fname" value="<?= $_SESSION['formData']['fname'] ?? '' ?>" required>
                             <input class="form-control" placeholder="Enter First name" name="fname" value="<?= $_SESSION['formData']['fname'] ?? '' ?>" required>
                           </div>
                         </div>
@@ -151,6 +153,7 @@ $purokList = (function () use ($db) {
                           <div class="form-group">
                             <label>Last name</label>
                             <input class="form-control" placeholder="Enter Last name" name="lname" required value="<?= $_SESSION['formData']['lname'] ?? '' ?>">
+                            <input class="form-control" placeholder="Enter Last name" name="lname" required value="<?= $_SESSION['formData']['lname'] ?? '' ?>">
                           </div>
                         </div>
                       </div>
@@ -160,6 +163,7 @@ $purokList = (function () use ($db) {
                           <div class="form-group">
                             <label>Alias</label>
                             <input class="form-control" placeholder="Enter Alias" name="alias" value="<?= $_SESSION['formData']['alias'] ?? '' ?>">
+                            <input class="form-control" placeholder="Enter Alias" name="alias" value="<?= $_SESSION['formData']['alias'] ?? '' ?>">
                           </div>
                         </div>
 
@@ -167,12 +171,23 @@ $purokList = (function () use ($db) {
                           <div class="form-group">
                             <label>Place of Birth</label>
                             <input class="form-control" placeholder="Enter Birthplace" name="birthplace" required value="<?= $_SESSION['formData']['birthplace'] ?? '' ?>">
+                            <input class="form-control" placeholder="Enter Birthplace" name="birthplace" required value="<?= $_SESSION['formData']['birthplace'] ?? '' ?>">
                           </div>
                         </div>
 
                        <div class="col-sm-4">
                         <div class="form-group">
                           <label>Birthdate</label>
+                          <input 
+                            type="date" 
+                            class="form-control" 
+                            placeholder="Enter Birthdate" 
+                            name="birthdate" 
+                            id="birthdate" 
+                            value="<?= isset($_SESSION['formData']['birthdate']) ? $_SESSION['formData']['birthdate'] : '' ?>" 
+                            required
+                          >
+
                           <input 
                             type="date" 
                             class="form-control" 
@@ -193,6 +208,7 @@ $purokList = (function () use ($db) {
                             <label>Age</label>
                             <input type="number"  id="age" class="form-control" placeholder="Enter Age" min="1" name="age" value="0"
                               required readonly value="<?= $_SESSION['formData']['age'] ?? '' ?>">
+                              required readonly value="<?= $_SESSION['formData']['age'] ?? '' ?>">
                           </div>
                         </div>
 
@@ -204,7 +220,12 @@ $purokList = (function () use ($db) {
                               <option value="Single" <?= ($_SESSION['formData']['civil_status'] ?? '') == 'Single' ? 'selected' : '' ?>>Single</option>
                               <option value="Married" <?= ($_SESSION['formData']['civil_status'] ?? '') == 'Married' ? 'selected' : '' ?>>Married</option>
                               <option value="Widow" <?= ($_SESSION['formData']['civil_status'] ?? '') == 'Widow' ? 'selected' : '' ?>>Widow</option>
+                              <option disabled <?= empty($_SESSION['formData']['civil_status']) ? 'selected' : '' ?>>Select Civil Status</option>
+                              <option value="Single" <?= ($_SESSION['formData']['civil_status'] ?? '') == 'Single' ? 'selected' : '' ?>>Single</option>
+                              <option value="Married" <?= ($_SESSION['formData']['civil_status'] ?? '') == 'Married' ? 'selected' : '' ?>>Married</option>
+                              <option value="Widow" <?= ($_SESSION['formData']['civil_status'] ?? '') == 'Widow' ? 'selected' : '' ?>>Widow</option>
                             </select>
+
 
                           </div>
                         </div>
@@ -214,6 +235,9 @@ $purokList = (function () use ($db) {
                             <label>Sex</label>
                             <select class="form-control" required name="gender">
                               <option disabled selected value="">Select Sex</option>
+                      
+                              <option value="Male" <?= ($_SESSION['formData']['gender'] ?? '') == 'Male' ? 'selected' : '' ?>>Male</option>
+                              <option value="Female" <?= ($_SESSION['formData']['gender'] ?? '') == 'Female' ? 'selected' : '' ?>>Female</option>
                       
                               <option value="Male" <?= ($_SESSION['formData']['gender'] ?? '') == 'Male' ? 'selected' : '' ?>>Male</option>
                               <option value="Female" <?= ($_SESSION['formData']['gender'] ?? '') == 'Female' ? 'selected' : '' ?>>Female</option>
@@ -261,11 +285,15 @@ $purokList = (function () use ($db) {
                 
 
                       </div>
+                
+
+                      </div>
 
                       <div class="row g-0">
                         <div class="col-sm-4">
                        <div class="form-group">
                     <label>Email Address</label>
+                    <input type="email" class="form-control" placeholder="Enter Email" name="email" id="email"  value="<?= $_SESSION['formData']['email'] ?? '' ?>">
                     <input type="email" class="form-control" placeholder="Enter Email" name="email" id="email"  value="<?= $_SESSION['formData']['email'] ?? '' ?>">
                     <small id="emailHelp" class="form-text"></small>
                   </div>
@@ -350,6 +378,7 @@ $purokList = (function () use ($db) {
                           <div class="form-group">
                             <label>Username</label>
                             <input class="form-control" placeholder="Enter Username" name="username" required value="<?= $_SESSION['formData']['username'] ?? '' ?>">
+                            <input class="form-control" placeholder="Enter Username" name="username" required value="<?= $_SESSION['formData']['username'] ?? '' ?>">
                           </div>
                         </div>
 
@@ -358,6 +387,7 @@ $purokList = (function () use ($db) {
                             <label>Password</label>
 
                           <input id="password" name="password" type="password" class="form-control"
+                            placeholder="Password" title="Password must be at least 8 characters long, contain at least 1 uppercase letter, 1 lowercase letter, 1 numeric digit, and 1 special character.">
                             placeholder="Password" title="Password must be at least 8 characters long, contain at least 1 uppercase letter, 1 lowercase letter, 1 numeric digit, and 1 special character.">
 
 
@@ -414,6 +444,7 @@ $purokList = (function () use ($db) {
 
     <?php include "templates/footer.php"; ?>
     
+    
  <script>
   document.getElementById('email').addEventListener('input', function() {
     const emailField = this;
@@ -431,7 +462,10 @@ $purokList = (function () use ($db) {
   });
 
 
+
 </script>
+
+ </body>
 
  </body>
 

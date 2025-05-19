@@ -75,6 +75,29 @@ document.addEventListener('DOMContentLoaded', function() {
     togglePwdUploadField();
   });
 
+  console.log("DOM Loaded");
+  // Check initial state of radio buttons for "4Ps" and "PWD"
+  toggle4psUploadField();
+  togglePwdUploadField();
+
+  // Add event listeners to toggle the fields based on radio button selection
+  document.getElementById('4ps_yes').addEventListener('change', function() {
+    console.log("4Ps Yes selected");
+    toggle4psUploadField();
+  });
+  document.getElementById('4ps_no').addEventListener('change', function() {
+    console.log("4Ps No selected");
+    toggle4psUploadField();
+  });
+  document.getElementById('pwd_yes').addEventListener('change', function() {
+    console.log("PWD Yes selected");
+    togglePwdUploadField();
+  });
+  document.getElementById('pwd_no').addEventListener('change', function() {
+    console.log("PWD No selected");
+    togglePwdUploadField();
+  });
+
   const birthdateInput = document.getElementById('birthdate');
   const today = new Date();
   

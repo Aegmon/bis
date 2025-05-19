@@ -4,6 +4,9 @@ $id = $_GET['id'];
 $query = "SELECT b.*, r.firstname, r.lastname 
 			  FROM tblblotter b
 			  LEFT JOIN residents r ON b.complainant  WHERE b.id='$id'";
+$query = "SELECT b.*, r.firstname, r.lastname 
+			  FROM tblblotter b
+			  LEFT JOIN residents r ON b.complainant  WHERE b.id='$id'";
 $result = $conn->query($query);
 $resident = $result->fetch_assoc();
 
@@ -19,6 +22,7 @@ $captain = $db
   ->from(["tblofficials" => "officials"])
   ->join(["tblposition" => "positions"], "positions.id", "officials.position")
   ->where("positions.position", "Barangay Captain")
+  ->where("positions.position", "Barangay Captain")
   ->first()
   ->select([
     "name" => "officials.name"
@@ -28,6 +32,7 @@ $captain = $db
 $sec = $db
   ->from(["tblofficials" => "officials"])
   ->join(["tblposition" => "positions"], "positions.id", "officials.position")
+  ->where("positions.position", "Secretary")
   ->where("positions.position", "Secretary")
   ->first()
   ->select([
@@ -111,6 +116,14 @@ $sec = $db
                       <h3 class="fw-bold mb-0"><i><?= ucwords($town) ?></i></h3>
                       <h3 class="fw-bold mb-0"><i><?= ucwords($brgy) ?></i></h3>
                       <p><i>Mobile No. <?= $number ?></i></p>
+                <div class="card-body m-5" id="printThis">
+                  <div class="d-flex flex-wrap justify-content-center" style="border-bottom:1px solid red">
+                    <div class="text-center">
+                      <h3 class="fw-bold mb-0"><i>Republic of the Philippines</i></h3>
+                      <h3 class="fw-bold mb-0"><i>Province of <?= ucwords($province) ?></i></h3>
+                      <h3 class="fw-bold mb-0"><i><?= ucwords($town) ?></i></h3>
+                      <h3 class="fw-bold mb-0"><i><?= ucwords($brgy) ?></i></h3>
+                      <p><i>Mobile No. <?= $number ?></i></p>
                     </div>
                   </div>
 
@@ -118,7 +131,50 @@ $sec = $db
                     <div class="col-md-12">
                       <div class="text-center">
                         <h4 class="mt-2 fw-bold">OFFICE OF THE BARANGAY CAPTAIN</h4>
+                  </div>
+
+                  <div class="row mt-1">
+                    <div class="col-md-12">
+                      <div class="text-center">
+                        <h4 class="mt-2 fw-bold">OFFICE OF THE BARANGAY CAPTAIN</h4>
                       </div>
+                      <div class="text-center">
+                        <h4 class="mt-2 fw-bold mb-5">BLOTTER REPORT</h4>
+                      </div>
+
+                      <!-- Blotter details -->
+                      <div class="row">
+                        <div class="col">
+                          <div class="form-group row">
+                            <h3 class="mt-1 col-lg-4 text-left">Complainant:</h3>
+                            <div class="col-lg-8" style="border-bottom:1px solid black;">
+                              <span class="fw-bold" style="font-size:20px;">
+                                <?= $resident['firstname'] . '  ' . $resident['lastname'] ?>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <h3 class="mt-1 col-lg-4 text-left">Victim:</h3>
+                            <div class="col-lg-8" style="border-bottom:1px solid black;">
+                              <span class="fw-bold" style="font-size:20px;">
+                                <?= ucwords($resident['victim']) ?>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <h3 class="mt-1 col-lg-4 text-left">Location:</h3>
+                            <div class="col-lg-8" style="border-bottom:1px solid black;">
+                              <span class="fw-bold" style="font-size:20px;">
+                                <?= ucwords($resident['location']) ?>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <h3 class="mt-1 col-lg-4 text-left">Time:</h3>
+                            <div class="col-lg-8" style="border-bottom:1px solid black;">
+                              <span class="fw-bold" style="font-size:20px;">
+                                <?= date('h:i:s A', strtotime($resident['time'])) ?>
+                              </span>
                       <div class="text-center">
                         <h4 class="mt-2 fw-bold mb-5">BLOTTER REPORT</h4>
                       </div>
@@ -183,8 +239,43 @@ $sec = $db
                               <span class="fw-bold" style="font-size:20px;">
                                 <?= date('F d, Y', strtotime($resident['date'])) ?>
                               </span>
+                        </div>
+
+                        <div class="col">
+                          <div class="form-group row">
+                            <h3 class="mt-1 col-lg-4 text-left">Respondent:</h3>
+                            <div class="col-lg-8" style="border-bottom:1px solid black;">
+                              <span class="fw-bold" style="font-size:20px;">
+                                <?= ucwords($resident['respondent']) ?>
+                              </span>
                             </div>
                           </div>
+                          <div class="form-group row">
+                            <h3 class="mt-1 col-lg-4 text-left">Type:</h3>
+                            <div class="col-lg-8" style="border-bottom:1px solid black;">
+                              <span class="fw-bold" style="font-size:20px;">
+                                <?= ucwords($resident['type']) ?>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <h3 class="mt-1 col-lg-4 text-left">Date:</h3>
+                            <div class="col-lg-8" style="border-bottom:1px solid black;">
+                              <span class="fw-bold" style="font-size:20px;">
+                                <?= date('F d, Y', strtotime($resident['date'])) ?>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <h3 class="mt-1 col-lg-4 text-left">Status:</h3>
+                            <div class="col-lg-8" style="border-bottom:1px solid black;">
+                              <span class="fw-bold" style="font-size:20px;">
+                                <?= ucwords($resident['status']) ?>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                           <div class="form-group row">
                             <h3 class="mt-1 col-lg-4 text-left">Status:</h3>
                             <div class="col-lg-8" style="border-bottom:1px solid black;">
@@ -205,6 +296,15 @@ $sec = $db
                           <div class="col-lg-12">
                             <div class="fw-bold" style="font-size:20px;">
                               <?= ucwords(trim($resident['details'])) ?>
+                      <!-- Blotter Details -->
+                      <div class="row">
+                        <div class="col">
+                          <div class="form-group row">
+                            <h3 class="mt-1 col-lg-4 text-left">Blotter Details:</h3>
+                          </div>
+                          <div class="col-lg-12">
+                            <div class="fw-bold" style="font-size:20px;">
+                              <?= ucwords(trim($resident['details'])) ?>
                             </div>
                           </div>
                         </div>
@@ -214,9 +314,28 @@ $sec = $db
                   <div class="row mt-5">
                     <div class="col-md-12">
                        <div class="p-3 text-right mr-3">
+                    </div>     
+                  </div>
+                  <div class="row mt-5">
+                    <div class="col-md-12">
+                       <div class="p-3 text-right mr-3">
                           <h2 class="fw-bold mb-0 text-uppercase"><?= ucwords($captain['name']) ?></h2>
                           <p class="mr-3">PUNONG BARANGAY</p>
                         </div>
+                    </div>
+                  <div class="row mt-5">
+                    <div class="col-md-3 text-center mb-2">
+                            <img src="qr.png" class="img-fluid" width="200" />
+                    </div>
+                    <div class="col-md-9">
+                      <div class="text-center p-3" style="border:2px dotted red">
+                        <h3 class="mt-1 fw-bold mb-3">Sangguniang Barangay Members</h3>
+                        <?php if (!empty($officials)) : ?>
+                          <?php foreach ($officials as $row) : ?>
+                            <h5 class="mb-2 text-uppercase"><?= ucwords($row['name']) ?></h5>
+                          <?php endforeach ?>
+                        <?php endif ?>
+                      </div>
                     </div>
               <div class="row mt-5">
                 <div class="col-md-12 d-flex">

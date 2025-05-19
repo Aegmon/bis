@@ -223,9 +223,9 @@ $request_list = (function () use ($db) {
                 <?php endif; ?>
 
                 <?php if (role(["user", "administrator"])): ?>
-                <a data-toggle="tooltip" data-original-title="Remove"
+                <a data-toggle="tooltip" data-original-title="Reject"
                     href="model/certificate-request.php?id=<?= $request["id"] ?>&delete-request=1"
-                    onclick="confirm('Are you sure you want to delete this request?');"
+                    onclick="confirm('Are you sure you want to reject this request?');"
                     class="btn-link btn-danger">
                     <i class="fa fa-times"></i>
                 </a>

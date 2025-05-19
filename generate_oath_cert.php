@@ -145,9 +145,9 @@ if(isset($_GET['cr_id'])){
 
                           </h1>
                         </div>
-                        <h3 class="mt-5 fw-bold">TO WHOM IT MAY CONCERN:</h3>
-                          <h3 class="mt-3" style="text-indent: 40px;">I <?= ucwords($job['firstname'].' '.$job['middlename'].'. '.$job['lastname']) ?>  <?= ucwords($job['age']) ?> years of age, resident of Barangay Carino, Paniqui Tarlac, availing the benefits of Republic Act 11261, otherwise known as the First Time Jobseekers Act of 2019, do hereby declare, agree and undertake to abide and be bound by the following:
-                        </h3>
+                        <h2 class="mt-5 fw-bold">TO WHOM IT MAY CONCERN:</h2>
+                          <h2 class="mt-3" style="text-indent: 40px;">I <?= ucwords($job['firstname'].' '.$job['middlename'].'. '.$job['lastname']) ?>  <?= ucwords($job['age']) ?> years of age, resident of Barangay Carino, Paniqui Tarlac, for <?= ucwords($residence['year_residence']) ?> years/months,availing the benefits of Republic Act 11261, otherwise known as the First Time Jobseekers Act of 2019, do hereby declare, agree and undertake to abide and be bound by the following:
+                        </h2>
                         <br>
                         
                         <h3 style="text-indent: 40px;">

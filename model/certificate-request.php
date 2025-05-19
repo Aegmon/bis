@@ -8,6 +8,35 @@ if (isset($_POST["request-certificate"])) {
 	$resident_id = getBody("resident_id", $_POST);
 	$request_data = (object) [];
 
+
+    $uploadDir = __DIR__ . '/uploads/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true); // Create the uploads directory if it doesn't exist
+    }
+
+
+   $uploadedFilePath = null;
+    if (isset($_FILES['supporting_document']) && $_FILES['supporting_document']['error'] === UPLOAD_ERR_OK) {
+        $fileName = basename($_FILES['supporting_document']['name']);
+        $targetFilePath = $uploadDir . $fileName;
+
+        if (move_uploaded_file($_FILES['supporting_document']['tmp_name'], $targetFilePath)) {
+            $uploadedFilePath = 'uploads/' . $fileName; // Store relative path for database
+        } else {
+            $_SESSION["message"] = "Failed to upload file.";
+            $_SESSION["status"] = "danger";
+            header("Location: ../certificate-requests.php");
+            return $conn->close();
+        }
+    } else {
+        $_SESSION["message"] = "Supporting document is required!";
+        $_SESSION["status"] = "danger";
+        header("Location: ../certificate-requests.php");
+        return $conn->close();
+    }
+
+
+
 	$requiredFields = [
 		"Certificate" => $certificate_id,
 		"Resident" => $resident_id,
@@ -174,6 +203,16 @@ if (isset($_GET["delete-request"])) {
 		return $conn->close();
 	}
 
+	$stmt = $conn->prepare("UPDATE certificate_requests SET status = 'rejected' WHERE id = ?");
+	$stmt->bind_param("i", $request_id);
+	$success = $stmt->execute();
+	
+	if (!$success) {
+			$_SESSION["message"] = "Failed to delete request!";
+			$_SESSION["status"] = "danger";
+	
+			header("Location: ../certificate-requests.php");
+			return $conn->close();
 	$result = $db
 		->delete("certificate_requests")
 		->where("id", $request_id)
@@ -185,9 +224,14 @@ if (isset($_GET["delete-request"])) {
 		header("Location: ../certificate-requests.php");
 		return $conn->close();
 	}
-
-	$_SESSION["message"] = "Request deleted!";
+	
+	$_SESSION["message"] = "Request rejected!";
 	$_SESSION["status"] = "success";
+	$role = $_SESSION["username"];
+	$logMessage = "$role Reject Certificate Request";
+	$logQuery = $conn->prepare("INSERT INTO admin_logs (logs) VALUES (?)");
+	$logQuery->bind_param("s", $logMessage);
+	$logQuery->execute();
 	header("Location: ../certificate-requests.php");
 	return $conn->close();
 }

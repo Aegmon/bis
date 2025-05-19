@@ -18,6 +18,7 @@ $time          = $conn->real_escape_string($_POST['time']);
 $status        = $conn->real_escape_string($_POST['status']);
 $details       = $conn->real_escape_string($_POST['details']);
 $feedback       = $conn->real_escape_string($_POST['feedback']);
+$feedback       = $conn->real_escape_string($_POST['feedback']);
 
 // Check if the ID is not empty
 if (!empty($id)) {

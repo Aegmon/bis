@@ -110,6 +110,7 @@ $sec = $db
                         </div>
                         <div class="text-center">
                           <h1 class="mt-4 fw-bold mb-5" style="font-size:28px;color:black">CERTIFICATE OF INDIGENCY
+                          <h1 class="mt-4 fw-bold mb-5" style="font-size:28px;color:black">CERTIFICATE OF INDIGENCY
                           </h1>
                         </div>
                         <h3 class="mt-5 fw-bold">TO WHOM IT MAY CONCERN:</h3>
