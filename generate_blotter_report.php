@@ -177,7 +177,6 @@ $sec = $db
                         </div>
                       </div>
 
-<<<<<<< HEAD
                       <!-- Blotter Details -->
                       <div class="row">
                         <div class="col">
@@ -190,10 +189,6 @@ $sec = $db
                             </div>
                           </div>
                         </div>
-=======
-                 
-
->>>>>>> 4bea30e1c3ccfb56c27612a76902532a25ee193c
                       </div>
                     </div>     
                   </div>
