@@ -210,7 +210,7 @@ if (!empty($profileFile["name"])) {
 		$result = $db
 			->insert("residents")
 			->values([
-				"national_id" => $national_id,
+				"national_id" => $nationalIDFilename,
 				"citizenship" => $citizenship,
 				"firstname" => $fname,
 				"middlename" => $mname,

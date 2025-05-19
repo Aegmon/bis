@@ -156,8 +156,6 @@ function appendActiveClass(array $pages)
           </a>
         </li>
 
-      
-
                    <li class="nav-item <?= appendActiveClass(["purok", "generate_resident"]) ?>">
           <a href="purok.php">
             <i class="icon-pin"></i>
@@ -166,14 +164,13 @@ function appendActiveClass(array $pages)
         </li>
         <?php endif; ?>
 
-           <?php if (role(["administrator", "user","staff"])): ?>
         <li class="nav-item <?= appendActiveClass(["blotter", "generate_blotter_report"]) ?>">
           <a href="blotter.php">
             <i class="icon-layers"></i>
             <p>Blotter Records</p>
           </a>
         </li>
-        <?php endif; ?>
+    
 
         <li class="nav-item <?= appendActiveClass(["announcements", "announcements-view"]) ?>">
           <a href="announcements.php">
